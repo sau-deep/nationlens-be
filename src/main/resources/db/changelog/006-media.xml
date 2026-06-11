@@ -76,7 +76,7 @@
             <column name="old_value" type="JSON"/>
             <column name="new_value" type="JSON"/>
             <column name="reason" type="TEXT"/>
-            <column name="performed_by" type="BIGINT"><constraints foreignKeyName="fk_audit_user" references="users(id)"/></column>
+            <column name="performed_by" type="BIGINT"><constraints foreignKeyName="fk_media_audit_user" references="users(id)"/></column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>

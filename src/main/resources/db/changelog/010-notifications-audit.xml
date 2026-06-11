@@ -12,7 +12,7 @@
             <column name="action" type="VARCHAR(40)"><constraints nullable="false"/></column>
             <column name="old_values" type="JSON"/>
             <column name="new_values" type="JSON"/>
-            <column name="performed_by" type="BIGINT"><constraints foreignKeyName="fk_audit_user" references="users(id)"/></column>
+            <column name="performed_by" type="BIGINT"><constraints foreignKeyName="fk_system_audit_user" references="users(id)"/></column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
         <createIndex tableName="audit_logs" indexName="idx_audit_created"><column name="created_at" descending="true"/></createIndex>
