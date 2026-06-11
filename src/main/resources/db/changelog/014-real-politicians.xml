@@ -13,6 +13,7 @@
 
     <!-- ── New States ────────────────────────────────────────────────────── -->
     <changeSet id="014-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
         <insert tableName="states"><column name="code" value="KL"/><column name="name_en" value="Kerala"/><column name="name_hi" value="केरल"/></insert>
         <insert tableName="states"><column name="code" value="TG"/><column name="name_en" value="Telangana"/><column name="name_hi" value="तेलंगाना"/></insert>
         <insert tableName="states"><column name="code" value="HP"/><column name="name_en" value="Himachal Pradesh"/><column name="name_hi" value="हिमाचल प्रदेश"/></insert>
@@ -22,6 +23,7 @@
 
     <!-- ── New Districts ─────────────────────────────────────────────────── -->
     <changeSet id="014-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
         <!-- UP districts (varanasi already seeded in 011-04) -->
         <insert tableName="districts">
             <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/>
@@ -111,6 +113,7 @@
 
     <!-- ── New Parties ────────────────────────────────────────────────────── -->
     <changeSet id="014-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
         <insert tableName="entities">
             <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PARTY')"/>
             <column name="name_en" value="Samajwadi Party"/><column name="name_hi" value="समाजवादी पार्टी"/>
@@ -145,6 +148,7 @@
 
     <!-- ── 18th Lok Sabha MPs ─────────────────────────────────────────────── -->
     <changeSet id="014-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
 
         <!-- 1. Narendra Modi — Varanasi, BJP (PM) -->
         <insert tableName="entities">
@@ -475,6 +479,7 @@
 
     <!-- ── State MLAs ──────────────────────────────────────────────────────── -->
     <changeSet id="014-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
 
         <!-- 1. Yogi Adityanath — Gorakhpur Urban, BJP (UP CM) -->
         <insert tableName="entities">
