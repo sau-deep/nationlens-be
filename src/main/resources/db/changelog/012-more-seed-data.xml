@@ -57,13 +57,13 @@
             <column name="slug" value="sunita-patil-mp"/>
             <column name="description_en" value="Member of Parliament from Mumbai North. Three-term MP known for urban development and women's rights legislation."/>
             <column name="description_hi" value="मुंबई उत्तर से सांसद। शहरी विकास और महिला अधिकार कानून के लिए जानी जाती हैं।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mumbai')"/>
             <column name="image_url" value="https://picsum.photos/seed/sunita1/200/200"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='sunita-patil-mp') AS _tmp)"/>
             <column name="education" value="LLB, Mumbai University; MBA, IIM Ahmedabad"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="85000000"/>
@@ -82,13 +82,13 @@
             <column name="slug" value="ravi-kumar-gowda-mla"/>
             <column name="description_en" value="MLA from Bengaluru South. IT sector champion and urban infrastructure reformer."/>
             <column name="description_hi" value="बेंगलुरु दक्षिण से विधायक। आईटी क्षेत्र और शहरी बुनियादी ढांचे के सुधारक।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='bengaluru-urban')"/>
             <column name="image_url" value="https://picsum.photos/seed/ravi1/200/200"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla') AS _tmp)"/>
             <column name="education" value="B.Tech Computer Science, NIT Surathkal"/>
             <column name="declared_criminal_cases" valueNumeric="1"/>
             <column name="declared_assets_inr" valueNumeric="120000000"/>
@@ -107,13 +107,13 @@
             <column name="slug" value="vikram-tomar-mp"/>
             <column name="description_en" value="Member of Parliament from New Delhi. Focuses on digital governance and anti-corruption legislation."/>
             <column name="description_hi" value="नई दिल्ली से सांसद। डिजिटल शासन और भ्रष्टाचार विरोधी कानून पर ध्यान केंद्रित।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='aap') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='new-delhi')"/>
             <column name="image_url" value="https://picsum.photos/seed/vikram1/200/200"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='vikram-tomar-mp')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='vikram-tomar-mp') AS _tmp)"/>
             <column name="education" value="M.A. Public Policy, JNU"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="18000000"/>
@@ -132,13 +132,13 @@
             <column name="slug" value="meera-devi-singh-mla"/>
             <column name="description_en" value="MLA from Patna Sahib. Education and rural healthcare champion."/>
             <column name="description_hi" value="पटना साहिब से विधायक। शिक्षा और ग्रामीण स्वास्थ्य सेवा की समर्थक।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='patna')"/>
             <column name="image_url" value="https://picsum.photos/seed/meera1/200/200"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='meera-devi-singh-mla')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='meera-devi-singh-mla') AS _tmp)"/>
             <column name="education" value="B.Sc. Nursing, Patna Medical College"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="9500000"/>
@@ -200,7 +200,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Sunita Patil''s Parliament speech on Women''s Safety Bill')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='sunita-patil-mp') AS _tmp)"/>
             <column name="section_key" value="PARLIAMENT_ACTIVITY"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -230,7 +230,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Vikram Tomar launches free Wi-Fi at 50 Delhi metro stations')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='vikram-tomar-mp')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='vikram-tomar-mp') AS _tmp)"/>
             <column name="section_key" value="POSITIVE_WORK"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -259,7 +259,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Bengaluru flyover project: 3 years delayed, cost overrun by ₹480 crore')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla') AS _tmp)"/>
             <column name="section_key" value="CRITICAL_VIEW"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -287,7 +287,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Meera Devi Singh announces 10 new anganwadi centres in Patna Sahib')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='meera-devi-singh-mla')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='meera-devi-singh-mla') AS _tmp)"/>
             <column name="section_key" value="OFFICIAL_UPDATES"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -315,7 +315,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Ravi Gowda''s Bengaluru Tech Corridor attracts ₹12,000 Cr investment')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla') AS _tmp)"/>
             <column name="section_key" value="POSITIVE_WORK"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -343,7 +343,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='NCRB data confirms 22% drop in Mumbai North crime since 2019')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='sunita-patil-mp') AS _tmp)"/>
             <column name="section_key" value="EVIDENCE"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="2"/>
@@ -400,7 +400,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Amit Singh''s 5-year constituency development report (2019–2024)')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='amit-singh-mp')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='amit-singh-mp') AS _tmp)"/>
             <column name="section_key" value="OFFICIAL_UPDATES"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -430,7 +430,7 @@
         <insert tableName="media_mappings">
             <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Bal Shakti NGO: Inside India''s largest free school network')"/>
             <column name="mapping_type" value="ENTITY"/>
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='kavita-sharma-social-worker')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='kavita-sharma-social-worker') AS _tmp)"/>
             <column name="section_key" value="POSITIVE_WORK"/>
             <column name="display_context" value="ENTITY_PROFILE"/>
             <column name="display_order" valueNumeric="1"/>
@@ -523,7 +523,7 @@
     <!-- More manifesto promises for INC and AAP -->
     <changeSet id="012-06" author="nationlens">
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="category_key" value="education"/>
             <column name="title_en" value="Increase education budget to 6% of GDP"/>
             <column name="title_hi" value="शिक्षा बजट को GDP का 6% करना"/>
@@ -531,7 +531,7 @@
             <column name="election_year" valueNumeric="2024"/>
         </insert>
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='aap') AS _tmp)"/>
             <column name="category_key" value="water"/>
             <column name="title_en" value="24/7 clean drinking water for every Delhi household"/>
             <column name="title_hi" value="दिल्ली के हर घर में 24/7 स्वच्छ पेयजल"/>
@@ -539,7 +539,7 @@
             <column name="election_year" valueNumeric="2024"/>
         </insert>
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='aap') AS _tmp)"/>
             <column name="category_key" value="education"/>
             <column name="title_en" value="Transform all government schools with world-class facilities"/>
             <column name="title_hi" value="सरकारी स्कूलों को विश्वस्तरीय सुविधाओं से लैस करना"/>
@@ -547,7 +547,7 @@
             <column name="election_year" valueNumeric="2024"/>
         </insert>
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="category_key" value="agriculture"/>
             <column name="title_en" value="Double farmers' income by 2025"/>
             <column name="title_hi" value="2025 तक किसानों की आय दोगुनी करना"/>

@@ -114,7 +114,7 @@
             <column name="slug" value="rahul-sharma-mp"/>
             <column name="description_en" value="Member of Parliament from Jaipur Rural constituency. Active in parliamentary debates on education and rural development."/>
             <column name="description_hi" value="जयपुर ग्रामीण निर्वाचन क्षेत्र से लोकसभा सांसद।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _party)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
@@ -135,7 +135,7 @@
             <column name="slug" value="priya-verma-mla"/>
             <column name="description_en" value="MLA from Lucknow West. Known for women empowerment initiatives."/>
             <column name="description_hi" value="लखनऊ पश्चिम से विधायक। महिला सशक्तिकरण पहल के लिए जानी जाती हैं।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _party)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='lucknow')"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
@@ -153,7 +153,7 @@
             <column name="name_en" value="Amit Singh"/><column name="name_hi" value="अमित सिंह"/>
             <column name="slug" value="amit-singh-mp"/>
             <column name="description_en" value="Member of Parliament from Varanasi. Senior leader with 3 terms in parliament."/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _party)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='varanasi')"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
@@ -325,7 +325,7 @@
     <!-- Manifesto promises -->
     <changeSet id="011-11" author="nationlens">
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _party)"/>
             <column name="category_key" value="jobs"/>
             <column name="title_en" value="Create 2 crore jobs per year"/>
             <column name="title_hi" value="प्रति वर्ष 2 करोड़ रोजगार सृजन"/>
@@ -334,7 +334,7 @@
             <column name="source_url" value="https://affidavit.eci.gov.in"/>
         </insert>
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _party)"/>
             <column name="category_key" value="infrastructure"/>
             <column name="title_en" value="Build 25000 km of national highways"/>
             <column name="title_hi" value="25000 किमी राष्ट्रीय राजमार्ग निर्माण"/>
@@ -342,7 +342,7 @@
             <column name="election_year" valueNumeric="2024"/>
         </insert>
         <insert tableName="manifesto_promises">
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _party)"/>
             <column name="category_key" value="healthcare"/>
             <column name="title_en" value="Universal health coverage for all families"/>
             <column name="title_hi" value="सभी परिवारों के लिए सार्वभौमिक स्वास्थ्य कवरेज"/>

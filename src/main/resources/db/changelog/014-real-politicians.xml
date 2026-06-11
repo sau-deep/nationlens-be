@@ -22,13 +22,7 @@
 
     <!-- ── New Districts ─────────────────────────────────────────────────── -->
     <changeSet id="014-02" author="nationlens">
-        <!-- UP districts -->
-        <insert tableName="districts">
-            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/>
-            <column name="name_en" value="Varanasi"/><column name="name_hi" value="वाराणसी"/>
-            <column name="slug" value="varanasi"/><column name="population" valueNumeric="3676841"/>
-            <column name="literacy_rate" valueNumeric="75.6"/><column name="headquarters" value="Varanasi"/>
-        </insert>
+        <!-- UP districts (varanasi already seeded in 011-04) -->
         <insert tableName="districts">
             <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/>
             <column name="name_en" value="Kannauj"/><column name="name_hi" value="कन्नौज"/>
@@ -159,13 +153,13 @@
             <column name="slug" value="narendra-modi"/>
             <column name="description_en" value="Prime Minister of India. MP from Varanasi, Uttar Pradesh. Leader of BJP. Serving his third consecutive term as PM since 2024."/>
             <column name="description_hi" value="भारत के प्रधानमंत्री। वाराणसी, उत्तर प्रदेश से सांसद। 2024 में तीसरी बार प्रधानमंत्री बने।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='varanasi')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/The_official_portrait_of_Shri_Narendra_Modi%2C_the_Prime_Minister_of_the_Republic_of_India.jpg/330px-The_official_portrait_of_Shri_Narendra_Modi%2C_the_Prime_Minister_of_the_Republic_of_India.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='narendra-modi')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='narendra-modi') AS _tmp)"/>
             <column name="education" value="BA Political Science, Delhi University; MA Political Science, Gujarat University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="3200000"/>
@@ -184,13 +178,13 @@
             <column name="slug" value="rahul-gandhi"/>
             <column name="description_en" value="Leader of Opposition in Lok Sabha. MP from Rae Bareli, Uttar Pradesh. INC leader and former party president."/>
             <column name="description_hi" value="लोकसभा में विपक्ष के नेता। रायबरेली, उत्तर प्रदेश से सांसद। INC नेता।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='lucknow')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Rahul_Gandhi.png/330px-Rahul_Gandhi.png"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-gandhi')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='rahul-gandhi') AS _tmp)"/>
             <column name="education" value="BA History, St. Stephen's College, Delhi; MA Development Studies, Cambridge; MPhil, Cambridge"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="15300000"/>
@@ -209,13 +203,13 @@
             <column name="slug" value="amit-shah"/>
             <column name="description_en" value="Union Home and Cooperation Minister. MP from Gandhinagar, Gujarat. National President of BJP (2014-2020)."/>
             <column name="description_hi" value="केंद्रीय गृह और सहकारिता मंत्री। गांधीनगर, गुजरात से सांसद।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='gandhinagar')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Shri_Amit_Shah_in_Raigad.jpg/330px-Shri_Amit_Shah_in_Raigad.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='amit-shah')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='amit-shah') AS _tmp)"/>
             <column name="education" value="BSc Biochemistry, Gujarat University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="39500000"/>
@@ -234,13 +228,13 @@
             <column name="slug" value="rajnath-singh"/>
             <column name="description_en" value="Union Defence Minister. MP from Lucknow, Uttar Pradesh. Former Home Minister and BJP National President."/>
             <column name="description_hi" value="केंद्रीय रक्षा मंत्री। लखनऊ, उत्तर प्रदेश से सांसद।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='lucknow')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/2025_Rajnath_Singh_%28cropped%29.jpg/330px-2025_Rajnath_Singh_%28cropped%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rajnath-singh')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='rajnath-singh') AS _tmp)"/>
             <column name="education" value="MSc Physics, Gorakhpur University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="57800000"/>
@@ -259,13 +253,13 @@
             <column name="slug" value="nitin-gadkari"/>
             <column name="description_en" value="Union Minister for Road Transport and Highways. MP from Nagpur, Maharashtra. Known for highway infrastructure transformation."/>
             <column name="description_hi" value="केंद्रीय सड़क परिवहन और राजमार्ग मंत्री। नागपुर, महाराष्ट्र से सांसद।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='nagpur')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Nitin_Jairam_Gadkari.jpg/330px-Nitin_Jairam_Gadkari.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='nitin-gadkari')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='nitin-gadkari') AS _tmp)"/>
             <column name="education" value="BCom, Commerce College Nagpur; LLB, Nagpur University; MBA, Institute of Management, Nagpur"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="1520000000"/>
@@ -284,13 +278,13 @@
             <column name="slug" value="shashi-tharoor"/>
             <column name="description_en" value="MP from Thiruvananthapuram, Kerala. INC leader, author, former UN Under-Secretary General. Chairs Parliamentary Standing Committee on IT."/>
             <column name="description_hi" value="तिरुवनंतपुरम, केरल से सांसद। INC नेता, लेखक, पूर्व संयुक्त राष्ट्र अवर महासचिव।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='thiruvananthapuram')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Shashi_Tharoor_2025.jpg/330px-Shashi_Tharoor_2025.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='shashi-tharoor')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='shashi-tharoor') AS _tmp)"/>
             <column name="education" value="BA History, St. Stephen's College; MA International Relations, Tufts; PhD International Relations, Tufts"/>
             <column name="declared_criminal_cases" valueNumeric="1"/>
             <column name="declared_assets_inr" valueNumeric="112000000"/>
@@ -309,13 +303,13 @@
             <column name="slug" value="akhilesh-yadav"/>
             <column name="description_en" value="MP from Kannauj, Uttar Pradesh. President of Samajwadi Party. Former Chief Minister of UP (2012-2017)."/>
             <column name="description_hi" value="कन्नौज, उत्तर प्रदेश से सांसद। समाजवादी पार्टी के अध्यक्ष। UP के पूर्व मुख्यमंत्री (2012-2017)।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='sp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='kannauj')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Akhilesh_Yadav_receiving_Padma_Vibhushan_on_the_behalf_of_his_late_father_Sh._Mulayam_Singh_Yadav_%28cropped%29.jpg/330px-Akhilesh_Yadav_receiving_Padma_Vibhushan_on_the_behalf_of_his_late_father_Sh._Mulayam_Singh_Yadav_%28cropped%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='akhilesh-yadav')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='akhilesh-yadav') AS _tmp)"/>
             <column name="education" value="BTech Environmental Engineering, Mysore University; MS Environmental Engineering, University of Sydney"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="62100000"/>
@@ -334,13 +328,13 @@
             <column name="slug" value="priyanka-gandhi-vadra"/>
             <column name="description_en" value="MP from Wayanad, Kerala (Nov 2024 bypoll). INC General Secretary. First election win in November 2024."/>
             <column name="description_hi" value="वायनाड, केरल से सांसद (नवंबर 2024 उपचुनाव)। INC महासचिव। नवंबर 2024 में पहली बार सांसद बनीं।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='wayanad')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Priyanka_Gandhi_Vadra_%287%29.jpg/330px-Priyanka_Gandhi_Vadra_%287%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='priyanka-gandhi-vadra')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='priyanka-gandhi-vadra') AS _tmp)"/>
             <column name="education" value="BA Psychology, Jesus and Mary College, Delhi; PG Psychology, Delhi University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="115000000"/>
@@ -359,13 +353,13 @@
             <column name="slug" value="supriya-sule"/>
             <column name="description_en" value="MP from Baramati, Maharashtra. Daughter of Sharad Pawar. Working President of NCP (Sharad Pawar faction)."/>
             <column name="description_hi" value="बारामती, महाराष्ट्र से सांसद। शरद पवार की पुत्री। NCP (एसपी) की कार्यकारी अध्यक्ष।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ncp-sp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='ncp-sp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='baramati')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/0/07/Supriya_Sule.png"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='supriya-sule')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='supriya-sule') AS _tmp)"/>
             <column name="education" value="BA, University of California, Berkeley; MBA, Santa Clara University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="234000000"/>
@@ -384,13 +378,13 @@
             <column name="slug" value="om-birla"/>
             <column name="description_en" value="Speaker of the 18th Lok Sabha. MP from Kota-Bundi, Rajasthan. Re-elected Speaker in June 2024."/>
             <column name="description_hi" value="18वीं लोकसभा के अध्यक्ष। कोटा-बूंदी, राजस्थान से सांसद। जून 2024 में पुनः अध्यक्ष चुने गए।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='kota')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Om_Birla_%282021%29_%28cropped%29.jpg/330px-Om_Birla_%282021%29_%28cropped%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='om-birla')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='om-birla') AS _tmp)"/>
             <column name="education" value="BCom, Commerce College Kota; MA Political Science, Rajasthan University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="43000000"/>
@@ -409,13 +403,13 @@
             <column name="slug" value="asaduddin-owaisi"/>
             <column name="description_en" value="MP from Hyderabad, Telangana. President of AIMIM. Five-term MP known for sharp parliamentary debates."/>
             <column name="description_hi" value="हैदराबाद, तेलंगाना से सांसद। AIMIM के अध्यक्ष। पांच बार सांसद।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aimim')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='aimim') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='hyderabad')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Asaduddin.jpg/330px-Asaduddin.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='asaduddin-owaisi')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='asaduddin-owaisi') AS _tmp)"/>
             <column name="education" value="LLB, Lincoln's Inn, London"/>
             <column name="declared_criminal_cases" valueNumeric="3"/>
             <column name="declared_assets_inr" valueNumeric="81000000"/>
@@ -434,13 +428,13 @@
             <column name="slug" value="kangana-ranaut"/>
             <column name="description_en" value="MP from Mandi, Himachal Pradesh. National Award-winning actress turned politician. Elected on BJP ticket in 2024."/>
             <column name="description_hi" value="मंडी, हिमाचल प्रदेश से सांसद। राष्ट्रीय पुरस्कार विजेता अभिनेत्री। 2024 में BJP से चुनाव जीता।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mandi')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Kangana_Ranaut_at_Ira_Khan%27s_wedding_reception_%28cropped%29.jpg/330px-Kangana_Ranaut_at_Ira_Khan%27s_wedding_reception_%28cropped%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='kangana-ranaut')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='kangana-ranaut') AS _tmp)"/>
             <column name="education" value="School: DAV Public School, Shimla (partial)"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="921000000"/>
@@ -459,13 +453,13 @@
             <column name="slug" value="dimple-yadav"/>
             <column name="description_en" value="MP from Mainpuri, Uttar Pradesh. Wife of Akhilesh Yadav, daughter-in-law of Mulayam Singh Yadav. SP leader."/>
             <column name="description_hi" value="मैनपुरी, उत्तर प्रदेश से सांसद। अखिलेश यादव की पत्नी, मुलायम सिंह यादव की पुत्रवधू।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='sp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mainpuri')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Dimple_Yadav.img.jpg/330px-Dimple_Yadav.img.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='dimple-yadav')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='dimple-yadav') AS _tmp)"/>
             <column name="education" value="BA, Agra University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="34500000"/>
@@ -489,13 +483,13 @@
             <column name="slug" value="yogi-adityanath"/>
             <column name="description_en" value="Chief Minister of Uttar Pradesh. MLA from Gorakhpur Urban. BJP leader and Hindu monk. CM since 2017."/>
             <column name="description_hi" value="उत्तर प्रदेश के मुख्यमंत्री। गोरखपुर शहरी से विधायक। BJP नेता। 2017 से CM।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='gorakhpur')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Yogiji_in_2023.jpg/330px-Yogiji_in_2023.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='yogi-adityanath')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='yogi-adityanath') AS _tmp)"/>
             <column name="education" value="BSc Mathematics, Garhwal University"/>
             <column name="declared_criminal_cases" valueNumeric="8"/>
             <column name="declared_assets_inr" valueNumeric="1200000"/>
@@ -514,13 +508,13 @@
             <column name="slug" value="devendra-fadnavis"/>
             <column name="description_en" value="Chief Minister of Maharashtra since December 2024. MLA from Nagpur South-West. BJP leader. Former CM (2014-2019)."/>
             <column name="description_hi" value="दिसंबर 2024 से महाराष्ट्र के मुख्यमंत्री। नागपुर दक्षिण-पश्चिम से विधायक। BJP नेता।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='nagpur')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/f/f7/Eknath_Shinde_and_Devendra_Fadnavis_with_PM_Narendra_Modi_Cropped%282%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='devendra-fadnavis')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='devendra-fadnavis') AS _tmp)"/>
             <column name="education" value="BCom, Nagpur University; LLB, Nagpur University; MBA, Institute of Management, Nagpur"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="42000000"/>
@@ -539,13 +533,13 @@
             <column name="slug" value="sachin-pilot"/>
             <column name="description_en" value="MLA from Tonk, Rajasthan. INC leader. Former Deputy Chief Minister of Rajasthan and former Union Minister."/>
             <column name="description_hi" value="टोंक, राजस्थान से विधायक। INC नेता। राजस्थान के पूर्व उपमुख्यमंत्री।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='tonk')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Sachin_Pilot_at_the_India_Economic_Summit_2010_cropped.jpg/330px-Sachin_Pilot_at_the_India_Economic_Summit_2010_cropped.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sachin-pilot')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='sachin-pilot') AS _tmp)"/>
             <column name="education" value="BA, St. Stephen's College Delhi; MBA, Wharton School, University of Pennsylvania"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="98000000"/>
@@ -564,13 +558,13 @@
             <column name="slug" value="vasundhara-raje"/>
             <column name="description_en" value="MLA from Jhalrapatan, Rajasthan. BJP leader. Former Chief Minister of Rajasthan (2003-2008, 2013-2018)."/>
             <column name="description_hi" value="झालरापाटन, राजस्थान से विधायक। BJP नेता। राजस्थान की पूर्व मुख्यमंत्री (दो बार)।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jhalrapatan')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Rajasthan_CM_-_Vasundhara_Raje_%28cropped%29.jpg/330px-Rajasthan_CM_-_Vasundhara_Raje_%28cropped%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='vasundhara-raje')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='vasundhara-raje') AS _tmp)"/>
             <column name="education" value="BA Economics, Sophia College Mumbai; Maharani Gayatri Devi School Jaipur"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="780000000"/>
@@ -589,13 +583,13 @@
             <column name="slug" value="atishi"/>
             <column name="description_en" value="MLA from Kalkaji, Delhi. AAP leader. Served as Delhi CM (Sept-Dec 2024). Former Education and Finance Minister."/>
             <column name="description_hi" value="कालकाजी, दिल्ली से विधायक। AAP नेता। दिल्ली की पूर्व मुख्यमंत्री (2024)। पूर्व शिक्षा और वित्त मंत्री।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='aap') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='delhi')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Atishi.jpg/330px-Atishi.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='atishi')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='atishi') AS _tmp)"/>
             <column name="education" value="BA History, St. Stephen's College Delhi; MA History, Oxford University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="11200000"/>
@@ -614,13 +608,13 @@
             <column name="slug" value="aaditya-thackeray"/>
             <column name="description_en" value="MLA from Worli, Mumbai, Maharashtra. Shiv Sena (UBT) leader. Son of Uddhav Thackeray. Former Cabinet Minister."/>
             <column name="description_hi" value="वर्ली, मुंबई, महाराष्ट्र से विधायक। शिव सेना (UBT) नेता। उद्धव ठाकरे के पुत्र।"/>
-            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='shiv-sena-ubt')"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='shiv-sena-ubt') AS _tmp)"/>
             <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mumbai')"/>
             <column name="image_url" value="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Shri_Aaditya_Thackeray_-_2020_%28cropped%29.jpg/330px-Shri_Aaditya_Thackeray_-_2020_%28cropped%29.jpg"/>
             <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
         </insert>
         <insert tableName="political_profiles">
-            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aaditya-thackeray')"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='aaditya-thackeray') AS _tmp)"/>
             <column name="education" value="BA Economics, Mumbai University; Law, Mumbai University"/>
             <column name="declared_criminal_cases" valueNumeric="0"/>
             <column name="declared_assets_inr" valueNumeric="87000000"/>
