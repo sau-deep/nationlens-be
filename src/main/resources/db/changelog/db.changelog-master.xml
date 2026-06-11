@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <include file="db/changelog/001-identity-rbac.xml"/>
+    <include file="db/changelog/002-geography.xml"/>
+    <include file="db/changelog/003-entities.xml"/>
+    <include file="db/changelog/004-source-registry.xml"/>
+    <include file="db/changelog/005-participation.xml"/>
+    <include file="db/changelog/006-media.xml"/>
+    <include file="db/changelog/007-manifesto.xml"/>
+    <include file="db/changelog/008-moderation.xml"/>
+    <include file="db/changelog/009-ai-analytics.xml"/>
+    <include file="db/changelog/010-notifications-audit.xml"/>
+    <include file="db/changelog/011-seed-data.xml"/>
+    <include file="db/changelog/012-more-seed-data.xml"/>
+    <include file="db/changelog/013-staff-accounts.xml"/>
+    <include file="db/changelog/014-real-politicians.xml"/>
+
+</databaseChangeLog>

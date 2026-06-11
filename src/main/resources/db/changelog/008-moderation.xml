@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="008-01" author="nationlens">
+        <createTable tableName="reports">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="target_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
+            <column name="target_id" type="BIGINT"><constraints nullable="false"/></column>
+            <column name="reason_key" type="VARCHAR(80)"><constraints nullable="false"/></column>
+            <column name="reason_detail" type="TEXT"/>
+            <column name="reported_by" type="BIGINT"><constraints foreignKeyName="fk_report_user" references="users(id)"/></column>
+            <column name="status" type="VARCHAR(40)" defaultValue="PENDING"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

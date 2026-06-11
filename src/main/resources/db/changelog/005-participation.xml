@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="005-01" author="nationlens">
+        <createTable tableName="polls">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="question_en" type="VARCHAR(500)"><constraints nullable="false"/></column>
+            <column name="question_hi" type="VARCHAR(500)"/>
+            <column name="entity_id" type="BIGINT"><constraints foreignKeyName="fk_poll_entity" references="entities(id)"/></column>
+            <column name="district_id" type="BIGINT"><constraints foreignKeyName="fk_poll_district" references="districts(id)"/></column>
+            <column name="is_active" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="expires_at" type="TIMESTAMP"/>
+            <column name="created_by" type="BIGINT"><constraints foreignKeyName="fk_poll_user" references="users(id)"/></column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="005-02" author="nationlens">
+        <createTable tableName="poll_options">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="poll_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_opt_poll" references="polls(id)"/></column>
+            <column name="label_en" type="VARCHAR(255)"><constraints nullable="false"/></column>
+            <column name="label_hi" type="VARCHAR(255)"/>
+            <column name="display_order" type="INT" defaultValueNumeric="0"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="005-03" author="nationlens">
+        <createTable tableName="poll_votes">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="poll_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_vote_poll" references="polls(id)"/></column>
+            <column name="poll_option_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_vote_option" references="poll_options(id)"/></column>
+            <column name="user_id" type="BIGINT"><constraints foreignKeyName="fk_vote_user" references="users(id)"/></column>
+            <column name="voted_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <addUniqueConstraint tableName="poll_votes" columnNames="poll_id,user_id" constraintName="uq_poll_user_vote"/>
+    </changeSet>
+
+    <changeSet id="005-04" author="nationlens">
+        <createTable tableName="comments">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="media_link_id" type="BIGINT"/>
+            <column name="discussion_id" type="BIGINT"/>
+            <column name="parent_id" type="BIGINT"/>
+            <column name="body" type="TEXT"><constraints nullable="false"/></column>
+            <column name="user_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_comment_user" references="users(id)"/></column>
+            <column name="moderation_status" type="VARCHAR(40)" defaultValue="PENDING"/>
+            <column name="is_deleted" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+        <createIndex tableName="comments" indexName="idx_comments_media"><column name="media_link_id"/></createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!--
+        Staff accounts — email/password login only.
+        Citizens use mobile OTP login instead.
+        Passwords are BCrypt(rounds=10). See docs/Staff_Credentials.md for plaintext.
+    -->
+
+    <!-- NATIONAL_ADMIN -->
+    <changeSet id="013-01" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="national@nationlens.in"/>
+            <column name="display_name" value="National Admin"/>
+            <column name="password_hash" value="$2b$10$uzTHi8b33GnFdCqkIo8.0OMLx2DtLFPFG78GzU3qKhEDFnMzCzfhy"/>
+            <column name="email_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='national@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='NATIONAL_ADMIN')"/>
+        </insert>
+    </changeSet>
+
+    <!-- STATE_ADMIN -->
+    <changeSet id="013-02" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="stateadmin@nationlens.in"/>
+            <column name="display_name" value="State Admin"/>
+            <column name="password_hash" value="$2b$10$mI/CRZTeZrIfWkEdBPCiI.8nOFh.YFgPBkmxTNKcDVJFrOGw3t.KO"/>
+            <column name="email_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='stateadmin@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='STATE_ADMIN')"/>
+        </insert>
+    </changeSet>
+
+    <!-- DISTRICT_MODERATOR -->
+    <changeSet id="013-03" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="distmod@nationlens.in"/>
+            <column name="display_name" value="District Moderator"/>
+            <column name="password_hash" value="$2b$10$Dkw.mVMip3syyV.CDLnE4.3HleJlkbxRCGClBirPK1GbeHa3xVE1S"/>
+            <column name="email_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='distmod@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='DISTRICT_MODERATOR')"/>
+        </insert>
+    </changeSet>
+
+    <!-- CONTENT_MODERATOR -->
+    <changeSet id="013-04" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="contentmod@nationlens.in"/>
+            <column name="display_name" value="Content Moderator"/>
+            <column name="password_hash" value="$2b$10$dgF.8dghnbZJv8mx2ab.SOQWX4O7/nk9Xr6nuoBA/3UD4NqLR3QA2"/>
+            <column name="email_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='contentmod@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='CONTENT_MODERATOR')"/>
+        </insert>
+    </changeSet>
+
+    <!-- FACT_CHECKER -->
+    <changeSet id="013-05" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="factcheck@nationlens.in"/>
+            <column name="display_name" value="Fact Checker"/>
+            <column name="password_hash" value="$2b$10$2XIvWhnZ1pMZNfMECq9xG.ZBvihL8FTPs6x.UvsPvU5XCfHGMsUL."/>
+            <column name="email_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='factcheck@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='FACT_CHECKER')"/>
+        </insert>
+    </changeSet>
+
+    <!-- ANALYST -->
+    <changeSet id="013-06" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="analyst@nationlens.in"/>
+            <column name="display_name" value="Analyst"/>
+            <column name="password_hash" value="$2b$10$2zJbwYNMKunMRuuvjEmfSeYfglwY38KqgWzPAcTSAeEdPx6dC41XC"/>
+            <column name="email_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='analyst@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='ANALYST')"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

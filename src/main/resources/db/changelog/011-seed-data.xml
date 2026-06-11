@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- Roles -->
+    <changeSet id="011-01" author="nationlens">
+        <insert tableName="roles"><column name="code" value="SUPER_ADMIN"/><column name="name" value="Super Admin"/></insert>
+        <insert tableName="roles"><column name="code" value="NATIONAL_ADMIN"/><column name="name" value="National Admin"/></insert>
+        <insert tableName="roles"><column name="code" value="STATE_ADMIN"/><column name="name" value="State Admin"/></insert>
+        <insert tableName="roles"><column name="code" value="DISTRICT_MODERATOR"/><column name="name" value="District Moderator"/></insert>
+        <insert tableName="roles"><column name="code" value="CONTENT_MODERATOR"/><column name="name" value="Content Moderator"/></insert>
+        <insert tableName="roles"><column name="code" value="FACT_CHECKER"/><column name="name" value="Fact Checker"/></insert>
+        <insert tableName="roles"><column name="code" value="ANALYST"/><column name="name" value="Analyst"/></insert>
+        <insert tableName="roles"><column name="code" value="CITIZEN"/><column name="name" value="Citizen"/></insert>
+        <insert tableName="roles"><column name="code" value="GUEST"/><column name="name" value="Guest"/></insert>
+    </changeSet>
+
+    <!-- Admin user (password: Admin@123) -->
+    <changeSet id="011-02" author="nationlens">
+        <insert tableName="users">
+            <column name="email" value="admin@nationlens.in"/>
+            <column name="display_name" value="NationLens Admin"/>
+            <column name="password_hash" value="$2b$10$y0uMNTupLH1ZZ5p31bApe.oWPrUzejsy5D6G3hL2HdtHlf1R8.N/S"/>
+            <column name="mobile_verified" valueBoolean="true"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" valueComputed="(SELECT id FROM users WHERE email='admin@nationlens.in')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM roles WHERE code='SUPER_ADMIN')"/>
+        </insert>
+    </changeSet>
+
+    <!-- States -->
+    <changeSet id="011-03" author="nationlens">
+        <insert tableName="states"><column name="code" value="RJ"/><column name="name_en" value="Rajasthan"/><column name="name_hi" value="राजस्थान"/></insert>
+        <insert tableName="states"><column name="code" value="UP"/><column name="name_en" value="Uttar Pradesh"/><column name="name_hi" value="उत्तर प्रदेश"/></insert>
+        <insert tableName="states"><column name="code" value="MH"/><column name="name_en" value="Maharashtra"/><column name="name_hi" value="महाराष्ट्र"/></insert>
+        <insert tableName="states"><column name="code" value="DL"/><column name="name_en" value="Delhi"/><column name="name_hi" value="दिल्ली"/></insert>
+        <insert tableName="states"><column name="code" value="MP"/><column name="name_en" value="Madhya Pradesh"/><column name="name_hi" value="मध्य प्रदेश"/></insert>
+        <insert tableName="states"><column name="code" value="GJ"/><column name="name_en" value="Gujarat"/><column name="name_hi" value="गुजरात"/></insert>
+        <insert tableName="states"><column name="code" value="WB"/><column name="name_en" value="West Bengal"/><column name="name_hi" value="पश्चिम बंगाल"/></insert>
+        <insert tableName="states"><column name="code" value="KA"/><column name="name_en" value="Karnataka"/><column name="name_hi" value="कर्नाटक"/></insert>
+        <insert tableName="states"><column name="code" value="BR"/><column name="name_en" value="Bihar"/><column name="name_hi" value="बिहार"/></insert>
+        <insert tableName="states"><column name="code" value="HR"/><column name="name_en" value="Haryana"/><column name="name_hi" value="हरियाणा"/></insert>
+    </changeSet>
+
+    <!-- Districts -->
+    <changeSet id="011-04" author="nationlens">
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/>
+            <column name="name_en" value="Jaipur"/><column name="name_hi" value="जयपुर"/>
+            <column name="slug" value="jaipur"/><column name="population" valueNumeric="6626178"/><column name="literacy_rate" valueNumeric="76.4"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/>
+            <column name="name_en" value="Lucknow"/><column name="name_hi" value="लखनऊ"/>
+            <column name="slug" value="lucknow"/><column name="population" valueNumeric="4588455"/><column name="literacy_rate" valueNumeric="79.2"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/>
+            <column name="name_en" value="Varanasi"/><column name="name_hi" value="वाराणसी"/>
+            <column name="slug" value="varanasi"/><column name="population" valueNumeric="3676841"/><column name="literacy_rate" valueNumeric="75.6"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='DL')"/>
+            <column name="name_en" value="New Delhi"/><column name="name_hi" value="नई दिल्ली"/>
+            <column name="slug" value="new-delhi"/><column name="population" valueNumeric="11034555"/><column name="literacy_rate" valueNumeric="86.2"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/>
+            <column name="name_en" value="Mumbai"/><column name="name_hi" value="मुंबई"/>
+            <column name="slug" value="mumbai"/><column name="population" valueNumeric="12442373"/><column name="literacy_rate" valueNumeric="90.1"/>
+        </insert>
+    </changeSet>
+
+    <!-- Entity types -->
+    <changeSet id="011-05" author="nationlens">
+        <insert tableName="entity_types"><column name="code" value="MP"/><column name="name_en" value="Member of Parliament"/><column name="name_hi" value="संसद सदस्य"/></insert>
+        <insert tableName="entity_types"><column name="code" value="MLA"/><column name="name_en" value="Member of Legislative Assembly"/><column name="name_hi" value="विधान सभा सदस्य"/></insert>
+        <insert tableName="entity_types"><column name="code" value="PARTY"/><column name="name_en" value="Political Party"/><column name="name_hi" value="राजनीतिक पार्टी"/></insert>
+        <insert tableName="entity_types"><column name="code" value="ROLE_MODEL"/><column name="name_en" value="Role Model"/><column name="name_hi" value="रोल मॉडल"/></insert>
+        <insert tableName="entity_types"><column name="code" value="PUBLIC_FIGURE"/><column name="name_en" value="Public Figure"/><column name="name_hi" value="सार्वजनिक व्यक्तित्व"/></insert>
+        <insert tableName="entity_types"><column name="code" value="JOURNALIST"/><column name="name_en" value="Journalist"/><column name="name_hi" value="पत्रकार"/></insert>
+        <insert tableName="entity_types"><column name="code" value="SOCIAL_WORKER"/><column name="name_en" value="Social Worker"/><column name="name_hi" value="सामाजिक कार्यकर्ता"/></insert>
+        <insert tableName="entity_types"><column name="code" value="INFLUENCER"/><column name="name_en" value="Influencer"/><column name="name_hi" value="इन्फ्लुएंसर"/></insert>
+    </changeSet>
+
+    <!-- Party entities -->
+    <changeSet id="011-06" author="nationlens">
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PARTY')"/>
+            <column name="name_en" value="Bharatiya Janata Party"/><column name="name_hi" value="भारतीय जनता पार्टी"/>
+            <column name="slug" value="bjp"/><column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PARTY')"/>
+            <column name="name_en" value="Indian National Congress"/><column name="name_hi" value="भारतीय राष्ट्रीय कांग्रेस"/>
+            <column name="slug" value="inc"/><column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PARTY')"/>
+            <column name="name_en" value="Aam Aadmi Party"/><column name="name_hi" value="आम आदमी पार्टी"/>
+            <column name="slug" value="aap"/><column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+    </changeSet>
+
+    <!-- MP/MLA entities -->
+    <changeSet id="011-07" author="nationlens">
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MP')"/>
+            <column name="name_en" value="Rahul Sharma"/><column name="name_hi" value="राहुल शर्मा"/>
+            <column name="slug" value="rahul-sharma-mp"/>
+            <column name="description_en" value="Member of Parliament from Jaipur Rural constituency. Active in parliamentary debates on education and rural development."/>
+            <column name="description_hi" value="जयपुर ग्रामीण निर्वाचन क्षेत्र से लोकसभा सांसद।"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-sharma-mp')"/>
+            <column name="education" value="B.A. Political Science, Rajasthan University"/>
+            <column name="declared_criminal_cases" valueNumeric="1"/>
+            <column name="declared_assets_inr" valueNumeric="24000000"/>
+            <column name="declared_liabilities_inr" valueNumeric="3000000"/>
+            <column name="parliament_attendance_pct" valueNumeric="78.0"/>
+            <column name="questions_raised" valueNumeric="42"/>
+            <column name="accountability_score" valueNumeric="72"/>
+        </insert>
+
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MLA')"/>
+            <column name="name_en" value="Priya Verma"/><column name="name_hi" value="प्रिया वर्मा"/>
+            <column name="slug" value="priya-verma-mla"/>
+            <column name="description_en" value="MLA from Lucknow West. Known for women empowerment initiatives."/>
+            <column name="description_hi" value="लखनऊ पश्चिम से विधायक। महिला सशक्तिकरण पहल के लिए जानी जाती हैं।"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='lucknow')"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='priya-verma-mla')"/>
+            <column name="education" value="MBA, Lucknow University"/>
+            <column name="declared_criminal_cases" valueNumeric="0"/>
+            <column name="parliament_attendance_pct" valueNumeric="85.0"/>
+            <column name="questions_raised" valueNumeric="28"/>
+            <column name="accountability_score" valueNumeric="68"/>
+        </insert>
+
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MP')"/>
+            <column name="name_en" value="Amit Singh"/><column name="name_hi" value="अमित सिंह"/>
+            <column name="slug" value="amit-singh-mp"/>
+            <column name="description_en" value="Member of Parliament from Varanasi. Senior leader with 3 terms in parliament."/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='varanasi')"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='amit-singh-mp')"/>
+            <column name="declared_criminal_cases" valueNumeric="2"/>
+            <column name="parliament_attendance_pct" valueNumeric="71.0"/>
+            <column name="questions_raised" valueNumeric="65"/>
+            <column name="accountability_score" valueNumeric="81"/>
+        </insert>
+    </changeSet>
+
+    <!-- Media links with mappings -->
+    <changeSet id="011-08" author="nationlens">
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/>
+            <column name="content_type" value="Video"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Rahul Sharma inaugurates new school in Jaipur"/>
+            <column name="title_hi" value="राहुल शर्मा ने जयपुर में नए स्कूल का उद्घाटन किया"/>
+            <column name="summary_en" value="MP Rahul Sharma inaugurates a government school with modern facilities in Jaipur Rural constituency under PM Shri scheme."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=example1"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/example1"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/school1/400/225"/>
+            <column name="source_owner" value="Rahul Sharma Official"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Rahul Sharma inaugurates new school in Jaipur')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-sharma-mp')"/>
+            <column name="section_key" value="POSITIVE_WORK"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="Post"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Priya Verma women empowerment skill development camp"/>
+            <column name="title_hi" value="प्रिया वर्मा महिला सशक्तिकरण कौशल शिविर"/>
+            <column name="summary_en" value="MLA Priya Verma leads a women skill development camp in Lucknow West, helping 200+ women gain vocational training."/>
+            <column name="source_url" value="https://www.instagram.com/p/example2"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/women1/400/225"/>
+            <column name="source_owner" value="@priya.verma.mla"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Priya Verma women empowerment skill development camp')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='priya-verma-mla')"/>
+            <column name="section_key" value="OFFICIAL_UPDATES"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <insert tableName="media_links">
+            <column name="platform" value="NEWS"/>
+            <column name="content_type" value="Article"/>
+            <column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Public audit finds Jaipur road project running 18 months behind schedule"/>
+            <column name="title_hi" value="सार्वजनिक ऑडिट: जयपुर सड़क परियोजना 18 महीने पिछड़ी"/>
+            <column name="summary_en" value="A public audit report notes that road development projects in Jaipur Rural constituency are running 18 months behind schedule. Source: CAG Report 2024."/>
+            <column name="source_url" value="https://example-news.com/jaipur-road-audit"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/audit1/400/225"/>
+            <column name="source_owner" value="The Public Record"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Public audit finds Jaipur road project running 18 months behind schedule')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-sharma-mp')"/>
+            <column name="section_key" value="CRITICAL_VIEW"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- Polls with options -->
+    <changeSet id="011-09" author="nationlens">
+        <insert tableName="polls">
+            <column name="question_en" value="Which issue should the government prioritize in your district?"/>
+            <column name="question_hi" value="आपके जिले में सरकार को किस मुद्दे को प्राथमिकता देनी चाहिए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which issue should the government prioritize in your district?' LIMIT 1)"/>
+            <column name="label_en" value="Roads and Infrastructure"/><column name="label_hi" value="सड़कें और बुनियादी ढांचा"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which issue should the government prioritize in your district?' LIMIT 1)"/>
+            <column name="label_en" value="Healthcare"/><column name="label_hi" value="स्वास्थ्य सेवा"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which issue should the government prioritize in your district?' LIMIT 1)"/>
+            <column name="label_en" value="Education"/><column name="label_hi" value="शिक्षा"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which issue should the government prioritize in your district?' LIMIT 1)"/>
+            <column name="label_en" value="Employment"/><column name="label_hi" value="रोजगार"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Are you satisfied with your MP or MLA performance?"/>
+            <column name="question_hi" value="क्या आप अपने सांसद या विधायक के प्रदर्शन से संतुष्ट हैं?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Are you satisfied with your MP or MLA performance?' LIMIT 1)"/>
+            <column name="label_en" value="Very Satisfied"/><column name="label_hi" value="बहुत संतुष्ट"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Are you satisfied with your MP or MLA performance?' LIMIT 1)"/>
+            <column name="label_en" value="Somewhat Satisfied"/><column name="label_hi" value="कुछ हद तक संतुष्ट"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Are you satisfied with your MP or MLA performance?' LIMIT 1)"/>
+            <column name="label_en" value="Neutral"/><column name="label_hi" value="तटस्थ"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Are you satisfied with your MP or MLA performance?' LIMIT 1)"/>
+            <column name="label_en" value="Dissatisfied"/><column name="label_hi" value="असंतुष्ट"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+    </changeSet>
+
+    <!-- AI insights (placeholder) -->
+    <changeSet id="011-10" author="nationlens">
+        <insert tableName="ai_insights">
+            <column name="insight_type" value="DISTRICT"/>
+            <column name="title_en" value="Jaipur District Development Index Analysis"/>
+            <column name="title_hi" value="जयपुर जिला विकास सूचकांक विश्लेषण"/>
+            <column name="body_en" value="AI analysis placeholder: Based on publicly available data, Jaipur shows improvement in literacy (76.4%) and healthcare access over the last 5 years. Infrastructure investment has increased by 23% per public budget records."/>
+            <column name="body_hi" value="AI विश्लेषण प्लेसहोल्डर: सार्वजनिक रूप से उपलब्ध डेटा के आधार पर, जयपुर पिछले 5 वर्षों में साक्षरता और स्वास्थ्य सेवा पहुंच में सुधार दर्शाता है।"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
+            <column name="is_placeholder" valueBoolean="true"/>
+            <column name="is_published" valueBoolean="true"/>
+        </insert>
+        <insert tableName="ai_insights">
+            <column name="insight_type" value="ENTITY"/>
+            <column name="title_en" value="Parliamentary Performance: Rahul Sharma 2024"/>
+            <column name="title_hi" value="संसदीय प्रदर्शन: राहुल शर्मा 2024"/>
+            <column name="body_en" value="AI insight placeholder: Based on Lok Sabha records, Rahul Sharma attended 78% of sessions and raised 42 questions. Constituency development projects show mixed progress per CAG public audit."/>
+            <column name="body_hi" value="AI इनसाइट: लोक सभा रिकॉर्ड के अनुसार, राहुल शर्मा ने 78% सत्रों में भाग लिया और 42 प्रश्न पूछे।"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-sharma-mp')"/>
+            <column name="is_placeholder" valueBoolean="true"/>
+            <column name="is_published" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- Manifesto promises -->
+    <changeSet id="011-11" author="nationlens">
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="category_key" value="jobs"/>
+            <column name="title_en" value="Create 2 crore jobs per year"/>
+            <column name="title_hi" value="प्रति वर्ष 2 करोड़ रोजगार सृजन"/>
+            <column name="status" value="DISPUTED"/>
+            <column name="election_year" valueNumeric="2024"/>
+            <column name="source_url" value="https://affidavit.eci.gov.in"/>
+        </insert>
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="category_key" value="infrastructure"/>
+            <column name="title_en" value="Build 25000 km of national highways"/>
+            <column name="title_hi" value="25000 किमी राष्ट्रीय राजमार्ग निर्माण"/>
+            <column name="status" value="IN_PROGRESS"/>
+            <column name="election_year" valueNumeric="2024"/>
+        </insert>
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="category_key" value="healthcare"/>
+            <column name="title_en" value="Universal health coverage for all families"/>
+            <column name="title_hi" value="सभी परिवारों के लिए सार्वभौमिक स्वास्थ्य कवरेज"/>
+            <column name="status" value="NOT_STARTED"/>
+            <column name="election_year" valueNumeric="2024"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

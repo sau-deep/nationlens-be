@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="006-01" author="nationlens">
+        <createTable tableName="media_links">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="platform" type="VARCHAR(40)"><constraints nullable="false"/></column>
+            <column name="content_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
+            <column name="sentiment_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
+            <column name="title_en" type="VARCHAR(500)"><constraints nullable="false"/></column>
+            <column name="title_hi" type="VARCHAR(500)"/>
+            <column name="summary_en" type="TEXT"/>
+            <column name="summary_hi" type="TEXT"/>
+            <column name="source_url" type="TEXT"><constraints nullable="false"/></column>
+            <column name="embed_url" type="TEXT"/>
+            <column name="thumbnail_url" type="TEXT"/>
+            <column name="source_owner" type="VARCHAR(255)"/>
+            <column name="source_published_at" type="TIMESTAMP"/>
+            <column name="source_verified" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="is_embeddable" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="no_app_switch_required" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="external_open_allowed" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="approval_status" type="VARCHAR(40)" defaultValue="DRAFT"/>
+            <column name="visibility" type="VARCHAR(40)" defaultValue="PUBLIC"/>
+            <column name="moderation_status" type="VARCHAR(40)" defaultValue="PENDING"/>
+            <column name="moderation_notes" type="TEXT"/>
+            <column name="source_confidence" type="VARCHAR(40)" defaultValue="MEDIUM"/>
+            <column name="display_order" type="INT" defaultValueNumeric="0"/>
+            <column name="language_visibility" type="VARCHAR(20)" defaultValue="BOTH"/>
+            <column name="created_by" type="BIGINT"><constraints foreignKeyName="fk_media_created_by" references="users(id)"/></column>
+            <column name="approved_by" type="BIGINT"><constraints foreignKeyName="fk_media_approved_by" references="users(id)"/></column>
+            <column name="approved_at" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <createIndex tableName="media_links" indexName="idx_media_links_platform"><column name="platform"/></createIndex>
+        <createIndex tableName="media_links" indexName="idx_media_links_sentiment"><column name="sentiment_type"/></createIndex>
+        <createIndex tableName="media_links" indexName="idx_media_links_approval"><column name="approval_status"/></createIndex>
+    </changeSet>
+
+    <changeSet id="006-02" author="nationlens">
+        <createTable tableName="media_mappings">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="media_link_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_mapping_media" references="media_links(id)"/></column>
+            <column name="mapping_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
+            <column name="entity_id" type="BIGINT"><constraints foreignKeyName="fk_mapping_entity" references="entities(id)"/></column>
+            <column name="district_id" type="BIGINT"><constraints foreignKeyName="fk_mapping_district" references="districts(id)"/></column>
+            <column name="constituency_id" type="BIGINT"><constraints foreignKeyName="fk_mapping_constituency" references="constituencies(id)"/></column>
+            <column name="party_entity_id" type="BIGINT"/>
+            <column name="election_id" type="BIGINT"/>
+            <column name="issue_key" type="VARCHAR(100)"/>
+            <column name="section_key" type="VARCHAR(100)"><constraints nullable="false"/></column>
+            <column name="sub_menu_key" type="VARCHAR(100)"/>
+            <column name="display_context" type="VARCHAR(100)"><constraints nullable="false"/></column>
+            <column name="display_order" type="INT" defaultValueNumeric="0"/>
+            <column name="is_primary" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_entity"><column name="entity_id"/></createIndex>
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_district"><column name="district_id"/></createIndex>
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_section"><column name="section_key"/></createIndex>
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_context"><column name="display_context"/></createIndex>
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_link"><column name="media_link_id"/></createIndex>
+    </changeSet>
+
+    <changeSet id="006-03" author="nationlens">
+        <createTable tableName="media_audit_logs">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="media_link_id" type="BIGINT"><constraints foreignKeyName="fk_audit_media" references="media_links(id)"/></column>
+            <column name="action" type="VARCHAR(80)"><constraints nullable="false"/></column>
+            <column name="old_value" type="JSONB"/>
+            <column name="new_value" type="JSONB"/>
+            <column name="reason" type="TEXT"/>
+            <column name="performed_by" type="BIGINT"><constraints foreignKeyName="fk_audit_user" references="users(id)"/></column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

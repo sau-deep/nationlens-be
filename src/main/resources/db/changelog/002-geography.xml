@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="002-01" author="nationlens">
+        <createTable tableName="states">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="code" type="VARCHAR(10)"><constraints unique="true" nullable="false"/></column>
+            <column name="name_en" type="VARCHAR(120)"><constraints nullable="false"/></column>
+            <column name="name_hi" type="VARCHAR(120)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="002-02" author="nationlens">
+        <createTable tableName="districts">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="state_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_district_state" references="states(id)"/></column>
+            <column name="name_en" type="VARCHAR(120)"><constraints nullable="false"/></column>
+            <column name="name_hi" type="VARCHAR(120)"/>
+            <column name="slug" type="VARCHAR(200)"><constraints unique="true" nullable="false"/></column>
+            <column name="population" type="BIGINT"/>
+            <column name="literacy_rate" type="DECIMAL(5,2)"/>
+            <column name="area_sq_km" type="DECIMAL(10,2)"/>
+            <column name="headquarters" type="VARCHAR(120)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <createIndex tableName="districts" indexName="idx_districts_state">
+            <column name="state_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="002-03" author="nationlens">
+        <createTable tableName="constituencies">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="district_id" type="BIGINT"><constraints foreignKeyName="fk_const_district" references="districts(id)"/></column>
+            <column name="state_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_const_state" references="states(id)"/></column>
+            <column name="name_en" type="VARCHAR(200)"><constraints nullable="false"/></column>
+            <column name="name_hi" type="VARCHAR(200)"/>
+            <column name="slug" type="VARCHAR(300)"><constraints unique="true" nullable="false"/></column>
+            <column name="constituency_type" type="VARCHAR(20)"><constraints nullable="false"/></column>
+            <column name="constituency_number" type="INT"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

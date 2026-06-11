@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="009-01" author="nationlens">
+        <createTable tableName="ai_insights">
+            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="insight_type" type="VARCHAR(80)"><constraints nullable="false"/></column>
+            <column name="title_en" type="VARCHAR(500)"><constraints nullable="false"/></column>
+            <column name="title_hi" type="VARCHAR(500)"/>
+            <column name="body_en" type="TEXT"><constraints nullable="false"/></column>
+            <column name="body_hi" type="TEXT"/>
+            <column name="entity_id" type="BIGINT"><constraints foreignKeyName="fk_insight_entity" references="entities(id)"/></column>
+            <column name="district_id" type="BIGINT"><constraints foreignKeyName="fk_insight_district" references="districts(id)"/></column>
+            <column name="is_placeholder" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="is_published" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="generated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

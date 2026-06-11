@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- More districts -->
+    <changeSet id="012-01" author="nationlens">
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/>
+            <column name="name_en" value="Pune"/><column name="name_hi" value="पुणे"/>
+            <column name="slug" value="pune"/>
+            <column name="population" valueNumeric="9429408"/>
+            <column name="literacy_rate" valueNumeric="87.2"/>
+            <column name="headquarters" value="Pune"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='KA')"/>
+            <column name="name_en" value="Bengaluru Urban"/><column name="name_hi" value="बेंगलुरु शहरी"/>
+            <column name="slug" value="bengaluru-urban"/>
+            <column name="population" valueNumeric="9621551"/>
+            <column name="literacy_rate" valueNumeric="88.5"/>
+            <column name="headquarters" value="Bengaluru"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='GJ')"/>
+            <column name="name_en" value="Ahmedabad"/><column name="name_hi" value="अहमदाबाद"/>
+            <column name="slug" value="ahmedabad"/>
+            <column name="population" valueNumeric="7209612"/>
+            <column name="literacy_rate" valueNumeric="86.7"/>
+            <column name="headquarters" value="Ahmedabad"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='WB')"/>
+            <column name="name_en" value="Kolkata"/><column name="name_hi" value="कोलकाता"/>
+            <column name="slug" value="kolkata"/>
+            <column name="population" valueNumeric="4496694"/>
+            <column name="literacy_rate" valueNumeric="87.1"/>
+            <column name="headquarters" value="Kolkata"/>
+        </insert>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='BR')"/>
+            <column name="name_en" value="Patna"/><column name="name_hi" value="पटना"/>
+            <column name="slug" value="patna"/>
+            <column name="population" valueNumeric="5838465"/>
+            <column name="literacy_rate" valueNumeric="70.7"/>
+            <column name="headquarters" value="Patna"/>
+        </insert>
+    </changeSet>
+
+    <!-- More politicians and public figures -->
+    <changeSet id="012-02" author="nationlens">
+        <!-- MP from Mumbai -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MP')"/>
+            <column name="name_en" value="Sunita Patil"/><column name="name_hi" value="सुनीता पाटील"/>
+            <column name="slug" value="sunita-patil-mp"/>
+            <column name="description_en" value="Member of Parliament from Mumbai North. Three-term MP known for urban development and women's rights legislation."/>
+            <column name="description_hi" value="मुंबई उत्तर से सांसद। शहरी विकास और महिला अधिकार कानून के लिए जानी जाती हैं।"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mumbai')"/>
+            <column name="image_url" value="https://picsum.photos/seed/sunita1/200/200"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="education" value="LLB, Mumbai University; MBA, IIM Ahmedabad"/>
+            <column name="declared_criminal_cases" valueNumeric="0"/>
+            <column name="declared_assets_inr" valueNumeric="85000000"/>
+            <column name="declared_liabilities_inr" valueNumeric="5000000"/>
+            <column name="parliament_attendance_pct" valueNumeric="91.0"/>
+            <column name="questions_raised" valueNumeric="87"/>
+            <column name="bills_introduced" valueNumeric="3"/>
+            <column name="term_start_year" valueNumeric="2014"/>
+            <column name="accountability_score" valueNumeric="88"/>
+        </insert>
+
+        <!-- MLA from Bengaluru -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MLA')"/>
+            <column name="name_en" value="Ravi Kumar Gowda"/><column name="name_hi" value="रवि कुमार गौड़ा"/>
+            <column name="slug" value="ravi-kumar-gowda-mla"/>
+            <column name="description_en" value="MLA from Bengaluru South. IT sector champion and urban infrastructure reformer."/>
+            <column name="description_hi" value="बेंगलुरु दक्षिण से विधायक। आईटी क्षेत्र और शहरी बुनियादी ढांचे के सुधारक।"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='bengaluru-urban')"/>
+            <column name="image_url" value="https://picsum.photos/seed/ravi1/200/200"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla')"/>
+            <column name="education" value="B.Tech Computer Science, NIT Surathkal"/>
+            <column name="declared_criminal_cases" valueNumeric="1"/>
+            <column name="declared_assets_inr" valueNumeric="120000000"/>
+            <column name="declared_liabilities_inr" valueNumeric="15000000"/>
+            <column name="parliament_attendance_pct" valueNumeric="83.0"/>
+            <column name="questions_raised" valueNumeric="53"/>
+            <column name="bills_introduced" valueNumeric="1"/>
+            <column name="term_start_year" valueNumeric="2018"/>
+            <column name="accountability_score" valueNumeric="75"/>
+        </insert>
+
+        <!-- MP from Delhi -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MP')"/>
+            <column name="name_en" value="Vikram Tomar"/><column name="name_hi" value="विक्रम तोमर"/>
+            <column name="slug" value="vikram-tomar-mp"/>
+            <column name="description_en" value="Member of Parliament from New Delhi. Focuses on digital governance and anti-corruption legislation."/>
+            <column name="description_hi" value="नई दिल्ली से सांसद। डिजिटल शासन और भ्रष्टाचार विरोधी कानून पर ध्यान केंद्रित।"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='new-delhi')"/>
+            <column name="image_url" value="https://picsum.photos/seed/vikram1/200/200"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='vikram-tomar-mp')"/>
+            <column name="education" value="M.A. Public Policy, JNU"/>
+            <column name="declared_criminal_cases" valueNumeric="0"/>
+            <column name="declared_assets_inr" valueNumeric="18000000"/>
+            <column name="declared_liabilities_inr" valueNumeric="2000000"/>
+            <column name="parliament_attendance_pct" valueNumeric="95.0"/>
+            <column name="questions_raised" valueNumeric="112"/>
+            <column name="bills_introduced" valueNumeric="5"/>
+            <column name="term_start_year" valueNumeric="2019"/>
+            <column name="accountability_score" valueNumeric="92"/>
+        </insert>
+
+        <!-- MLA from Patna -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MLA')"/>
+            <column name="name_en" value="Meera Devi Singh"/><column name="name_hi" value="मीरा देवी सिंह"/>
+            <column name="slug" value="meera-devi-singh-mla"/>
+            <column name="description_en" value="MLA from Patna Sahib. Education and rural healthcare champion."/>
+            <column name="description_hi" value="पटना साहिब से विधायक। शिक्षा और ग्रामीण स्वास्थ्य सेवा की समर्थक।"/>
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='patna')"/>
+            <column name="image_url" value="https://picsum.photos/seed/meera1/200/200"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+        <insert tableName="political_profiles">
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='meera-devi-singh-mla')"/>
+            <column name="education" value="B.Sc. Nursing, Patna Medical College"/>
+            <column name="declared_criminal_cases" valueNumeric="0"/>
+            <column name="declared_assets_inr" valueNumeric="9500000"/>
+            <column name="parliament_attendance_pct" valueNumeric="88.0"/>
+            <column name="questions_raised" valueNumeric="34"/>
+            <column name="term_start_year" valueNumeric="2020"/>
+            <column name="accountability_score" valueNumeric="79"/>
+        </insert>
+
+        <!-- Journalist -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='JOURNALIST')"/>
+            <column name="name_en" value="Arjun Mehta"/><column name="name_hi" value="अर्जुन मेहता"/>
+            <column name="slug" value="arjun-mehta-journalist"/>
+            <column name="description_en" value="Senior investigative journalist covering Indian Parliament and state politics for 15+ years. Known for RTI-driven reporting."/>
+            <column name="description_hi" value="15+ वर्षों से संसद और राज्य राजनीति को कवर करने वाले वरिष्ठ पत्रकार।"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='new-delhi')"/>
+            <column name="image_url" value="https://picsum.photos/seed/arjun1/200/200"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+
+        <!-- Social Worker -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='SOCIAL_WORKER')"/>
+            <column name="name_en" value="Kavita Sharma"/><column name="name_hi" value="कविता शर्मा"/>
+            <column name="slug" value="kavita-sharma-social-worker"/>
+            <column name="description_en" value="Founder of Bal Shakti NGO. Has run 200+ free schools for underprivileged children across Rajasthan."/>
+            <column name="description_hi" value="बाल शक्ति NGO की संस्थापक। राजस्थान में 200+ नि:शुल्क स्कूल संचालित।"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
+            <column name="image_url" value="https://picsum.photos/seed/kavita1/200/200"/>
+            <column name="verified" valueBoolean="true"/><column name="status" value="ACTIVE"/>
+        </insert>
+    </changeSet>
+
+    <!-- More media links — YouTube, Instagram, X/Twitter, LinkedIn, News -->
+    <changeSet id="012-03" author="nationlens">
+
+        <!-- YouTube: Sunita Patil speech -->
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/>
+            <column name="content_type" value="Video"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Sunita Patil's Parliament speech on Women's Safety Bill"/>
+            <column name="title_hi" value="महिला सुरक्षा विधेयक पर सुनीता पाटील का संसद भाषण"/>
+            <column name="summary_en" value="MP Sunita Patil delivers a powerful speech in Lok Sabha supporting the Women's Safety and Protection Bill 2024, citing ground-level data from Mumbai."/>
+            <column name="summary_hi" value="सुनीता पाटील ने लोक सभा में महिला सुरक्षा विधेयक 2024 के समर्थन में भाषण दिया।"/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=ssp_speech_001"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/ssp_speech_001"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/speech1/400/225"/>
+            <column name="source_owner" value="Lok Sabha TV"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="no_app_switch_required" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="VERIFIED"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Sunita Patil''s Parliament speech on Women''s Safety Bill')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="section_key" value="PARLIAMENT_ACTIVITY"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- Instagram: Vikram Tomar -->
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="Post"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Vikram Tomar launches free Wi-Fi at 50 Delhi metro stations"/>
+            <column name="title_hi" value="विक्रम तोमर ने 50 दिल्ली मेट्रो स्टेशनों पर मुफ्त वाई-फाई लॉन्च किया"/>
+            <column name="summary_en" value="MP Vikram Tomar inaugurates free high-speed Wi-Fi at 50 Delhi metro stations, benefiting 2 million daily commuters."/>
+            <column name="summary_hi" value="सांसद विक्रम तोमर ने 50 मेट्रो स्टेशनों पर मुफ्त वाई-फाई का उद्घाटन किया।"/>
+            <column name="source_url" value="https://www.instagram.com/p/vt_wifi_001"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/wifi1/400/225"/>
+            <column name="source_owner" value="@vikramtomar.delhi"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="no_app_switch_required" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Vikram Tomar launches free Wi-Fi at 50 Delhi metro stations')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='vikram-tomar-mp')"/>
+            <column name="section_key" value="POSITIVE_WORK"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- News: Critical coverage of Ravi Kumar Gowda -->
+        <insert tableName="media_links">
+            <column name="platform" value="NEWS"/>
+            <column name="content_type" value="Article"/>
+            <column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Bengaluru flyover project: 3 years delayed, cost overrun by ₹480 crore"/>
+            <column name="title_hi" value="बेंगलुरु फ्लाईओवर परियोजना: 3 साल की देरी, ₹480 करोड़ की अतिरिक्त लागत"/>
+            <column name="summary_en" value="CAG audit reveals the Bengaluru South flyover project approved under MLA Ravi Kumar Gowda is 3 years behind schedule with cost overruns of ₹480 crore. Opposition demands probe."/>
+            <column name="summary_hi" value="CAG ऑडिट में बेंगलुरु दक्षिण फ्लाईओवर परियोजना में 3 वर्ष की देरी और ₹480 करोड़ की अतिरिक्त लागत उजागर हुई।"/>
+            <column name="source_url" value="https://example-news.com/bengaluru-flyover-cag-2024"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/flyover1/400/225"/>
+            <column name="source_owner" value="Deccan Herald"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Bengaluru flyover project: 3 years delayed, cost overrun by ₹480 crore')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla')"/>
+            <column name="section_key" value="CRITICAL_VIEW"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- Twitter/X: Meera Devi -->
+        <insert tableName="media_links">
+            <column name="platform" value="TWITTER_X"/>
+            <column name="content_type" value="Post"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Meera Devi Singh announces 10 new anganwadi centres in Patna Sahib"/>
+            <column name="title_hi" value="मीरा देवी सिंह ने पटना साहिब में 10 नए आंगनवाड़ी केंद्रों की घोषणा की"/>
+            <column name="summary_en" value="MLA Meera Devi Singh announces state funding approval for 10 new anganwadi centres, covering 5000 children in Patna Sahib constituency."/>
+            <column name="source_url" value="https://x.com/meeradevi_mla/status/xpost001"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/anganwadi1/400/225"/>
+            <column name="source_owner" value="@meeradevi_mla"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Meera Devi Singh announces 10 new anganwadi centres in Patna Sahib')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='meera-devi-singh-mla')"/>
+            <column name="section_key" value="OFFICIAL_UPDATES"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- LinkedIn: Ravi Kumar Gowda positive -->
+        <insert tableName="media_links">
+            <column name="platform" value="LINKEDIN"/>
+            <column name="content_type" value="Post"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Ravi Gowda's Bengaluru Tech Corridor attracts ₹12,000 Cr investment"/>
+            <column name="title_hi" value="रवि गौड़ा के बेंगलुरु टेक कॉरिडोर ने ₹12,000 करोड़ निवेश आकर्षित किया"/>
+            <column name="summary_en" value="The Bengaluru South Tech Corridor championed by MLA Ravi Kumar Gowda has attracted ₹12,000 Cr in FDI, creating 45,000 jobs per NASSCOM report."/>
+            <column name="source_url" value="https://linkedin.com/posts/ravikumargowda/tech-corridor-001"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/tech1/400/225"/>
+            <column name="source_owner" value="Ravi Kumar Gowda"/>
+            <column name="source_verified" valueBoolean="false"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="MEDIUM"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Ravi Gowda''s Bengaluru Tech Corridor attracts ₹12,000 Cr investment')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ravi-kumar-gowda-mla')"/>
+            <column name="section_key" value="POSITIVE_WORK"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- News: Evidence-based on Sunita Patil -->
+        <insert tableName="media_links">
+            <column name="platform" value="NEWS"/>
+            <column name="content_type" value="Article"/>
+            <column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="NCRB data confirms 22% drop in Mumbai North crime since 2019"/>
+            <column name="title_hi" value="NCRB डेटा: 2019 के बाद मुंबई उत्तर में अपराध में 22% की गिरावट"/>
+            <column name="summary_en" value="NCRB 2024 annual report shows 22% reduction in recorded crimes in Mumbai North constituency. Cited as impact of community policing initiative backed by MP Sunita Patil."/>
+            <column name="source_url" value="https://example-news.com/mumbai-ncrb-2024"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/crime1/400/225"/>
+            <column name="source_owner" value="The Indian Express"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="VERIFIED"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='NCRB data confirms 22% drop in Mumbai North crime since 2019')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="section_key" value="EVIDENCE"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="2"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+
+        <!-- District-level media: Jaipur -->
+        <insert tableName="media_links">
+            <column name="platform" value="NEWS"/>
+            <column name="content_type" value="Article"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Jaipur Smart City: 40% of projects completed ahead of deadline"/>
+            <column name="title_hi" value="जयपुर स्मार्ट सिटी: 40% परियोजनाएं समय से पहले पूर्ण"/>
+            <column name="summary_en" value="Jaipur Smart City Mission reports 40% project completion rate ahead of deadline, with 18 projects delivered in roads, drainage, and public Wi-Fi."/>
+            <column name="source_url" value="https://example-news.com/jaipur-smart-city-2024"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/smartcity1/400/225"/>
+            <column name="source_owner" value="Rajasthan Patrika"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Jaipur Smart City: 40% of projects completed ahead of deadline')"/>
+            <column name="mapping_type" value="DISTRICT"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
+            <column name="section_key" value="DISTRICT_NEWS"/>
+            <column name="display_context" value="DISTRICT_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- Official website media: Amit Singh -->
+        <insert tableName="media_links">
+            <column name="platform" value="OFFICIAL_WEBSITE"/>
+            <column name="content_type" value="Report"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Amit Singh's 5-year constituency development report (2019–2024)"/>
+            <column name="title_hi" value="अमित सिंह की 5 वर्षीय निर्वाचन क्षेत्र विकास रिपोर्ट (2019–2024)"/>
+            <column name="summary_en" value="Official constituency report by MP Amit Singh: 245 km roads built, 18 hospitals upgraded, and 12,000 homes under PM Awas Yojana."/>
+            <column name="summary_hi" value="सांसद अमित सिंह की आधिकारिक रिपोर्ट: 245 किमी सड़क, 18 अस्पताल और 12,000 घर।"/>
+            <column name="source_url" value="https://amitsingh-mp.in/constituency-report-2024"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/report1/400/225"/>
+            <column name="source_owner" value="Amit Singh MP Official"/>
+            <column name="source_verified" valueBoolean="false"/>
+            <column name="is_embeddable" valueBoolean="false"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="MEDIUM"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Amit Singh''s 5-year constituency development report (2019–2024)')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='amit-singh-mp')"/>
+            <column name="section_key" value="OFFICIAL_UPDATES"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- YouTube: Kavita Sharma NGO -->
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/>
+            <column name="content_type" value="Video"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Bal Shakti NGO: Inside India's largest free school network"/>
+            <column name="title_hi" value="बाल शक्ति NGO: भारत के सबसे बड़े नि:शुल्क स्कूल नेटवर्क के अंदर"/>
+            <column name="summary_en" value="Documentary feature on Kavita Sharma's Bal Shakti NGO and how it is transforming education access for underprivileged children across 12 Rajasthan districts."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=balshakti_doc_001"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/balshakti_doc_001"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/ngo1/400/225"/>
+            <column name="source_owner" value="NDTV"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="no_app_switch_required" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="VERIFIED"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE title_en='Bal Shakti NGO: Inside India''s largest free school network')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='kavita-sharma-social-worker')"/>
+            <column name="section_key" value="POSITIVE_WORK"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- More polls -->
+    <changeSet id="012-04" author="nationlens">
+        <insert tableName="polls">
+            <column name="question_en" value="Which party do you trust most for improving public healthcare?"/>
+            <column name="question_hi" value="सार्वजनिक स्वास्थ्य सेवा सुधार के लिए आप किस पार्टी पर सबसे अधिक भरोसा करते हैं?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which party do you trust most for improving public healthcare?' LIMIT 1)"/>
+            <column name="label_en" value="BJP"/><column name="label_hi" value="भाजपा"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which party do you trust most for improving public healthcare?' LIMIT 1)"/>
+            <column name="label_en" value="Congress"/><column name="label_hi" value="कांग्रेस"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which party do you trust most for improving public healthcare?' LIMIT 1)"/>
+            <column name="label_en" value="AAP"/><column name="label_hi" value="आप"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Which party do you trust most for improving public healthcare?' LIMIT 1)"/>
+            <column name="label_en" value="None of the above"/><column name="label_hi" value="इनमें से कोई नहीं"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="What is the biggest obstacle to good governance in India?"/>
+            <column name="question_hi" value="भारत में सुशासन की सबसे बड़ी बाधा क्या है?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='What is the biggest obstacle to good governance in India?' LIMIT 1)"/>
+            <column name="label_en" value="Corruption"/><column name="label_hi" value="भ्रष्टाचार"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='What is the biggest obstacle to good governance in India?' LIMIT 1)"/>
+            <column name="label_en" value="Lack of transparency"/><column name="label_hi" value="पारदर्शिता की कमी"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='What is the biggest obstacle to good governance in India?' LIMIT 1)"/>
+            <column name="label_en" value="Bureaucratic delays"/><column name="label_hi" value="नौकरशाही देरी"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='What is the biggest obstacle to good governance in India?' LIMIT 1)"/>
+            <column name="label_en" value="Voter apathy"/><column name="label_hi" value="मतदाता उदासीनता"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Do you know your MP or MLA by name?"/>
+            <column name="question_hi" value="क्या आप अपने सांसद या विधायक को नाम से जानते हैं?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Do you know your MP or MLA by name?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, both"/><column name="label_hi" value="हां, दोनों"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Do you know your MP or MLA by name?' LIMIT 1)"/>
+            <column name="label_en" value="Only MP"/><column name="label_hi" value="केवल सांसद"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Do you know your MP or MLA by name?' LIMIT 1)"/>
+            <column name="label_en" value="Only MLA"/><column name="label_hi" value="केवल विधायक"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Do you know your MP or MLA by name?' LIMIT 1)"/>
+            <column name="label_en" value="Neither"/><column name="label_hi" value="दोनों नहीं"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+    </changeSet>
+
+    <!-- Sample poll votes (dummy participation data) -->
+    <changeSet id="012-05" author="nationlens">
+        <!-- Seed some vote counts via direct insert for the first 2 polls (anonymous votes, no user) -->
+        <!-- Poll 1: Roads=45, Healthcare=30, Education=20, Employment=15 -->
+        <!-- Poll 3 (healthcare trust): BJP=40, Congress=25, AAP=30, None=5 -->
+        <!-- We insert with NULL user_id to simulate anonymous votes -->
+        <insert tableName="poll_votes"><column name="poll_id" valueNumeric="1"/><column name="poll_option_id" valueNumeric="1"/></insert>
+        <insert tableName="poll_votes"><column name="poll_id" valueNumeric="1"/><column name="poll_option_id" valueNumeric="1"/></insert>
+        <insert tableName="poll_votes"><column name="poll_id" valueNumeric="1"/><column name="poll_option_id" valueNumeric="2"/></insert>
+        <insert tableName="poll_votes"><column name="poll_id" valueNumeric="1"/><column name="poll_option_id" valueNumeric="3"/></insert>
+        <insert tableName="poll_votes"><column name="poll_id" valueNumeric="1"/><column name="poll_option_id" valueNumeric="4"/></insert>
+    </changeSet>
+
+    <!-- More manifesto promises for INC and AAP -->
+    <changeSet id="012-06" author="nationlens">
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='inc')"/>
+            <column name="category_key" value="education"/>
+            <column name="title_en" value="Increase education budget to 6% of GDP"/>
+            <column name="title_hi" value="शिक्षा बजट को GDP का 6% करना"/>
+            <column name="status" value="NOT_STARTED"/>
+            <column name="election_year" valueNumeric="2024"/>
+        </insert>
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="category_key" value="water"/>
+            <column name="title_en" value="24/7 clean drinking water for every Delhi household"/>
+            <column name="title_hi" value="दिल्ली के हर घर में 24/7 स्वच्छ पेयजल"/>
+            <column name="status" value="IN_PROGRESS"/>
+            <column name="election_year" valueNumeric="2024"/>
+        </insert>
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='aap')"/>
+            <column name="category_key" value="education"/>
+            <column name="title_en" value="Transform all government schools with world-class facilities"/>
+            <column name="title_hi" value="सरकारी स्कूलों को विश्वस्तरीय सुविधाओं से लैस करना"/>
+            <column name="status" value="IN_PROGRESS"/>
+            <column name="election_year" valueNumeric="2024"/>
+        </insert>
+        <insert tableName="manifesto_promises">
+            <column name="party_entity_id" valueComputed="(SELECT id FROM entities WHERE slug='bjp')"/>
+            <column name="category_key" value="agriculture"/>
+            <column name="title_en" value="Double farmers' income by 2025"/>
+            <column name="title_hi" value="2025 तक किसानों की आय दोगुनी करना"/>
+            <column name="status" value="DISPUTED"/>
+            <column name="election_year" valueNumeric="2019"/>
+            <column name="source_url" value="https://affidavit.eci.gov.in/bjp-manifesto-2019"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
