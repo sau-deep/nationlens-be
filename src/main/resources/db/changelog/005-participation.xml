@@ -6,7 +6,7 @@
 
     <changeSet id="005-01" author="nationlens">
         <createTable tableName="polls">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="question_en" type="VARCHAR(500)"><constraints nullable="false"/></column>
             <column name="question_hi" type="VARCHAR(500)"/>
             <column name="entity_id" type="BIGINT"><constraints foreignKeyName="fk_poll_entity" references="entities(id)"/></column>
@@ -20,7 +20,7 @@
 
     <changeSet id="005-02" author="nationlens">
         <createTable tableName="poll_options">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="poll_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_opt_poll" references="polls(id)"/></column>
             <column name="label_en" type="VARCHAR(255)"><constraints nullable="false"/></column>
             <column name="label_hi" type="VARCHAR(255)"/>
@@ -30,7 +30,7 @@
 
     <changeSet id="005-03" author="nationlens">
         <createTable tableName="poll_votes">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="poll_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_vote_poll" references="polls(id)"/></column>
             <column name="poll_option_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_vote_option" references="poll_options(id)"/></column>
             <column name="user_id" type="BIGINT"><constraints foreignKeyName="fk_vote_user" references="users(id)"/></column>
@@ -41,7 +41,7 @@
 
     <changeSet id="005-04" author="nationlens">
         <createTable tableName="comments">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="media_link_id" type="BIGINT"/>
             <column name="discussion_id" type="BIGINT"/>
             <column name="parent_id" type="BIGINT"/>

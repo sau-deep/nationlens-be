@@ -6,7 +6,7 @@
 
     <changeSet id="006-01" author="nationlens">
         <createTable tableName="media_links">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="platform" type="VARCHAR(40)"><constraints nullable="false"/></column>
             <column name="content_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
             <column name="sentiment_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
@@ -44,7 +44,7 @@
 
     <changeSet id="006-02" author="nationlens">
         <createTable tableName="media_mappings">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="media_link_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_mapping_media" references="media_links(id)"/></column>
             <column name="mapping_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
             <column name="entity_id" type="BIGINT"><constraints foreignKeyName="fk_mapping_entity" references="entities(id)"/></column>
@@ -70,11 +70,11 @@
 
     <changeSet id="006-03" author="nationlens">
         <createTable tableName="media_audit_logs">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="media_link_id" type="BIGINT"><constraints foreignKeyName="fk_audit_media" references="media_links(id)"/></column>
             <column name="action" type="VARCHAR(80)"><constraints nullable="false"/></column>
-            <column name="old_value" type="JSONB"/>
-            <column name="new_value" type="JSONB"/>
+            <column name="old_value" type="JSON"/>
+            <column name="new_value" type="JSON"/>
             <column name="reason" type="TEXT"/>
             <column name="performed_by" type="BIGINT"><constraints foreignKeyName="fk_audit_user" references="users(id)"/></column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>

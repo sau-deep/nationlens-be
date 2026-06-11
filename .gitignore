@@ -32,6 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 
+### Deploy artifacts ###
+deploy-temp/
+deployment-*.zip
+
 ### OS / logs / env ###
 .DS_Store
 *.log

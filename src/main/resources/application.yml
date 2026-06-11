@@ -3,25 +3,23 @@ spring:
     name: nationlens-backend
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/nationlens}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/nationlens?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&serverTimezone=UTC}
     username: ${SPRING_DATASOURCE_USERNAME:nationlens}
     password: ${SPRING_DATASOURCE_PASSWORD:nationlens123}
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-        default_schema: public
 
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
-    default-schema: public
 
 server:
   port: ${SERVER_PORT:8080}
@@ -39,11 +37,11 @@ nationlens:
     secret: ${JWT_SECRET:NationLensSecretKey2024VeryLongAndSecureKeyForProductionUseOnlyMustBe32Chars}
     expiration-ms: 86400000
   cors:
-    allowed-origins: http://localhost:3000,http://localhost:3001
+    allowed-origins: ${NATIONLENS_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
 
 msg91:
-  authkey: 467759AK9OsJyrK168baf5d7P1
-  widget-id: 3569656e6455363038373834
+  authkey: ${MSG91_AUTHKEY:467759AK9OsJyrK168baf5d7P1}
+  widget-id: ${MSG91_WIDGET_ID:3569656e6455363038373834}
   base-url: https://api.msg91.com/api/v5/widget
 
 logging:

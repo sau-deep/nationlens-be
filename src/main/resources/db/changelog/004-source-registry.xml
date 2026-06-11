@@ -6,7 +6,7 @@
 
     <changeSet id="004-01" author="nationlens">
         <createTable tableName="source_registry">
-            <column name="id" type="BIGSERIAL"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="name" type="VARCHAR(255)"><constraints nullable="false"/></column>
             <column name="source_type" type="VARCHAR(80)"><constraints nullable="false"/></column>
             <column name="tier" type="VARCHAR(40)"><constraints nullable="false"/></column>

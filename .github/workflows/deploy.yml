@@ -1,0 +1,52 @@
+name: Deploy Backend to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-east-1
+  APPLICATION_NAME: nationlens-be
+  ENVIRONMENT_NAME: nationlens-be-env
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install zip
+        run: sudo apt-get update -y && sudo apt-get install -y zip
+
+      - name: Deploy to Elastic Beanstalk
+        env:
+          AWS_PROFILE: ""
+          APPLICATION_NAME: ${{ env.APPLICATION_NAME }}
+          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+          AWS_REGION: ${{ env.AWS_REGION }}
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
+
+      - name: Deployment summary
+        run: |
+          echo "## Backend deployment" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Environment: \`${{ env.ENVIRONMENT_NAME }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Region: \`${{ env.AWS_REGION }}\`" >> "$GITHUB_STEP_SUMMARY"
