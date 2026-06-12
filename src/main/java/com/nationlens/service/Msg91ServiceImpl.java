@@ -25,12 +25,23 @@ public class Msg91ServiceImpl implements Msg91Service {
     @Value("${msg91.base-url}")
     private String baseUrl;
 
+    @Value("${nationlens.otp.enabled:false}")
+    private boolean otpEnabled;
+
+    @Value("${nationlens.otp.dev-bypass-code:123456}")
+    private String devBypassCode;
+
     public Msg91ServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     @Override
     public OtpSendResponse sendOtp(String mobile) {
+        if (!otpEnabled) {
+            log.info("OTP disabled – skipping MSG91 send for mobile {}", mobile);
+            return new OtpSendResponse("dev-bypass", widgetId, true, "OTP delivery skipped (OTP disabled)");
+        }
+
         String url = baseUrl + "/sendOtp";
         Map<String, String> body = new HashMap<>();
         body.put("widgetId", widgetId);
@@ -60,6 +71,16 @@ public class Msg91ServiceImpl implements Msg91Service {
 
     @Override
     public boolean verifyOtp(String reqId, String otp) {
+        if (!otpEnabled) {
+            boolean valid = devBypassCode.equals(otp);
+            if (valid) {
+                log.info("OTP bypass code accepted (OTP disabled)");
+            } else {
+                log.warn("Invalid OTP bypass attempt while OTP is disabled");
+            }
+            return valid;
+        }
+
         String url = baseUrl + "/verifyOtp";
         Map<String, String> body = new HashMap<>();
         body.put("widgetId", widgetId);
@@ -87,6 +108,12 @@ public class Msg91ServiceImpl implements Msg91Service {
 
     @Override
     public OtpSendResponse retryOtp(String reqId) {
+        if (!otpEnabled) {
+            log.info("OTP disabled – skipping MSG91 retry for reqId {}", reqId);
+            return new OtpSendResponse(reqId != null ? reqId : "dev-bypass", widgetId, true,
+                "OTP delivery skipped (OTP disabled)");
+        }
+
         String url = baseUrl + "/retryOtp";
         Map<String, String> body = new HashMap<>();
         body.put("widgetId", widgetId);

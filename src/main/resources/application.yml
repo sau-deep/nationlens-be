@@ -38,6 +38,10 @@ nationlens:
     expiration-ms: 86400000
   cors:
     allowed-origins: ${NATIONLENS_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+  otp:
+    # Set OTP_ENABLED=true when MSG91 is live. Until then, use dev-bypass-code on verify.
+    enabled: ${OTP_ENABLED:false}
+    dev-bypass-code: ${OTP_DEV_BYPASS_CODE:123456}
 
 msg91:
   authkey: ${MSG91_AUTHKEY:467759AK9OsJyrK168baf5d7P1}
