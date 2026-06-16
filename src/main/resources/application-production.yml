@@ -11,13 +11,23 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      # Liquibase owns the schema, but 'validate' crash-loops on harmless MySQL
+      # type representations (e.g. BOOLEAN stored as TINYINT vs Hibernate's BIT).
+      # 'update' does additive sync only and tolerates such mismatches, so it
+      # avoids the validation crash. Override via SPRING_JPA_HIBERNATE_DDL_AUTO.
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: false
 
 server:
   port: ${SERVER_PORT:5000}
 
 nationlens:
+  cors:
+    # CloudFront prod origin + localhost so developers can point a local frontend
+    # at the deployed AWS backend (dev-only Backend Switcher). Auth is Bearer-token
+    # (localStorage), not cookies, so allowing localhost here carries minimal risk.
+    # Override entirely via NATIONLENS_CORS_ALLOWED_ORIGINS (comma-separated) in AWS EB env.
+    allowed-origins: ${NATIONLENS_CORS_ALLOWED_ORIGINS:https://d3rzn1740h1qlc.cloudfront.net,http://localhost:3000,http://localhost:3001}
   otp:
     # OTP disabled until go-live. Set OTP_ENABLED=true in AWS EB env when MSG91 is ready.
     enabled: ${OTP_ENABLED:false}

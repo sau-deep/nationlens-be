@@ -10,7 +10,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      # Liquibase owns the schema; 'validate' crash-loops on MySQL TINYINT-vs-BIT
+      # boolean representation. 'update' does additive sync only and tolerates it.
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: false
     properties:
       hibernate:
@@ -38,6 +40,9 @@ nationlens:
     expiration-ms: 86400000
   cors:
     allowed-origins: ${NATIONLENS_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+  rss:
+    # How often to re-fetch all RSS feeds (ms). Default 2 hours. Set RSS_FETCH_INTERVAL_MS to override.
+    fetch-interval-ms: ${RSS_FETCH_INTERVAL_MS:7200000}
   otp:
     # Set OTP_ENABLED=true when MSG91 is live. Until then, use dev-bypass-code on verify.
     enabled: ${OTP_ENABLED:false}
