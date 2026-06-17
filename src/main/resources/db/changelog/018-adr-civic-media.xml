@@ -10,6 +10,7 @@
          ================================================================ -->
     <changeSet id="018-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM entities WHERE slug = 'adr-india'</sqlCheck></preConditions>
 
         <insert tableName="entities">
             <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PUBLIC_FIGURE')"/>
@@ -30,6 +31,7 @@
          ================================================================ -->
     <changeSet id="018-02" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/DZheT6WS_ca/'</sqlCheck></preConditions>
 
         <insert tableName="media_links">
             <column name="platform" value="INSTAGRAM"/>
@@ -69,6 +71,7 @@
          ================================================================ -->
     <changeSet id="018-03" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/DUF2nDqiCby/'</sqlCheck></preConditions>
 
         <insert tableName="media_links">
             <column name="platform" value="INSTAGRAM"/>
@@ -118,6 +121,7 @@
          ================================================================ -->
     <changeSet id="018-04" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'ADR India — Reports and Press Releases'</sqlCheck></preConditions>
 
         <insert tableName="rss_feed_sources">
             <column name="name" value="ADR India — Reports and Press Releases"/>
@@ -145,6 +149,7 @@
          ================================================================ -->
     <changeSet id="018-05" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_news_items WHERE guid = 'adr-ls2024-allphases-criminal-financial'</sqlCheck></preConditions>
 
         <!-- Report 1: All-phases criminal/financial analysis -->
         <insert tableName="rss_news_items">

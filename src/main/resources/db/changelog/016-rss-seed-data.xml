@@ -8,6 +8,7 @@
     <!-- ===== ADR / Electoral Reforms / Governance ===== -->
     <changeSet id="016-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'Indian Express - Politics'</sqlCheck></preConditions>
 
         <!-- Indian Express – Politics (covers ADR reports, electoral bonds, ECI orders) -->
         <insert tableName="rss_feed_sources">
@@ -40,6 +41,7 @@
     <!-- ===== LEGAL (Court judgments, new laws, amendments) ===== -->
     <changeSet id="016-02" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'LiveLaw'</sqlCheck></preConditions>
 
         <!-- LiveLaw – India's top legal news portal -->
         <insert tableName="rss_feed_sources">
@@ -73,6 +75,7 @@
     <!-- ===== ELECTIONS ===== -->
     <changeSet id="016-03" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'The Hindu - Elections'</sqlCheck></preConditions>
 
         <!-- The Hindu – Elections section -->
         <insert tableName="rss_feed_sources">
@@ -105,6 +108,7 @@
     <!-- ===== NATIONAL NEWS ===== -->
     <changeSet id="016-04" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'Indian Express - India'</sqlCheck></preConditions>
 
         <insert tableName="rss_feed_sources">
             <column name="name" value="Indian Express - India"/>
@@ -126,6 +130,7 @@
     <!-- ===== CITY NEWS — The Hindu city feeds ===== -->
     <changeSet id="016-05" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'The Hindu - Delhi'</sqlCheck></preConditions>
 
         <insert tableName="rss_feed_sources">
             <column name="name" value="The Hindu - Delhi"/>
@@ -227,6 +232,7 @@
     <!-- ===== CITY NEWS — Times of India city feeds ===== -->
     <changeSet id="016-06" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'Times of India - Delhi'</sqlCheck></preConditions>
 
         <insert tableName="rss_feed_sources">
             <column name="name" value="Times of India - Delhi"/>

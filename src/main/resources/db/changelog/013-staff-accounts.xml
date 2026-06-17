@@ -12,6 +12,8 @@
 
     <!-- NATIONAL_ADMIN -->
     <changeSet id="013-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'national@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="national@nationlens.in"/>
             <column name="display_name" value="National Admin"/>
@@ -27,6 +29,8 @@
 
     <!-- STATE_ADMIN -->
     <changeSet id="013-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'stateadmin@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="stateadmin@nationlens.in"/>
             <column name="display_name" value="State Admin"/>
@@ -42,6 +46,8 @@
 
     <!-- DISTRICT_MODERATOR -->
     <changeSet id="013-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'distmod@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="distmod@nationlens.in"/>
             <column name="display_name" value="District Moderator"/>
@@ -57,6 +63,8 @@
 
     <!-- CONTENT_MODERATOR -->
     <changeSet id="013-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'contentmod@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="contentmod@nationlens.in"/>
             <column name="display_name" value="Content Moderator"/>
@@ -72,6 +80,8 @@
 
     <!-- FACT_CHECKER -->
     <changeSet id="013-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'factcheck@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="factcheck@nationlens.in"/>
             <column name="display_name" value="Fact Checker"/>
@@ -87,6 +97,8 @@
 
     <!-- ANALYST -->
     <changeSet id="013-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'analyst@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="analyst@nationlens.in"/>
             <column name="display_name" value="Analyst"/>

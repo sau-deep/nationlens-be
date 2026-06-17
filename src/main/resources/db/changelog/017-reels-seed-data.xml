@@ -9,6 +9,7 @@
          ================================================================ -->
     <changeSet id="017-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM entities WHERE slug = 'ananya-kapoor-civic'</sqlCheck></preConditions>
 
         <!-- Civic influencer — Delhi based -->
         <insert tableName="entities">
@@ -56,6 +57,7 @@
          ================================================================ -->
     <changeSet id="017-02" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/DZoy_xUSD8X/'</sqlCheck></preConditions>
 
         <!-- The reel provided by the user -->
         <insert tableName="media_links">
@@ -125,6 +127,7 @@
          ================================================================ -->
     <changeSet id="017-03" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/rahul_water_project/'</sqlCheck></preConditions>
 
         <insert tableName="media_links">
             <column name="platform" value="INSTAGRAM"/>
@@ -193,6 +196,7 @@
          ================================================================ -->
     <changeSet id="017-04" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/priya_sakhi_shakti/'</sqlCheck></preConditions>
 
         <insert tableName="media_links">
             <column name="platform" value="INSTAGRAM"/>
@@ -272,6 +276,7 @@
          ================================================================ -->
     <changeSet id="017-05" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/amit_smart_city/'</sqlCheck></preConditions>
 
         <insert tableName="media_links">
             <column name="platform" value="INSTAGRAM"/>
@@ -320,6 +325,7 @@
          ================================================================ -->
     <changeSet id="017-06" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.instagram.com/reel/constitution_art19/'</sqlCheck></preConditions>
 
         <!-- Ananya Kapoor — Constitution 101 reel -->
         <insert tableName="media_links">
@@ -431,6 +437,7 @@
          ================================================================ -->
     <changeSet id="017-07" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url = 'https://www.youtube.com/watch?v=amit_parliament_speech'</sqlCheck></preConditions>
 
         <!-- Parliament speech — Amit Singh -->
         <insert tableName="media_links">

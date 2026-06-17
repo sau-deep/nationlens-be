@@ -6,6 +6,7 @@
 
     <changeSet id="004-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="source_registry"/></not></preConditions>
         <createTable tableName="source_registry">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="name" type="VARCHAR(255)"><constraints nullable="false"/></column>

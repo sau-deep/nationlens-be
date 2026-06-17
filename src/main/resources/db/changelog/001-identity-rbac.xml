@@ -6,6 +6,7 @@
 
     <changeSet id="001-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="roles"/></not></preConditions>
         <createTable tableName="roles">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="code" type="VARCHAR(80)"><constraints unique="true" nullable="false"/></column>
@@ -17,6 +18,7 @@
 
     <changeSet id="001-02" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="permissions"/></not></preConditions>
         <createTable tableName="permissions">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="code" type="VARCHAR(120)"><constraints unique="true" nullable="false"/></column>
@@ -28,6 +30,7 @@
 
     <changeSet id="001-03" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="role_permissions"/></not></preConditions>
         <createTable tableName="role_permissions">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="role_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_rp_role" references="roles(id)"/></column>
@@ -38,6 +41,7 @@
 
     <changeSet id="001-04" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="users"/></not></preConditions>
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="mobile" type="VARCHAR(20)"><constraints unique="true"/></column>
@@ -58,6 +62,7 @@
 
     <changeSet id="001-05" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="user_roles"/></not></preConditions>
         <createTable tableName="user_roles">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="user_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_ur_user" references="users(id)"/></column>
@@ -70,6 +75,7 @@
 
     <changeSet id="001-06" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="otp_requests"/></not></preConditions>
         <createTable tableName="otp_requests">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="mobile" type="VARCHAR(20)"><constraints nullable="false"/></column>

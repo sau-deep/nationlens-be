@@ -6,6 +6,7 @@
 
     <changeSet id="008-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="reports"/></not></preConditions>
         <createTable tableName="reports">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="target_type" type="VARCHAR(40)"><constraints nullable="false"/></column>

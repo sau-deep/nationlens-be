@@ -6,6 +6,8 @@
 
     <!-- Roles -->
     <changeSet id="011-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM roles WHERE code = 'SUPER_ADMIN'</sqlCheck></preConditions>
         <insert tableName="roles"><column name="code" value="SUPER_ADMIN"/><column name="name" value="Super Admin"/></insert>
         <insert tableName="roles"><column name="code" value="NATIONAL_ADMIN"/><column name="name" value="National Admin"/></insert>
         <insert tableName="roles"><column name="code" value="STATE_ADMIN"/><column name="name" value="State Admin"/></insert>
@@ -19,6 +21,8 @@
 
     <!-- Admin user (password: Admin@123) -->
     <changeSet id="011-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM users WHERE email = 'admin@nationlens.in'</sqlCheck></preConditions>
         <insert tableName="users">
             <column name="email" value="admin@nationlens.in"/>
             <column name="display_name" value="NationLens Admin"/>
@@ -34,6 +38,8 @@
 
     <!-- States -->
     <changeSet id="011-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM states WHERE code = 'RJ'</sqlCheck></preConditions>
         <insert tableName="states"><column name="code" value="RJ"/><column name="name_en" value="Rajasthan"/><column name="name_hi" value="राजस्थान"/></insert>
         <insert tableName="states"><column name="code" value="UP"/><column name="name_en" value="Uttar Pradesh"/><column name="name_hi" value="उत्तर प्रदेश"/></insert>
         <insert tableName="states"><column name="code" value="MH"/><column name="name_en" value="Maharashtra"/><column name="name_hi" value="महाराष्ट्र"/></insert>
@@ -48,6 +54,8 @@
 
     <!-- Districts -->
     <changeSet id="011-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM districts WHERE slug = 'jaipur'</sqlCheck></preConditions>
         <insert tableName="districts">
             <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/>
             <column name="name_en" value="Jaipur"/><column name="name_hi" value="जयपुर"/>
@@ -77,6 +85,8 @@
 
     <!-- Entity types -->
     <changeSet id="011-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM entity_types WHERE code = 'MP'</sqlCheck></preConditions>
         <insert tableName="entity_types"><column name="code" value="MP"/><column name="name_en" value="Member of Parliament"/><column name="name_hi" value="संसद सदस्य"/></insert>
         <insert tableName="entity_types"><column name="code" value="MLA"/><column name="name_en" value="Member of Legislative Assembly"/><column name="name_hi" value="विधान सभा सदस्य"/></insert>
         <insert tableName="entity_types"><column name="code" value="PARTY"/><column name="name_en" value="Political Party"/><column name="name_hi" value="राजनीतिक पार्टी"/></insert>
@@ -89,6 +99,8 @@
 
     <!-- Party entities -->
     <changeSet id="011-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM entities WHERE slug = 'bjp'</sqlCheck></preConditions>
         <insert tableName="entities">
             <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PARTY')"/>
             <column name="name_en" value="Bharatiya Janata Party"/><column name="name_hi" value="भारतीय जनता पार्टी"/>
@@ -108,6 +120,8 @@
 
     <!-- MP/MLA entities -->
     <changeSet id="011-07" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM entities WHERE slug = 'rahul-sharma-mp'</sqlCheck></preConditions>
         <insert tableName="entities">
             <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MP')"/>
             <column name="name_en" value="Rahul Sharma"/><column name="name_hi" value="राहुल शर्मा"/>
@@ -168,6 +182,8 @@
 
     <!-- Media links with mappings -->
     <changeSet id="011-08" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE title_en = 'Rahul Sharma inaugurates new school in Jaipur'</sqlCheck></preConditions>
         <insert tableName="media_links">
             <column name="platform" value="YOUTUBE"/>
             <column name="content_type" value="Video"/>
@@ -253,6 +269,8 @@
 
     <!-- Polls with options -->
     <changeSet id="011-09" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM polls WHERE question_en = 'Which issue should the government prioritize in your district?'</sqlCheck></preConditions>
         <insert tableName="polls">
             <column name="question_en" value="Which issue should the government prioritize in your district?"/>
             <column name="question_hi" value="आपके जिले में सरकार को किस मुद्दे को प्राथमिकता देनी चाहिए?"/>
@@ -300,6 +318,8 @@
 
     <!-- AI insights (placeholder) -->
     <changeSet id="011-10" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM ai_insights WHERE title_en = 'Jaipur District Development Index Analysis'</sqlCheck></preConditions>
         <insert tableName="ai_insights">
             <column name="insight_type" value="DISTRICT"/>
             <column name="title_en" value="Jaipur District Development Index Analysis"/>
@@ -324,6 +344,8 @@
 
     <!-- Manifesto promises -->
     <changeSet id="011-11" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM manifesto_promises WHERE title_en = 'Create 2 crore jobs per year'</sqlCheck></preConditions>
         <insert tableName="manifesto_promises">
             <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='bjp') AS _party)"/>
             <column name="category_key" value="jobs"/>

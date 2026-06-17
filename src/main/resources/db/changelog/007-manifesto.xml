@@ -6,6 +6,7 @@
 
     <changeSet id="007-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="manifesto_promises"/></not></preConditions>
         <createTable tableName="manifesto_promises">
             <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
             <column name="party_entity_id" type="BIGINT"><constraints nullable="false" foreignKeyName="fk_promise_party" references="entities(id)"/></column>

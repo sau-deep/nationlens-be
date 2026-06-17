@@ -6,6 +6,8 @@
 
     <!-- More districts -->
     <changeSet id="012-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM districts WHERE slug = 'pune'</sqlCheck></preConditions>
         <insert tableName="districts">
             <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/>
             <column name="name_en" value="Pune"/><column name="name_hi" value="पुणे"/>
@@ -50,6 +52,8 @@
 
     <!-- More politicians and public figures -->
     <changeSet id="012-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM entities WHERE slug = 'sunita-patil-mp'</sqlCheck></preConditions>
         <!-- MP from Mumbai -->
         <insert tableName="entities">
             <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='MP')"/>
@@ -175,6 +179,8 @@
 
     <!-- More media links — YouTube, Instagram, X/Twitter, LinkedIn, News -->
     <changeSet id="012-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE title_en = 'Sunita Patil''s Parliament speech on Women''s Safety Bill'</sqlCheck></preConditions>
 
         <!-- YouTube: Sunita Patil speech -->
         <insert tableName="media_links">
@@ -440,6 +446,8 @@
 
     <!-- More polls -->
     <changeSet id="012-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM polls WHERE question_en = 'Which party do you trust most for improving public healthcare?'</sqlCheck></preConditions>
         <insert tableName="polls">
             <column name="question_en" value="Which party do you trust most for improving public healthcare?"/>
             <column name="question_hi" value="सार्वजनिक स्वास्थ्य सेवा सुधार के लिए आप किस पार्टी पर सबसे अधिक भरोसा करते हैं?"/>
@@ -509,6 +517,8 @@
 
     <!-- Sample poll votes (dummy participation data) -->
     <changeSet id="012-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM poll_votes WHERE poll_id = 1 AND poll_option_id = 1</sqlCheck></preConditions>
         <!-- Seed some vote counts via direct insert for the first 2 polls (anonymous votes, no user) -->
         <!-- Poll 1: Roads=45, Healthcare=30, Education=20, Employment=15 -->
         <!-- Poll 3 (healthcare trust): BJP=40, Congress=25, AAP=30, None=5 -->
@@ -522,6 +532,8 @@
 
     <!-- More manifesto promises for INC and AAP -->
     <changeSet id="012-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM manifesto_promises WHERE title_en = 'Increase education budget to 6% of GDP'</sqlCheck></preConditions>
         <insert tableName="manifesto_promises">
             <column name="party_entity_id" valueComputed="(SELECT id FROM (SELECT id FROM entities WHERE slug='inc') AS _tmp)"/>
             <column name="category_key" value="education"/>
