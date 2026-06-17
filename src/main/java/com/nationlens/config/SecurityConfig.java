@@ -54,6 +54,8 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/health").permitAll()
                 // Admin endpoints require ADMIN role
                 .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "NATIONAL_ADMIN")
+                // State admin endpoints
+                .requestMatchers("/state-admin/**").hasAnyRole("SUPER_ADMIN", "NATIONAL_ADMIN", "STATE_ADMIN")
                 // Moderator endpoints
                 .requestMatchers("/moderator/**").hasAnyRole("SUPER_ADMIN", "NATIONAL_ADMIN", "CONTENT_MODERATOR", "DISTRICT_MODERATOR", "FACT_CHECKER")
                 // Everything else requires authentication

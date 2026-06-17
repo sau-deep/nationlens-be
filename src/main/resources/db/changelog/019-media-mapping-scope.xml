@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="019-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <!-- audience_scope: NATIONAL | STATE | DISTRICT | ENTITY | GENERAL -->
+        <addColumn tableName="media_mappings">
+            <column name="audience_scope" type="VARCHAR(20)" defaultValue="ENTITY">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="019-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <!-- state_code: 2-char Indian state abbreviation, e.g. MH, DL, KA -->
+        <addColumn tableName="media_mappings">
+            <column name="state_code" type="VARCHAR(10)"/>
+        </addColumn>
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_state_code">
+            <column name="state_code"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="019-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <!-- tags: comma-separated topic tags, e.g. "parliament,education" -->
+        <addColumn tableName="media_mappings">
+            <column name="tags" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="019-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <!-- Index for audience_scope for fast feed queries -->
+        <createIndex tableName="media_mappings" indexName="idx_media_mappings_scope">
+            <column name="audience_scope"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

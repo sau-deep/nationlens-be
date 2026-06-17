@@ -19,5 +19,11 @@
     <include file="db/changelog/012-more-seed-data.xml"/>
     <include file="db/changelog/013-staff-accounts.xml"/>
     <include file="db/changelog/014-real-politicians.xml"/>
+    <include file="db/changelog/015-rss-feeds.xml"/>
+    <include file="db/changelog/016-rss-seed-data.xml"/>
+    <include file="db/changelog/017-reels-seed-data.xml"/>
+    <include file="db/changelog/018-adr-civic-media.xml"/>
+    <include file="db/changelog/019-media-mapping-scope.xml"/>
+    <include file="db/changelog/020-rss-language-feeds.xml"/>
 
 </databaseChangeLog>

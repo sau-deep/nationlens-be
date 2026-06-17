@@ -28,4 +28,22 @@ public interface MediaMappingRepository extends JpaRepository<MediaMapping, Long
     List<MediaMapping> findApprovedByDistrictId(@Param("districtId") Long districtId);
 
     List<MediaMapping> findByMediaLinkId(Long mediaLinkId);
+
+    List<MediaMapping> findByEntityId(Long entityId);
+
+    // Find all APPROVED content for a given audience scope
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.audienceScope = :scope ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedByScope(@Param("scope") String scope);
+
+    // Find APPROVED content for NATIONAL + specific state (home feed)
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND (mm.audienceScope = 'NATIONAL' OR (mm.audienceScope = 'STATE' AND mm.stateCode = :stateCode)) ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedForStateFeed(@Param("stateCode") String stateCode);
+
+    // Find APPROVED content by hashtag tag (comma-separated search)
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.tags IS NOT NULL AND mm.tags LIKE %:tag% ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedByTag(@Param("tag") String tag);
+
+    // Find APPROVED content by section key (for section-specific feeds)
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.sectionKey = :sectionKey ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedBySectionKey(@Param("sectionKey") String sectionKey);
 }

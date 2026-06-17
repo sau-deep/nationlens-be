@@ -14,6 +14,10 @@ public class MediaMappingRequest {
     private Long constituencyId;
     private Long partyEntityId;
 
+    private String audienceScope = "ENTITY";
+    private String stateCode;
+    private String tags;
+
     @NotBlank
     private String sectionKey;
 

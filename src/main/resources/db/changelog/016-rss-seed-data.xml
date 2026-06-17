@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ===== ADR / Electoral Reforms / Governance ===== -->
+    <changeSet id="016-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- Indian Express – Politics (covers ADR reports, electoral bonds, ECI orders) -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Indian Express - Politics"/>
+            <column name="feed_url" value="https://indianexpress.com/section/politics/feed/"/>
+            <column name="category" value="ADR"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <!-- The Hindu – National Politics -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - National"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/national/feeder/default.rss"/>
+            <column name="category" value="ADR"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <!-- Hindustan Times – India (elections, governance) -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Hindustan Times - India"/>
+            <column name="feed_url" value="https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml"/>
+            <column name="category" value="ADR"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+    </changeSet>
+
+    <!-- ===== LEGAL (Court judgments, new laws, amendments) ===== -->
+    <changeSet id="016-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- LiveLaw – India's top legal news portal -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="LiveLaw"/>
+            <column name="feed_url" value="https://www.livelaw.in/rss"/>
+            <column name="category" value="LEGAL"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <!-- Bar and Bench – Legal news & Supreme Court -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Bar and Bench"/>
+            <column name="feed_url" value="https://www.barandbench.com/rss"/>
+            <column name="category" value="LEGAL"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <!-- The Hindu – Legal / Supreme Court -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Law"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/national/feeder/default.rss"/>
+            <column name="category" value="LEGAL"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+            <column name="active" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+    <!-- ===== ELECTIONS ===== -->
+    <changeSet id="016-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- The Hindu – Elections section -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Elections"/>
+            <column name="feed_url" value="https://www.thehindu.com/elections/feeder/default.rss"/>
+            <column name="category" value="ELECTIONS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <!-- NDTV India – Elections -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="NDTV - India News"/>
+            <column name="feed_url" value="https://feeds.feedburner.com/ndtvnews-india-news"/>
+            <column name="category" value="ELECTIONS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <!-- Indian Express – Elections -->
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Indian Express - Elections"/>
+            <column name="feed_url" value="https://indianexpress.com/section/elections/feed/"/>
+            <column name="category" value="ELECTIONS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+    </changeSet>
+
+    <!-- ===== NATIONAL NEWS ===== -->
+    <changeSet id="016-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Indian Express - India"/>
+            <column name="feed_url" value="https://indianexpress.com/section/india/feed/"/>
+            <column name="category" value="NATIONAL_NEWS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Top Stories"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeedstopstories.cms"/>
+            <column name="category" value="NATIONAL_NEWS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+    </changeSet>
+
+    <!-- ===== CITY NEWS — The Hindu city feeds ===== -->
+    <changeSet id="016-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Delhi"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/Delhi/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="DELHI"/>
+            <column name="state_code" value="DL"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Mumbai"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/mumbai/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="MUMBAI"/>
+            <column name="state_code" value="MH"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Bangalore"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/bangalore/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="BANGALORE"/>
+            <column name="state_code" value="KA"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Chennai"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/chennai/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="CHENNAI"/>
+            <column name="state_code" value="TN"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Hyderabad"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/Hyderabad/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="HYDERABAD"/>
+            <column name="state_code" value="TG"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Kolkata"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/kolkata/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="KOLKATA"/>
+            <column name="state_code" value="WB"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Thiruvananthapuram"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/Thiruvananthapuram/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="THIRUVANANTHAPURAM"/>
+            <column name="state_code" value="KL"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Kochi"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/kozhikode/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="KOCHI"/>
+            <column name="state_code" value="KL"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Chandigarh"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/chandigarh/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="CHANDIGARH"/>
+            <column name="state_code" value="PB"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Lucknow"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/lucknow/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="LUCKNOW"/>
+            <column name="state_code" value="UP"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Pune"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/pune/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="PUNE"/>
+            <column name="state_code" value="MH"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Ahmedabad"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/cities/ahmedabad/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="AHMEDABAD"/>
+            <column name="state_code" value="GJ"/>
+        </insert>
+    </changeSet>
+
+    <!-- ===== CITY NEWS — Times of India city feeds ===== -->
+    <changeSet id="016-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Delhi"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950567.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="DELHI"/>
+            <column name="state_code" value="DL"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Mumbai"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950668.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="MUMBAI"/>
+            <column name="state_code" value="MH"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Jaipur"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950673.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="JAIPUR"/>
+            <column name="state_code" value="RJ"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Lucknow"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950700.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="LUCKNOW"/>
+            <column name="state_code" value="UP"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Hyderabad"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950663.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="HYDERABAD"/>
+            <column name="state_code" value="TG"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Ahmedabad"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950666.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="AHMEDABAD"/>
+            <column name="state_code" value="GJ"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Pune"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950680.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="PUNE"/>
+            <column name="state_code" value="MH"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Kolkata"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950745.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="KOLKATA"/>
+            <column name="state_code" value="WB"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Bhopal"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950711.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="BHOPAL"/>
+            <column name="state_code" value="MP"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Patna"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950694.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="PATNA"/>
+            <column name="state_code" value="BR"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Nagpur"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950671.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="NAGPUR"/>
+            <column name="state_code" value="MH"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Varanasi"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/2950714.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="VARANASI"/>
+            <column name="state_code" value="UP"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

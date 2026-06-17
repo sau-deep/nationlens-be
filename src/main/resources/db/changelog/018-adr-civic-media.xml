@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ================================================================
+         ADR India — PUBLIC_FIGURE entity (the organisation itself)
+         Maps to the ADR Instagram account and website.
+         ================================================================ -->
+    <changeSet id="018-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='PUBLIC_FIGURE')"/>
+            <column name="name_en" value="Association for Democratic Reforms (ADR)"/>
+            <column name="name_hi" value="एसोसिएशन फॉर डेमोक्रेटिक रिफॉर्म्स (ADR)"/>
+            <column name="slug" value="adr-india"/>
+            <column name="description_en" value="ADR (Association for Democratic Reforms) is a non-partisan, non-governmental organisation working on electoral and political reforms in India for over 25 years. It publishes affidavit-based analysis of MPs, MLAs, criminal cases, and wealth declarations at adrindia.org."/>
+            <column name="description_hi" value="ADR एक गैर-पक्षपाती, गैर-सरकारी संगठन है जो 25 वर्षों से भारत में चुनावी और राजनीतिक सुधारों पर काम कर रहा है।"/>
+            <column name="verified" valueBoolean="true"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         REAL ADR Instagram reel — "Criminal Cases Against India's Politicians"
+         Shortcode: DZheT6WS_ca (surfaced by Firecrawl search 2026-06-16)
+         Section: CRITICAL_REPORTS | SubMenu: PARLIAMENT_REEL
+         ================================================================ -->
+    <changeSet id="018-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="ADR: Criminal Cases Against India's Politicians — Facts from Affidavits"/>
+            <column name="title_hi" value="ADR: भारतीय राजनेताओं के खिलाफ आपराधिक मामले — शपथपत्रों के तथ्य"/>
+            <column name="summary_en" value="Association for Democratic Reforms (ADR) presents data from election affidavits showing the extent of criminal cases declared by candidates. Source: ADR India, Election Commission affidavits."/>
+            <column name="summary_hi" value="ADR ने चुनावी शपथपत्रों से जुटाए आंकड़े पेश किए जो उम्मीदवारों द्वारा घोषित आपराधिक मामलों की सीमा दर्शाते हैं।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/DZheT6WS_ca/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/DZheT6WS_ca/embed/"/>
+            <column name="source_owner" value="@adrindia.org"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <!-- Map to ADR India entity -->
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/DZheT6WS_ca/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='adr-india')"/>
+            <column name="section_key" value="CRITICAL_REPORTS"/>
+            <column name="sub_menu_key" value="PARLIAMENT_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         REAL Parliament awareness reel — "What really happens inside Parliament"
+         Shortcode: DUF2nDqiCby (surfaced by Firecrawl search 2026-06-16)
+         Section: SPEECHES_INTERVIEWS | SubMenu: PARLIAMENT_REEL
+         ================================================================ -->
+    <changeSet id="018-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="What really happens inside Parliament — A citizen's guide to Lok Sabha sessions"/>
+            <column name="title_hi" value="संसद के अंदर वाकई क्या होता है — लोकसभा सत्रों पर एक नागरिक मार्गदर्शिका"/>
+            <column name="summary_en" value="Most citizens never know when Parliament sessions begin, what is discussed inside, or which decisions actually change things on the ground. This reel explains the basics of how Parliament works."/>
+            <column name="summary_hi" value="अधिकांश नागरिक नहीं जानते कि संसद सत्र कब शुरू होते हैं, अंदर क्या चर्चा होती है, और कौन से निर्णय वास्तव में जमीनी स्तर पर बदलाव लाते हैं।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/DUF2nDqiCby/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/DUF2nDqiCby/embed/"/>
+            <column name="source_owner" value="@parliament_watch_india"/>
+            <column name="source_verified" valueBoolean="false"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="MEDIUM"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="2"/>
+        </insert>
+        <!-- Map to Deepa Rajan journalist (Parliament section) -->
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/DUF2nDqiCby/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='deepa-rajan-journalist')"/>
+            <column name="section_key" value="SPEECHES_INTERVIEWS"/>
+            <column name="sub_menu_key" value="PARLIAMENT_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="2"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+        <!-- Also map to ADR entity as general Parliament awareness content -->
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/DUF2nDqiCby/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='adr-india')"/>
+            <column name="section_key" value="OVERVIEW"/>
+            <column name="sub_menu_key" value="CIVIC_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         ADR India RSS feed source (website-scraped, not an RSS feed)
+         Firecrawl will poll this URL and insert into rss_news_items.
+         ================================================================ -->
+    <changeSet id="018-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="ADR India — Reports and Press Releases"/>
+            <column name="feed_url" value="https://adrindia.org/research-and-reports/election-watch-reports"/>
+            <column name="category" value="ADR"/>
+            <column name="source_language" value="en"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="fetch_interval_minutes" valueNumeric="720"/>
+        </insert>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="PRS India — Parliament Vital Stats"/>
+            <column name="feed_url" value="https://prsindia.org/parliamenttrack/vital-stats"/>
+            <column name="category" value="ADR"/>
+            <column name="source_language" value="en"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="fetch_interval_minutes" valueNumeric="1440"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         ADR India reports seeded directly as national news items.
+         Extracted by Firecrawl agent on 2026-06-16 from adrindia.org.
+         city_key = NATIONAL — these are pan-India reports.
+         ================================================================ -->
+    <changeSet id="018-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- Report 1: All-phases criminal/financial analysis -->
+        <insert tableName="rss_news_items">
+            <column name="feed_source_id" valueComputed="(SELECT id FROM rss_feed_sources WHERE name='ADR India — Reports and Press Releases' LIMIT 1)"/>
+            <column name="guid" value="adr-ls2024-allphases-criminal-financial"/>
+            <column name="title" value="Analysis of Criminal Background, Financial, Education, Gender Details of Candidates — LS Elections 2024 (Phase 1–7)"/>
+            <column name="description" value="Consolidated ADR analysis of criminal, financial, educational, and gender backgrounds of candidates across all seven phases of the 2024 Lok Sabha elections. Includes asset comparison for re-contesting MPs."/>
+            <column name="article_url" value="https://adrindia.org/content/analysis-criminal-background-financial-education-gender-and-other-details-candidates-and-3"/>
+            <column name="author" value="ADR India"/>
+            <column name="published_at" valueDate="2024-06-01"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="category" value="ADR"/>
+            <column name="source_name" value="ADR India"/>
+            <column name="fetched_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="active" valueBoolean="true"/>
+        </insert>
+
+        <!-- Report 2: Winners' criminal/financial background -->
+        <insert tableName="rss_news_items">
+            <column name="feed_source_id" valueComputed="(SELECT id FROM rss_feed_sources WHERE name='ADR India — Reports and Press Releases' LIMIT 1)"/>
+            <column name="guid" value="adr-ls2024-winners-criminal-financial"/>
+            <column name="title" value="Analysis of Criminal Background, Financial, Education, Gender Details of Winners — LS 2024"/>
+            <column name="description" value="ADR's comprehensive analysis of criminal, financial, educational, and gender backgrounds of winning candidates from the 2024 Lok Sabha elections. Informs the public about profiles and assets of newly elected Parliament members."/>
+            <column name="article_url" value="https://adrindia.org/content/analysis-criminal-background-financial-education-gender-and-other-details-winning-31"/>
+            <column name="author" value="ADR India"/>
+            <column name="published_at" valueDate="2024-06-07"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="category" value="ADR"/>
+            <column name="source_name" value="ADR India"/>
+            <column name="fetched_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="active" valueBoolean="true"/>
+        </insert>
+
+        <!-- Report 3: Vote share and margin of victory analysis -->
+        <insert tableName="rss_news_items">
+            <column name="feed_source_id" valueComputed="(SELECT id FROM rss_feed_sources WHERE name='ADR India — Reports and Press Releases' LIMIT 1)"/>
+            <column name="guid" value="adr-ls2024-vote-share-margin"/>
+            <column name="title" value="Analysis of Vote Share, Margin of Victory and Representativeness of Winners — LS 2024"/>
+            <column name="description" value="ADR analysis of 2024 Lok Sabha results focusing on winners' vote shares, margins of victory, and representativeness relative to total registered electorate. Compares results to 2019 general elections by party."/>
+            <column name="article_url" value="https://adrindia.org/content/analysis-vote-share-margin-victory-and-representativeness-winners-lok-sabha-elections-2024"/>
+            <column name="author" value="ADR India"/>
+            <column name="published_at" valueDate="2024-06-10"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="category" value="ELECTIONS"/>
+            <column name="source_name" value="ADR India"/>
+            <column name="fetched_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="active" valueBoolean="true"/>
+        </insert>
+
+        <!-- Report 4: Union Council of Ministers — 18th Lok Sabha -->
+        <insert tableName="rss_news_items">
+            <column name="feed_source_id" valueComputed="(SELECT id FROM rss_feed_sources WHERE name='ADR India — Reports and Press Releases' LIMIT 1)"/>
+            <column name="guid" value="adr-ls2024-council-ministers-18th"/>
+            <column name="title" value="Analysis of Criminal, Financial, and Other Background Details of Union Council of Ministers — 18th Lok Sabha"/>
+            <column name="description" value="Detailed ADR analysis of criminal, financial, and educational backgrounds of 71 ministers in the 18th Lok Sabha Cabinet. 99% of analyzed ministers are crorepatis; nearly 40% have declared criminal cases against them."/>
+            <column name="article_url" value="https://adrindia.org/content/analysis-criminal-financial-and-other-background-details-union-council-ministers-18th-lok"/>
+            <column name="author" value="ADR India"/>
+            <column name="published_at" valueDate="2024-06-11"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="category" value="ADR"/>
+            <column name="source_name" value="ADR India"/>
+            <column name="fetched_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="active" valueBoolean="true"/>
+        </insert>
+
+        <!-- Report 5: Vote count discrepancies -->
+        <insert tableName="rss_news_items">
+            <column name="feed_source_id" valueComputed="(SELECT id FROM rss_feed_sources WHERE name='ADR India — Reports and Press Releases' LIMIT 1)"/>
+            <column name="guid" value="adr-ls2024-vote-count-discrepancies"/>
+            <column name="title" value="Discrepancies Between Votes Cast and Votes Counted in the 2024 Lok Sabha Election"/>
+            <column name="description" value="ADR analysis of discrepancies between votes polled and votes counted across parliamentary constituencies in the 2024 Lok Sabha elections. Highlights constituencies with differences in both directions."/>
+            <column name="article_url" value="https://adrindia.org/content/discrepancies-between-votes-cast-and-votes-counted-2024-lok-sabha-election-multiple"/>
+            <column name="author" value="ADR India"/>
+            <column name="published_at" valueDate="2024-08-15"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="category" value="ADR"/>
+            <column name="source_name" value="ADR India"/>
+            <column name="fetched_at" valueComputed="CURRENT_TIMESTAMP"/>
+            <column name="active" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

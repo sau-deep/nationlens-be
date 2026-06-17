@@ -32,6 +32,15 @@ public class MediaMapping {
     @Column(name = "party_entity_id")
     private Long partyEntityId;
 
+    @Column(name = "audience_scope", nullable = false, length = 20)
+    private String audienceScope = "ENTITY";
+
+    @Column(name = "state_code", length = 10)
+    private String stateCode;
+
+    @Column(name = "tags", columnDefinition = "TEXT")
+    private String tags;
+
     @Column(name = "issue_key", length = 100)
     private String issueKey;
 

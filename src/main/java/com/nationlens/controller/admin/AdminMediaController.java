@@ -1,6 +1,7 @@
 package com.nationlens.controller.admin;
 
 import com.nationlens.domain.enums.ApprovalStatus;
+import com.nationlens.dto.admin.UpdateMediaLinkRequest;
 import com.nationlens.dto.common.ApiResponse;
 import com.nationlens.dto.media.CreateMediaLinkRequest;
 import com.nationlens.dto.media.MediaLinkDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -68,6 +70,20 @@ public class AdminMediaController {
     ) {
         Long userId = extractUserId(userDetails);
         return ResponseEntity.ok(ApiResponse.ok(mediaService.updateStatus(id, ApprovalStatus.HIDDEN, userId)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<MediaLinkDto>> update(
+        @PathVariable Long id,
+        @RequestBody UpdateMediaLinkRequest request
+    ) {
+        return ResponseEntity.ok(ApiResponse.ok("Media link updated", mediaService.update(id, request)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        mediaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     private Long extractUserId(UserDetails userDetails) {

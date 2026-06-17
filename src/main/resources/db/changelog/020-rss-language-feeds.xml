@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- Denormalize language onto news items for fast locale filtering -->
+    <changeSet id="020-01" author="nationlens">
+        <addColumn tableName="rss_news_items">
+            <column name="source_language" type="VARCHAR(10)" defaultValue="EN"/>
+        </addColumn>
+        <sql>
+            UPDATE rss_news_items n
+            SET source_language = COALESCE(
+                (SELECT s.source_language FROM rss_feed_sources s WHERE s.id = n.feed_source_id),
+                'EN'
+            )
+            WHERE n.source_language IS NULL OR n.source_language = 'EN';
+        </sql>
+    </changeSet>
+
+    <!-- Hindi national feeds (shown to hi locale users; NATIONAL = everyone) -->
+    <changeSet id="020-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="BBC Hindi - India"/>
+            <column name="feed_url" value="https://feeds.bbci.co.uk/hindi/rss.xml"/>
+            <column name="category" value="NATIONAL_NEWS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="HI"/>
+        </insert>
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Jagran - National"/>
+            <column name="feed_url" value="https://www.jagran.com/rss/national.xml"/>
+            <column name="category" value="NATIONAL_NEWS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="HI"/>
+            <column name="active" valueBoolean="false"/>
+        </insert>
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="NDTV India - News"/>
+            <column name="feed_url" value="https://feeds.feedburner.com/ndtvnews-india-news"/>
+            <column name="category" value="NATIONAL_NEWS"/>
+            <column name="city_key" value="NATIONAL"/>
+            <column name="source_language" value="HI"/>
+        </insert>
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Tamil Nadu"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/national/tamil-nadu/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="CHENNAI"/>
+            <column name="state_code" value="TN"/>
+            <column name="source_language" value="TA"/>
+        </insert>
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="The Hindu - Telangana"/>
+            <column name="feed_url" value="https://www.thehindu.com/news/national/telangana/feeder/default.rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="HYDERABAD"/>
+            <column name="state_code" value="TG"/>
+            <column name="source_language" value="TE"/>
+        </insert>
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Ananda Bazar - Kolkata"/>
+            <column name="feed_url" value="https://www.anandabazar.com/rss"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="KOLKATA"/>
+            <column name="state_code" value="WB"/>
+            <column name="source_language" value="BN"/>
+            <column name="active" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

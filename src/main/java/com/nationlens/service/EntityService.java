@@ -32,6 +32,11 @@ public class EntityService {
             .stream().map(this::toSummary).toList();
     }
 
+    public List<EntitySummaryDto> listByType(String typeCode) {
+        return entityRepository.findByEntityTypeCode(typeCode)
+            .stream().map(this::toSummary).toList();
+    }
+
     public Optional<EntityDetailDto> findBySlug(String slug) {
         return entityRepository.findBySlug(slug).map(entity -> {
             Optional<PoliticalProfile> profile = profileRepository.findByEntityId(entity.getId());

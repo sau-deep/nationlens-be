@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- RSS feed source registry -->
+    <changeSet id="015-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <createTable tableName="rss_feed_sources">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <!-- ADR | LEGAL | ELECTIONS | CIVIC | NATIONAL_NEWS | CITY_NEWS -->
+            <column name="category" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- NATIONAL | DELHI | MUMBAI | BANGALORE | CHENNAI | KOLKATA |
+                 HYDERABAD | AHMEDABAD | PUNE | JAIPUR | LUCKNOW | CHANDIGARH |
+                 BHOPAL | PATNA | THIRUVANANTHAPURAM | KOCHI | NAGPUR | SURAT | VARANASI -->
+            <column name="city_key" type="VARCHAR(60)"/>
+            <column name="state_code" type="VARCHAR(10)"/>
+            <column name="source_language" type="VARCHAR(10)" defaultValue="EN"/>
+            <column name="active" type="BOOLEAN" defaultValueBoolean="true"/>
+            <column name="last_fetched_at" type="TIMESTAMP"/>
+            <column name="fetch_interval_minutes" type="INT" defaultValueNumeric="120"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <createIndex tableName="rss_feed_sources" indexName="idx_rss_sources_city_key">
+            <column name="city_key"/>
+        </createIndex>
+        <createIndex tableName="rss_feed_sources" indexName="idx_rss_sources_category">
+            <column name="category"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- Ingested RSS news items -->
+    <changeSet id="015-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <createTable tableName="rss_news_items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="feed_source_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_news_item_feed_source"
+                             references="rss_feed_sources(id)"/>
+            </column>
+            <!-- Unique article identifier from feed (uri or link). Dedup key. -->
+            <column name="guid" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="article_url" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="thumbnail_url" type="TEXT"/>
+            <column name="author" type="VARCHAR(255)"/>
+            <column name="published_at" type="TIMESTAMP"/>
+            <column name="city_key" type="VARCHAR(60)"/>
+            <column name="category" type="VARCHAR(60)"/>
+            <column name="source_name" type="VARCHAR(200)"/>
+            <column name="fetched_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="active" type="BOOLEAN" defaultValueBoolean="true"/>
+        </createTable>
+
+        <addUniqueConstraint tableName="rss_news_items" columnNames="guid"
+                             constraintName="uq_rss_news_item_guid"/>
+        <createIndex tableName="rss_news_items" indexName="idx_rss_news_city_key">
+            <column name="city_key"/>
+        </createIndex>
+        <createIndex tableName="rss_news_items" indexName="idx_rss_news_category">
+            <column name="category"/>
+        </createIndex>
+        <createIndex tableName="rss_news_items" indexName="idx_rss_news_published_at">
+            <column name="published_at"/>
+        </createIndex>
+        <createIndex tableName="rss_news_items" indexName="idx_rss_news_fetched_at">
+            <column name="fetched_at"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

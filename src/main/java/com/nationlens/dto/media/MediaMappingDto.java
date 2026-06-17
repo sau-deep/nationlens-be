@@ -16,4 +16,7 @@ public class MediaMappingDto {
     private String displayContext;
     private Integer displayOrder;
     private Boolean isPrimary;
+    private String audienceScope;
+    private String stateCode;
+    private String tags;
 }

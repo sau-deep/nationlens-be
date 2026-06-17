@@ -3,6 +3,7 @@ package com.nationlens.service;
 import com.nationlens.domain.entity.MediaLink;
 import com.nationlens.domain.entity.MediaMapping;
 import com.nationlens.domain.enums.ApprovalStatus;
+import com.nationlens.dto.admin.UpdateMediaLinkRequest;
 import com.nationlens.dto.media.*;
 import com.nationlens.repository.MediaLinkRepository;
 import com.nationlens.repository.MediaMappingRepository;
@@ -91,6 +92,9 @@ public class MediaService {
                 mm.setDisplayContext(mr.getDisplayContext());
                 mm.setDisplayOrder(mr.getDisplayOrder());
                 mm.setIsPrimary(mr.getIsPrimary());
+                mm.setAudienceScope(mr.getAudienceScope() != null ? mr.getAudienceScope() : "ENTITY");
+                mm.setStateCode(mr.getStateCode());
+                mm.setTags(mr.getTags());
                 mm.setCreatedAt(LocalDateTime.now());
                 return mediaMappingRepository.save(mm);
             }).toList();
@@ -109,6 +113,44 @@ public class MediaService {
             link.setApprovedAt(LocalDateTime.now());
         }
         link.setUpdatedAt(LocalDateTime.now());
+        mediaLinkRepository.save(link);
+        List<MediaMapping> mappings = mediaMappingRepository.findByMediaLinkId(id);
+        return toDto(link, mappings.stream().map(this::toMappingDto).toList());
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        MediaLink link = mediaLinkRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Media link not found: " + id));
+        List<MediaMapping> mappings = mediaMappingRepository.findByMediaLinkId(id);
+        if (!mappings.isEmpty()) {
+            mediaMappingRepository.deleteAll(mappings);
+        }
+        mediaLinkRepository.delete(link);
+    }
+
+    @Transactional
+    public MediaLinkDto update(Long id, UpdateMediaLinkRequest req) {
+        MediaLink link = mediaLinkRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Media link not found: " + id));
+        if (req.getPlatform() != null) link.setPlatform(req.getPlatform());
+        if (req.getContentType() != null) link.setContentType(req.getContentType());
+        if (req.getSentimentType() != null) link.setSentimentType(req.getSentimentType());
+        if (req.getTitleEn() != null) link.setTitleEn(req.getTitleEn());
+        if (req.getTitleHi() != null) link.setTitleHi(req.getTitleHi());
+        if (req.getSummaryEn() != null) link.setSummaryEn(req.getSummaryEn());
+        if (req.getSummaryHi() != null) link.setSummaryHi(req.getSummaryHi());
+        if (req.getSourceUrl() != null) link.setSourceUrl(req.getSourceUrl());
+        if (req.getEmbedUrl() != null) link.setEmbedUrl(req.getEmbedUrl());
+        if (req.getThumbnailUrl() != null) link.setThumbnailUrl(req.getThumbnailUrl());
+        if (req.getSourceOwner() != null) link.setSourceOwner(req.getSourceOwner());
+        if (req.getSourceVerified() != null) link.setSourceVerified(req.getSourceVerified());
+        if (req.getIsEmbeddable() != null) link.setIsEmbeddable(req.getIsEmbeddable());
+        if (req.getApprovalStatus() != null) link.setApprovalStatus(req.getApprovalStatus());
+        if (req.getSourceConfidence() != null) link.setSourceConfidence(req.getSourceConfidence());
+        if (req.getVisibility() != null) link.setVisibility(req.getVisibility());
+        if (req.getDisplayOrder() != null) link.setDisplayOrder(req.getDisplayOrder());
+        link.setUpdatedAt(java.time.LocalDateTime.now());
         mediaLinkRepository.save(link);
         List<MediaMapping> mappings = mediaMappingRepository.findByMediaLinkId(id);
         return toDto(link, mappings.stream().map(this::toMappingDto).toList());
@@ -157,6 +199,29 @@ public class MediaService {
             .displayContext(mm.getDisplayContext())
             .displayOrder(mm.getDisplayOrder())
             .isPrimary(mm.getIsPrimary())
+            .audienceScope(mm.getAudienceScope())
+            .stateCode(mm.getStateCode())
+            .tags(mm.getTags())
             .build();
+    }
+
+    public List<MediaLinkDto> getMediaByScope(String audienceScope) {
+        return mediaMappingRepository.findApprovedByScope(audienceScope).stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+    }
+
+    public List<MediaLinkDto> getMediaForStateFeed(String stateCode) {
+        return mediaMappingRepository.findApprovedForStateFeed(stateCode).stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+    }
+
+    public List<MediaLinkDto> getMediaByTag(String tag) {
+        return mediaMappingRepository.findApprovedByTag(tag).stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+    }
+
+    public List<MediaLinkDto> getMediaBySection(String sectionKey) {
+        return mediaMappingRepository.findApprovedBySectionKey(sectionKey).stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
     }
 }

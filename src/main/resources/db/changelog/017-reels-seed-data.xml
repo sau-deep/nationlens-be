@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ================================================================
+         New public-figure / influencer entities for Instagram reels
+         ================================================================ -->
+    <changeSet id="017-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- Civic influencer — Delhi based -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='INFLUENCER')"/>
+            <column name="name_en" value="Ananya Kapoor"/>
+            <column name="name_hi" value="अनन्या कपूर"/>
+            <column name="slug" value="ananya-kapoor-civic"/>
+            <column name="description_en" value="Digital civic educator and Instagram creator with 1.2M followers. Creates reels explaining Indian laws, voter rights, and RTI."/>
+            <column name="description_hi" value="डिजिटल नागरिक शिक्षक। भारतीय कानून, मतदाता अधिकार और RTI समझाने वाले reels बनाती हैं।"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='new-delhi')"/>
+            <column name="verified" valueBoolean="true"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+
+        <!-- Social worker — Mumbai -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='SOCIAL_WORKER')"/>
+            <column name="name_en" value="Vikram Nair"/>
+            <column name="name_hi" value="विक्रम नायर"/>
+            <column name="slug" value="vikram-nair-sw"/>
+            <column name="description_en" value="Founder of Mumbai Civic Watch. Documents local governance, BMC work, and public infrastructure on Instagram."/>
+            <column name="description_hi" value="Mumbai Civic Watch के संस्थापक। स्थानीय शासन और BMC के कार्यों को Instagram पर दस्तावेज़ करते हैं।"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mumbai')"/>
+            <column name="verified" valueBoolean="true"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+
+        <!-- Journalist covering Parliament -->
+        <insert tableName="entities">
+            <column name="entity_type_id" valueComputed="(SELECT id FROM entity_types WHERE code='JOURNALIST')"/>
+            <column name="name_en" value="Deepa Rajan"/>
+            <column name="name_hi" value="दीपा राजन"/>
+            <column name="slug" value="deepa-rajan-journalist"/>
+            <column name="description_en" value="Senior political journalist covering Parliament and elections for a national news channel. Known for viral Parliament session reels."/>
+            <column name="description_hi" value="संसद और चुनाव कवर करने वाली वरिष्ठ राजनीतिक पत्रकार।"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='new-delhi')"/>
+            <column name="verified" valueBoolean="true"/>
+            <column name="status" value="ACTIVE"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         Instagram Reels — Parliament / Lok Sabha section
+         section_key = SPEECHES_INTERVIEWS | sub_menu_key = PARLIAMENT_REEL
+         ================================================================ -->
+    <changeSet id="017-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- The reel provided by the user -->
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="Parliament Civic Discussion — Budget Session Highlights"/>
+            <column name="title_hi" value="संसद चर्चा — बजट सत्र की मुख्य बातें"/>
+            <column name="summary_en" value="Key moments from the Parliament budget session. MPs debate on public expenditure, social welfare allocations, and infrastructure spending."/>
+            <column name="summary_hi" value="संसद के बजट सत्र के प्रमुख क्षण। सांसदों ने सामाजिक कल्याण और बुनियादी ढांचे पर बहस की।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/DZoy_xUSD8X/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/DZoy_xUSD8X/embed/"/>
+            <column name="source_owner" value="@parliament_india_watch"/>
+            <column name="source_verified" valueBoolean="false"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="MEDIUM"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/DZoy_xUSD8X/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='deepa-rajan-journalist')"/>
+            <column name="section_key" value="SPEECHES_INTERVIEWS"/>
+            <column name="sub_menu_key" value="PARLIAMENT_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- Parliament RTI awareness reel (Ananya Kapoor) -->
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="RTI Act explained in 60 seconds — Know your right to information"/>
+            <column name="title_hi" value="RTI अधिनियम 60 सेकंड में समझें — जानें अपना सूचना का अधिकार"/>
+            <column name="summary_en" value="Simple breakdown of the Right to Information Act 2005. How to file RTI, timelines, and what information you can request from government."/>
+            <column name="summary_hi" value="RTI दाखिल करने का तरीका, समय-सीमा और सरकार से क्या जानकारी मांगी जा सकती है।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/RTI_awareness_reel/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/RTI_awareness_reel/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/rti_reel/360/640"/>
+            <column name="source_owner" value="@ananya.civics"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/RTI_awareness_reel/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ananya-kapoor-civic')"/>
+            <column name="section_key" value="OFFICIAL_UPDATES"/>
+            <column name="sub_menu_key" value="CIVIC_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         Instagram Reels — MP section (Rahul Sharma)
+         section_key = OFFICIAL_UPDATES | sub_menu_key = MP_REEL
+         ================================================================ -->
+    <changeSet id="017-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Rahul Sharma — New water pipeline project inaugurated in Jaipur Rural"/>
+            <column name="title_hi" value="राहुल शर्मा — जयपुर ग्रामीण में नई जल पाइपलाइन परियोजना का उद्घाटन"/>
+            <column name="summary_en" value="MP Rahul Sharma inaugurates a ₹42 crore water pipeline bringing clean drinking water to 15 villages in Jaipur Rural constituency."/>
+            <column name="summary_hi" value="सांसद राहुल शर्मा ने जयपुर ग्रामीण के 15 गांवों में स्वच्छ पेयजल पहुंचाने वाली ₹42 करोड़ की जल पाइपलाइन का उद्घाटन किया।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/rahul_water_project/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/rahul_water_project/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/water_reel/360/640"/>
+            <column name="source_owner" value="@rahulsharmaofficial"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/rahul_water_project/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-sharma-mp')"/>
+            <column name="section_key" value="DEVELOPMENT_WORK"/>
+            <column name="sub_menu_key" value="MP_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Rahul Sharma — Jan Sunwai camp addresses 200+ grievances in one day"/>
+            <column name="title_hi" value="राहुल शर्मा — जन सुनवाई शिविर में एक दिन में 200+ शिकायतें सुनी गईं"/>
+            <column name="summary_en" value="Public grievance camp held in Chomu block where residents directly present issues to their MP. Roads, water, ration card issues addressed."/>
+            <column name="summary_hi" value="चोमू ब्लॉक में जन सुनवाई शिविर जहां निवासी अपने सांसद से सीधे मुद्दे उठाते हैं।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/rahul_jan_sunwai/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/rahul_jan_sunwai/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/sunwai_reel/360/640"/>
+            <column name="source_owner" value="@rahulsharmaofficial"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/rahul_jan_sunwai/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='rahul-sharma-mp')"/>
+            <column name="section_key" value="OFFICIAL_UPDATES"/>
+            <column name="sub_menu_key" value="MP_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="2"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         Instagram Reels — MLA section (Priya Verma)
+         section_key = POSITIVE_WORK | sub_menu_key = MLA_REEL
+         ================================================================ -->
+    <changeSet id="017-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Priya Verma — Sakhi Shakti self-help group empowers 500 women in Lucknow West"/>
+            <column name="title_hi" value="प्रिया वर्मा — सखी शक्ति स्वयं सहायता समूह ने लखनऊ पश्चिम में 500 महिलाओं को सशक्त किया"/>
+            <column name="summary_en" value="MLA Priya Verma's Sakhi Shakti program reaches 500 beneficiaries — micro loans, skill training, and market linkages for women entrepreneurs."/>
+            <column name="summary_hi" value="विधायक प्रिया वर्मा के सखी शक्ति कार्यक्रम से 500 महिलाओं को माइक्रो लोन और कौशल प्रशिक्षण मिला।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/priya_sakhi_shakti/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/priya_sakhi_shakti/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/women_reel/360/640"/>
+            <column name="source_owner" value="@priyavermaofficial"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/priya_sakhi_shakti/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='priya-verma-mla')"/>
+            <column name="section_key" value="POSITIVE_WORK"/>
+            <column name="sub_menu_key" value="MLA_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+        <!-- Also link to Lucknow district feed -->
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/priya_sakhi_shakti/')"/>
+            <column name="mapping_type" value="DISTRICT"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='lucknow')"/>
+            <column name="section_key" value="DEVELOPMENT_WORK"/>
+            <column name="sub_menu_key" value="MLA_REEL"/>
+            <column name="display_context" value="DISTRICT_FEED"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Citizens question Priya Verma on delayed drainage work in Ward 14"/>
+            <column name="title_hi" value="वार्ड 14 में लंबित नाली कार्य पर नागरिकों ने प्रिया वर्मा से सवाल किया"/>
+            <column name="summary_en" value="Residents of Lucknow West Ward 14 confront MLA Priya Verma at public meeting over 8-month delay in drainage infrastructure project."/>
+            <column name="summary_hi" value="लखनऊ पश्चिम वार्ड 14 के निवासी जनसभा में विधायक से नाली परियोजना में 8 महीने की देरी पर सवाल करते हैं।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/priya_drainage_question/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/priya_drainage_question/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/drainage_reel/360/640"/>
+            <column name="source_owner" value="@lucknow_civic_eye"/>
+            <column name="source_verified" valueBoolean="false"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="MEDIUM"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/priya_drainage_question/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='priya-verma-mla')"/>
+            <column name="section_key" value="CRITICAL_VIEW"/>
+            <column name="sub_menu_key" value="PUBLIC_REACTION_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="3"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         Instagram Reels — Amit Singh MP section
+         section_key = SPEECHES_INTERVIEWS | sub_menu_key = MP_REEL
+         ================================================================ -->
+    <changeSet id="017-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Amit Singh — Varanasi Smart City Project progress reel"/>
+            <column name="title_hi" value="अमित सिंह — वाराणसी स्मार्ट सिटी परियोजना प्रगति रील"/>
+            <column name="summary_en" value="MP Amit Singh reviews Smart City Mission progress in Varanasi — 40 road projects, digital kiosks, and heritage site restoration on track."/>
+            <column name="summary_hi" value="सांसद अमित सिंह वाराणसी में स्मार्ट सिटी मिशन की प्रगति की समीक्षा करते हैं।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/amit_smart_city/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/amit_smart_city/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/smartcity_reel/360/640"/>
+            <column name="source_owner" value="@amitsinghvaranasi"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/amit_smart_city/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='amit-singh-mp')"/>
+            <column name="section_key" value="DEVELOPMENT_WORK"/>
+            <column name="sub_menu_key" value="MP_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/amit_smart_city/')"/>
+            <column name="mapping_type" value="DISTRICT"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='varanasi')"/>
+            <column name="section_key" value="DEVELOPMENT_WORK"/>
+            <column name="sub_menu_key" value="MP_REEL"/>
+            <column name="display_context" value="DISTRICT_FEED"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         Public Figure / Civic Educator reels
+         section_key = PUBLIC_REACTIONS | sub_menu_key = CIVIC_REEL
+         ================================================================ -->
+    <changeSet id="017-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- Ananya Kapoor — Constitution 101 reel -->
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="Indian Constitution Article 19 — Your fundamental right to free speech explained"/>
+            <column name="title_hi" value="भारतीय संविधान अनुच्छेद 19 — बोलने की स्वतंत्रता का आपका मौलिक अधिकार"/>
+            <column name="summary_en" value="Article 19 of the Indian Constitution guarantees 6 fundamental freedoms. What they mean, what restrictions exist, and recent Supreme Court interpretations."/>
+            <column name="summary_hi" value="संविधान का अनुच्छेद 19 — 6 मौलिक स्वतंत्रताएं, प्रतिबंध और सुप्रीम कोर्ट की व्याख्याएं।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/constitution_art19/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/constitution_art19/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/constitution_reel/360/640"/>
+            <column name="source_owner" value="@ananya.civics"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/constitution_art19/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='ananya-kapoor-civic')"/>
+            <column name="section_key" value="OVERVIEW"/>
+            <column name="sub_menu_key" value="CIVIC_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- Vikram Nair — BMC accountability reel -->
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Mumbai BMC pothole crisis — 1200 potholes reported, only 300 repaired in 3 months"/>
+            <column name="title_hi" value="मुंबई BMC गड्ढा संकट — 3 महीने में 1200 में से केवल 300 गड्ढे भरे"/>
+            <column name="summary_en" value="Vikram Nair's ground-level documentation shows BMC's progress on pothole repair. Data sourced from 311 complaints, RTI responses, and field visits."/>
+            <column name="summary_hi" value="BMC के गड्ढा मरम्मत पर विक्रम नायर की जमीनी रिपोर्ट। डेटा 311 शिकायतों और RTI से।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/bmc_pothole_data/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/bmc_pothole_data/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/pothole_reel/360/640"/>
+            <column name="source_owner" value="@mumbai_civic_watch"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/bmc_pothole_data/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='vikram-nair-sw')"/>
+            <column name="section_key" value="CRITICAL_REPORTS"/>
+            <column name="sub_menu_key" value="CIVIC_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/bmc_pothole_data/')"/>
+            <column name="mapping_type" value="DISTRICT"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mumbai')"/>
+            <column name="section_key" value="LOCAL_ISSUES"/>
+            <column name="sub_menu_key" value="CIVIC_REEL"/>
+            <column name="display_context" value="DISTRICT_FEED"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+
+        <!-- Deepa Rajan — Parliament session reel -->
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/>
+            <column name="content_type" value="REEL"/>
+            <column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="Winter Session 2024 — What bills passed, what didn't, and what it means for you"/>
+            <column name="title_hi" value="शीतकालीन सत्र 2024 — कौन से विधेयक पास हुए, कौन नहीं और यह आपके लिए क्या मायने रखता है"/>
+            <column name="summary_en" value="Parliamentary correspondent Deepa Rajan breaks down the Winter Session 2024 — 12 bills passed, key debates, and what legislation affects citizens daily."/>
+            <column name="summary_hi" value="संसद संवाददाता दीपा राजन शीतकालीन सत्र 2024 का विश्लेषण — 12 विधेयक, प्रमुख बहसें और नागरिकों पर प्रभाव।"/>
+            <column name="source_url" value="https://www.instagram.com/reel/winter_session_2024/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/winter_session_2024/embed/"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/winter_session/360/640"/>
+            <column name="source_owner" value="@deeparajan.news"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/winter_session_2024/')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='deepa-rajan-journalist')"/>
+            <column name="section_key" value="SPEECHES_INTERVIEWS"/>
+            <column name="sub_menu_key" value="PARLIAMENT_REEL"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <!-- ================================================================
+         YouTube civic videos — Parliament, MP/MLA speeches
+         (landscape 16:9, regular MediaEmbedCard)
+         ================================================================ -->
+    <changeSet id="017-07" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+
+        <!-- Parliament speech — Amit Singh -->
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/>
+            <column name="content_type" value="Video"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Amit Singh — Parliamentary speech on Varanasi development budget allocation"/>
+            <column name="title_hi" value="अमित सिंह — वाराणसी विकास बजट आवंटन पर संसदीय भाषण"/>
+            <column name="summary_en" value="Full speech by MP Amit Singh in Lok Sabha demanding ₹500 crore for Varanasi Smart City, Ganga clean-up, and rural connectivity projects."/>
+            <column name="summary_hi" value="लोकसभा में सांसद अमित सिंह का भाषण — वाराणसी स्मार्ट सिटी, गंगा सफाई और ग्रामीण कनेक्टिविटी के लिए ₹500 करोड़ की मांग।"/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=amit_parliament_speech"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/amit_parliament_speech"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/parliament_speech/400/225"/>
+            <column name="source_owner" value="Lok Sabha TV"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=amit_parliament_speech')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='amit-singh-mp')"/>
+            <column name="section_key" value="SPEECHES_INTERVIEWS"/>
+            <column name="sub_menu_key" value="PARLIAMENT"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+
+        <!-- Sunita Patil Parliament speech -->
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/>
+            <column name="content_type" value="Video"/>
+            <column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Sunita Patil — Question hour on Mumbai coastal road environmental impact"/>
+            <column name="title_hi" value="सुनीता पाटील — मुंबई कोस्टल रोड पर्यावरणीय प्रभाव पर प्रश्नकाल"/>
+            <column name="summary_en" value="MP Sunita Patil raises starred question in Parliament on environmental clearances and displacement of fishing communities for Mumbai coastal road project."/>
+            <column name="summary_hi" value="सांसद सुनीता पाटील ने संसद में मुंबई कोस्टल रोड परियोजना में पर्यावरणीय मंजूरी पर तारांकित प्रश्न उठाया।"/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=sunita_coastal_road"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/sunita_coastal_road"/>
+            <column name="thumbnail_url" value="https://picsum.photos/seed/coastal_road/400/225"/>
+            <column name="source_owner" value="Lok Sabha TV"/>
+            <column name="source_verified" valueBoolean="true"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/>
+            <column name="source_confidence" value="HIGH"/>
+            <column name="visibility" value="PUBLIC"/>
+            <column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=sunita_coastal_road')"/>
+            <column name="mapping_type" value="ENTITY"/>
+            <column name="entity_id" valueComputed="(SELECT id FROM entities WHERE slug='sunita-patil-mp')"/>
+            <column name="section_key" value="SPEECHES_INTERVIEWS"/>
+            <column name="sub_menu_key" value="PARLIAMENT"/>
+            <column name="display_context" value="ENTITY_PROFILE"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="true"/>
+        </insert>
+        <insert tableName="media_mappings">
+            <column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=sunita_coastal_road')"/>
+            <column name="mapping_type" value="DISTRICT"/>
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='mumbai')"/>
+            <column name="section_key" value="LOCAL_ISSUES"/>
+            <column name="sub_menu_key" value="PARLIAMENT"/>
+            <column name="display_context" value="DISTRICT_FEED"/>
+            <column name="display_order" valueNumeric="1"/>
+            <column name="is_primary" valueBoolean="false"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

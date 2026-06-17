@@ -22,8 +22,14 @@ public class PublicEntityController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<EntitySummaryDto>>> list(
-        @PageableDefault(size = 20) Pageable pageable
+        @PageableDefault(size = 20) Pageable pageable,
+        @RequestParam(required = false) String type
     ) {
+        if (type != null && !type.isBlank()) {
+            List<EntitySummaryDto> items = entityService.listByType(type.trim().toUpperCase());
+            Page<EntitySummaryDto> page = new org.springframework.data.domain.PageImpl<>(items, pageable, items.size());
+            return ResponseEntity.ok(ApiResponse.ok(page));
+        }
         return ResponseEntity.ok(ApiResponse.ok(entityService.listEntities(pageable)));
     }
 

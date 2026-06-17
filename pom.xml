@@ -106,6 +106,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Rome RSS/Atom Feed Parser -->
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
         <!-- DevTools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
