@@ -8,6 +8,9 @@
     <!-- RSS feed source registry -->
     <changeSet id="015-01" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="rss_feed_sources"/></not>
+        </preConditions>
         <createTable tableName="rss_feed_sources">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -45,6 +48,9 @@
     <!-- Ingested RSS news items -->
     <changeSet id="015-02" author="nationlens">
         <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="rss_news_items"/></not>
+        </preConditions>
         <createTable tableName="rss_news_items">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

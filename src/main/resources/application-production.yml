@@ -11,12 +11,20 @@ spring:
 
   jpa:
     hibernate:
-      # Liquibase owns the schema, but 'validate' crash-loops on harmless MySQL
-      # type representations (e.g. BOOLEAN stored as TINYINT vs Hibernate's BIT).
-      # 'update' does additive sync only and tolerates such mismatches, so it
-      # avoids the validation crash. Override via SPRING_JPA_HIBERNATE_DDL_AUTO.
-      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+      # Liquibase owns schema in production — never let Hibernate create tables.
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:none}
     show-sql: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
 
 server:
   port: ${SERVER_PORT:5000}

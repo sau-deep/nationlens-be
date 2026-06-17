@@ -7,6 +7,10 @@
 
     <!-- Denormalize language onto news items for fast locale filtering -->
     <changeSet id="020-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="rss_news_items" columnName="source_language"/></not>
+        </preConditions>
         <addColumn tableName="rss_news_items">
             <column name="source_language" type="VARCHAR(10)" defaultValue="EN"/>
         </addColumn>
