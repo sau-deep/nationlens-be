@@ -46,4 +46,12 @@ public interface MediaMappingRepository extends JpaRepository<MediaMapping, Long
     // Find APPROVED content by section key (for section-specific feeds)
     @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.sectionKey = :sectionKey ORDER BY mm.displayOrder ASC")
     List<MediaMapping> findApprovedBySectionKey(@Param("sectionKey") String sectionKey);
+
+    // Browse sections: APPROVED content in a top-level browse section (display_context = 'BROWSE')
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.displayContext = 'BROWSE' AND mm.sectionKey = :sectionKey ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedBrowseBySection(@Param("sectionKey") String sectionKey);
+
+    // Browse section counts: [sectionKey, count] for all browse sections
+    @Query("SELECT mm.sectionKey, COUNT(mm) FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.displayContext = 'BROWSE' GROUP BY mm.sectionKey")
+    List<Object[]> countApprovedBrowseBySection();
 }

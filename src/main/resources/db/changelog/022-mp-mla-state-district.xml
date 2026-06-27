@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!--
+        Backfill state_id (and fix two district_id references) for all MP / MLA
+        entities. Every politician already had a district_id but state_id was NULL.
+
+        Constituency → district → state mapping verified against public records
+        (Wikipedia / MyNeta, 18th Lok Sabha 2024 results and current state
+        assemblies). All referenced state codes and district slugs already exist
+        in 002-geography / 011 / 014, except Rae Bareli which is added below.
+    -->
+
+    <!-- ── Missing district: Rae Bareli (Rahul Gandhi's 2024 LS seat) ──────── -->
+    <changeSet id="022-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM districts WHERE slug = 'rae-bareli'</sqlCheck></preConditions>
+        <insert tableName="districts">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/>
+            <column name="name_en" value="Rae Bareli"/><column name="name_hi" value="रायबरेली"/>
+            <column name="slug" value="rae-bareli"/><column name="population" valueNumeric="3405559"/>
+            <column name="literacy_rate" valueNumeric="67.3"/><column name="headquarters" value="Rae Bareli"/>
+        </insert>
+    </changeSet>
+
+    <!-- ── Fix two district_id references ─────────────────────────────────── -->
+    <changeSet id="022-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <comment>Rahul Gandhi sits for Rae Bareli (was lucknow); Atishi for Kalkaji in Delhi (was broken slug 'delhi').</comment>
+        <update tableName="entities">
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='rae-bareli')"/>
+            <where>slug = 'rahul-gandhi'</where>
+        </update>
+        <update tableName="entities">
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='new-delhi')"/>
+            <where>slug = 'atishi'</where>
+        </update>
+    </changeSet>
+
+    <!-- ── Backfill state_id for every MP / MLA ───────────────────────────── -->
+    <changeSet id="022-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <comment>Set state_id per verified constituency for all MP and MLA entities.</comment>
+
+        <!-- Uttar Pradesh -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'narendra-modi'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'rahul-gandhi'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'rajnath-singh'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'akhilesh-yadav'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'dimple-yadav'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'yogi-adityanath'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'priya-verma-mla'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='UP')"/><where>slug = 'amit-singh-mp'</where></update>
+
+        <!-- Gujarat -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='GJ')"/><where>slug = 'amit-shah'</where></update>
+
+        <!-- Maharashtra -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/><where>slug = 'nitin-gadkari'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/><where>slug = 'supriya-sule'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/><where>slug = 'devendra-fadnavis'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/><where>slug = 'aaditya-thackeray'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='MH')"/><where>slug = 'sunita-patil-mp'</where></update>
+
+        <!-- Kerala -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='KL')"/><where>slug = 'shashi-tharoor'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='KL')"/><where>slug = 'priyanka-gandhi-vadra'</where></update>
+
+        <!-- Rajasthan -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/><where>slug = 'om-birla'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/><where>slug = 'sachin-pilot'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/><where>slug = 'vasundhara-raje'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/><where>slug = 'rahul-sharma-mp'</where></update>
+
+        <!-- Telangana -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='TG')"/><where>slug = 'asaduddin-owaisi'</where></update>
+
+        <!-- Himachal Pradesh -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='HP')"/><where>slug = 'kangana-ranaut'</where></update>
+
+        <!-- Delhi -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='DL')"/><where>slug = 'atishi'</where></update>
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='DL')"/><where>slug = 'vikram-tomar-mp'</where></update>
+
+        <!-- Karnataka -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='KA')"/><where>slug = 'ravi-kumar-gowda-mla'</where></update>
+
+        <!-- Bihar -->
+        <update tableName="entities"><column name="state_id" valueComputed="(SELECT id FROM states WHERE code='BR')"/><where>slug = 'meera-devi-singh-mla'</where></update>
+    </changeSet>
+
+</databaseChangeLog>

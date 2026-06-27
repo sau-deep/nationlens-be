@@ -26,5 +26,8 @@
     <include file="db/changelog/019-media-mapping-scope.xml"/>
     <include file="db/changelog/020-rss-language-feeds.xml"/>
     <include file="db/changelog/021-rss-feed-fixes.xml"/>
+    <include file="db/changelog/022-mp-mla-state-district.xml"/>
+    <include file="db/changelog/023-media-ownership.xml"/>
+    <include file="db/changelog/024-browse-sections-media.xml"/>
 
 </databaseChangeLog>

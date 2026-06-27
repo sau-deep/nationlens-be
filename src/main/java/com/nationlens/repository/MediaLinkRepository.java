@@ -11,4 +11,6 @@ import java.util.List;
 public interface MediaLinkRepository extends JpaRepository<MediaLink, Long> {
     Page<MediaLink> findByApprovalStatusOrderByCreatedAtDesc(ApprovalStatus status, Pageable pageable);
     List<MediaLink> findByApprovalStatusOrderByDisplayOrderAscCreatedAtDesc(ApprovalStatus status);
+    long countByModerationStatus(String moderationStatus);
+    List<MediaLink> findByOwnerIdAndApprovalStatusOrderByDisplayOrderAscCreatedAtDesc(Long ownerId, ApprovalStatus status);
 }

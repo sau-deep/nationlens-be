@@ -26,6 +26,7 @@ public class MediaLinkDto {
     private String embedUrl;
     private String thumbnailUrl;
     private String sourceOwner;
+    private MediaOwnerDto owner;
     private LocalDateTime sourcePublishedAt;
     private Boolean isEmbeddable;
     private Boolean noAppSwitchRequired;

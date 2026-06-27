@@ -52,6 +52,11 @@ public class MediaLink {
     @Column(name = "source_owner")
     private String sourceOwner;
 
+    /** Structured owner (who owns this media) — see {@link MediaOwner}. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private MediaOwner owner;
+
     @Column(name = "source_published_at")
     private LocalDateTime sourcePublishedAt;
 

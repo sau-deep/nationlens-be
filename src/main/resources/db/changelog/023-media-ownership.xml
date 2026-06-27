@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ================================================================
+         MEDIA OWNERSHIP
+         Who owns the media. A self-referencing tree so we can model
+         "top companies owning big companies":
+           Conglomerate  ->  Media House  ->  Channel / Outlet
+         e.g. Reliance Industries -> Network18 -> CNN-News18
+         owner_type: CONGLOMERATE | MEDIA_HOUSE | CHANNEL | DIGITAL
+                     | GOVERNMENT | INDEPENDENT
+         ================================================================ -->
+    <changeSet id="023-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="media_owners"/></not></preConditions>
+        <createTable tableName="media_owners">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="slug" type="VARCHAR(160)"><constraints unique="true" nullable="false"/></column>
+            <column name="name_en" type="VARCHAR(255)"><constraints nullable="false"/></column>
+            <column name="name_hi" type="VARCHAR(255)"/>
+            <column name="owner_type" type="VARCHAR(40)"><constraints nullable="false"/></column>
+            <!-- self reference: the bigger company that owns this one -->
+            <column name="parent_owner_id" type="BIGINT"><constraints foreignKeyName="fk_owner_parent" references="media_owners(id)"/></column>
+            <column name="controlled_by" type="VARCHAR(255)"/>
+            <column name="ownership_note_en" type="TEXT"/>
+            <column name="ownership_note_hi" type="TEXT"/>
+            <column name="logo_url" type="TEXT"/>
+            <column name="website" type="TEXT"/>
+            <column name="hq_location" type="VARCHAR(160)"/>
+            <column name="founded_year" type="INT"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <createIndex tableName="media_owners" indexName="idx_media_owners_slug"><column name="slug"/></createIndex>
+        <createIndex tableName="media_owners" indexName="idx_media_owners_parent"><column name="parent_owner_id"/></createIndex>
+        <createIndex tableName="media_owners" indexName="idx_media_owners_type"><column name="owner_type"/></createIndex>
+    </changeSet>
+
+    <!-- Link every media item to a structured owner (keeps source_owner text too) -->
+    <changeSet id="023-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><columnExists tableName="media_links" columnName="owner_id"/></not></preConditions>
+        <addColumn tableName="media_links">
+            <column name="owner_id" type="BIGINT"><constraints foreignKeyName="fk_media_owner" references="media_owners(id)"/></column>
+        </addColumn>
+        <createIndex tableName="media_links" indexName="idx_media_links_owner"><column name="owner_id"/></createIndex>
+    </changeSet>
+
+    <!-- ============ TOP-LEVEL CONGLOMERATES (the "big companies") ============ -->
+    <changeSet id="023-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_owners WHERE slug='reliance-industries'</sqlCheck></preConditions>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="reliance-industries"/>
+            <column name="name_en" value="Reliance Industries Ltd"/>
+            <column name="name_hi" value="रिलायंस इंडस्ट्रीज़ लिमिटेड"/>
+            <column name="owner_type" value="CONGLOMERATE"/>
+            <column name="controlled_by" value="Mukesh Ambani family"/>
+            <column name="ownership_note_en" value="India's largest private conglomerate (energy, retail, telecom). Controls the Network18 media group, giving it one of the widest TV + digital news footprints in the country."/>
+            <column name="ownership_note_hi" value="भारत का सबसे बड़ा निजी समूह। Network18 मीडिया समूह को नियंत्रित करता है।"/>
+            <column name="website" value="https://www.ril.com"/>
+            <column name="hq_location" value="Mumbai, Maharashtra"/>
+            <column name="founded_year" valueNumeric="1966"/>
+        </insert>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="adani-group"/>
+            <column name="name_en" value="Adani Group"/>
+            <column name="name_hi" value="अदाणी समूह"/>
+            <column name="owner_type" value="CONGLOMERATE"/>
+            <column name="controlled_by" value="Gautam Adani family"/>
+            <column name="ownership_note_en" value="Ports-to-energy conglomerate. Through AMG Media Networks it acquired a controlling stake in NDTV in 2022."/>
+            <column name="ownership_note_hi" value="बंदरगाह से ऊर्जा तक फैला समूह। 2022 में NDTV में नियंत्रण हिस्सेदारी हासिल की।"/>
+            <column name="website" value="https://www.adani.com"/>
+            <column name="hq_location" value="Ahmedabad, Gujarat"/>
+            <column name="founded_year" valueNumeric="1988"/>
+        </insert>
+    </changeSet>
+
+    <!-- ============ MEDIA HOUSES (owned by conglomerates, or independent) ============ -->
+    <changeSet id="023-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_owners WHERE slug='network18'</sqlCheck></preConditions>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="network18"/>
+            <column name="name_en" value="Network18 Media &amp; Investments"/>
+            <column name="name_hi" value="नेटवर्क18 मीडिया"/>
+            <column name="owner_type" value="MEDIA_HOUSE"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='reliance-industries')"/>
+            <column name="controlled_by" value="Reliance Industries Ltd"/>
+            <column name="ownership_note_en" value="Operates the CNN-News18, CNBC-TV18 and News18 networks plus Moneycontrol and Firstpost. Majority owned by Reliance."/>
+            <column name="website" value="https://www.network18online.com"/>
+            <column name="hq_location" value="Mumbai, Maharashtra"/>
+            <column name="founded_year" valueNumeric="2005"/>
+        </insert>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="amg-media-networks"/>
+            <column name="name_en" value="AMG Media Networks"/>
+            <column name="name_hi" value="AMG मीडिया नेटवर्क्स"/>
+            <column name="owner_type" value="MEDIA_HOUSE"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='adani-group')"/>
+            <column name="controlled_by" value="Adani Group"/>
+            <column name="ownership_note_en" value="Adani Group's media arm; holding company for its controlling stake in NDTV."/>
+            <column name="hq_location" value="Ahmedabad, Gujarat"/>
+            <column name="founded_year" valueNumeric="2022"/>
+        </insert>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="bennett-coleman"/>
+            <column name="name_en" value="Bennett, Coleman &amp; Co. (The Times Group)"/>
+            <column name="name_hi" value="द टाइम्स समूह"/>
+            <column name="owner_type" value="MEDIA_HOUSE"/>
+            <column name="controlled_by" value="Sahu Jain family"/>
+            <column name="ownership_note_en" value="India's largest media conglomerate by revenue. Owns Times of India, Times Now, ET Now and Navbharat Times. Privately held by the Jain family."/>
+            <column name="website" value="https://www.timesgroup.com"/>
+            <column name="hq_location" value="Mumbai, Maharashtra"/>
+            <column name="founded_year" valueNumeric="1838"/>
+        </insert>
+    </changeSet>
+
+    <!-- ============ CHANNELS / DIGITAL OUTLETS (the leaf nodes) ============ -->
+    <changeSet id="023-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_owners WHERE slug='cnn-news18'</sqlCheck></preConditions>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="cnn-news18"/>
+            <column name="name_en" value="CNN-News18"/>
+            <column name="owner_type" value="CHANNEL"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='network18')"/>
+            <column name="controlled_by" value="Network18 (Reliance)"/>
+            <column name="ownership_note_en" value="English news channel operated by Network18."/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="news18-india"/>
+            <column name="name_en" value="News18 India"/>
+            <column name="owner_type" value="CHANNEL"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='network18')"/>
+            <column name="controlled_by" value="Network18 (Reliance)"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="moneycontrol"/>
+            <column name="name_en" value="Moneycontrol"/>
+            <column name="owner_type" value="DIGITAL"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='network18')"/>
+            <column name="controlled_by" value="Network18 (Reliance)"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="ndtv"/>
+            <column name="name_en" value="NDTV"/>
+            <column name="name_hi" value="एनडीटीवी"/>
+            <column name="owner_type" value="CHANNEL"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='amg-media-networks')"/>
+            <column name="controlled_by" value="Adani Group"/>
+            <column name="ownership_note_en" value="New Delhi Television; control passed to the Adani Group in 2022-23."/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="times-now"/>
+            <column name="name_en" value="Times Now"/>
+            <column name="owner_type" value="CHANNEL"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='bennett-coleman')"/>
+            <column name="controlled_by" value="The Times Group"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="navbharat-times"/>
+            <column name="name_en" value="Navbharat Times"/>
+            <column name="name_hi" value="नवभारत टाइम्स"/>
+            <column name="owner_type" value="DIGITAL"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='bennett-coleman')"/>
+            <column name="controlled_by" value="The Times Group"/>
+        </insert>
+    </changeSet>
+
+    <!-- ============ GOVERNMENT + INDEPENDENT (no corporate parent) ============ -->
+    <changeSet id="023-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_owners WHERE slug='sansad-tv'</sqlCheck></preConditions>
+
+        <insert tableName="media_owners">
+            <column name="slug" value="sansad-tv"/>
+            <column name="name_en" value="Sansad TV"/>
+            <column name="name_hi" value="संसद टीवी"/>
+            <column name="owner_type" value="GOVERNMENT"/>
+            <column name="controlled_by" value="Parliament of India"/>
+            <column name="ownership_note_en" value="Official broadcaster of the Indian Parliament (merger of Lok Sabha TV and Rajya Sabha TV). State-funded, non-commercial."/>
+            <column name="hq_location" value="New Delhi"/>
+            <column name="founded_year" valueNumeric="2021"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="pib-india"/>
+            <column name="name_en" value="Press Information Bureau"/>
+            <column name="name_hi" value="पत्र सूचना कार्यालय"/>
+            <column name="owner_type" value="GOVERNMENT"/>
+            <column name="controlled_by" value="Govt of India, Ministry of I&amp;B"/>
+            <column name="ownership_note_en" value="Nodal agency of the Government of India to disseminate official information."/>
+            <column name="hq_location" value="New Delhi"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="the-wire"/>
+            <column name="name_en" value="The Wire"/>
+            <column name="owner_type" value="INDEPENDENT"/>
+            <column name="controlled_by" value="Foundation for Independent Journalism (non-profit)"/>
+            <column name="ownership_note_en" value="Reader-funded non-profit digital outlet; not owned by any corporate group."/>
+            <column name="website" value="https://thewire.in"/>
+            <column name="founded_year" valueNumeric="2015"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="adr-india"/>
+            <column name="name_en" value="Association for Democratic Reforms"/>
+            <column name="name_hi" value="एसोसिएशन फ़ॉर डेमोक्रेटिक रिफ़ॉर्म्स"/>
+            <column name="owner_type" value="INDEPENDENT"/>
+            <column name="controlled_by" value="Non-profit (electoral watchdog)"/>
+            <column name="ownership_note_en" value="Non-partisan electoral and political reform watchdog that publishes candidate affidavit analysis."/>
+            <column name="website" value="https://adrindia.org"/>
+            <column name="founded_year" valueNumeric="1999"/>
+        </insert>
+        <insert tableName="media_owners">
+            <column name="slug" value="citizen-creators"/>
+            <column name="name_en" value="Independent Citizen Creators"/>
+            <column name="name_hi" value="स्वतंत्र नागरिक क्रिएटर्स"/>
+            <column name="owner_type" value="INDEPENDENT"/>
+            <column name="controlled_by" value="Individual creators"/>
+            <column name="ownership_note_en" value="Civic creators, RTI activists and citizen journalists publishing independently on social platforms."/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

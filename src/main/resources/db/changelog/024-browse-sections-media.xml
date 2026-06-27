@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ================================================================
+         BROWSE SECTIONS — reels & videos the user can browse by theme.
+         Six top-level sections (display_context = 'BROWSE'):
+           POLITICS | ENVIRONMENT | GOVERNMENT | MEDIA | JUDICIARY | CITIZEN
+         Each media item links to a structured owner (media_owners) so the
+         "who owns this" attribution shows in the Instagram-style viewer.
+         All seeded APPROVED so they appear in the public feed immediately.
+         ================================================================ -->
+
+    <!-- ============================ POLITICS ============================ -->
+    <changeSet id="024-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-pol-01'</sqlCheck></preConditions>
+
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="Lok Sabha debate: the Budget face-off"/>
+            <column name="title_hi" value="लोकसभा बहस: बजट पर आमना-सामना"/>
+            <column name="summary_en" value="Treasury and opposition benches clash over allocations during the Budget session."/>
+            <column name="summary_hi" value="बजट सत्र के दौरान सत्ता और विपक्ष के बीच आवंटन पर टकराव।"/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-pol-01"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-pol-01"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=600&amp;q=70"/>
+            <column name="source_owner" value="CNN-News18"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='cnn-news18')"/>
+            <column name="is_embeddable" valueBoolean="true"/><column name="source_verified" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Fact-check: what the manifesto actually promised"/>
+            <column name="title_hi" value="फ़ैक्ट-चेक: घोषणापत्र में असल में क्या वादा था"/>
+            <column name="summary_en" value="A creator compares the 2019 manifesto promises against the record."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-pol-02/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-pol-02/embed/"/>
+            <column name="source_owner" value="@ananya.civics"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="FACEBOOK"/><column name="content_type" value="Video"/><column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Party president's address to first-time voters"/>
+            <column name="title_hi" value="पहली बार के मतदाताओं को पार्टी अध्यक्ष का संबोधन"/>
+            <column name="summary_en" value="Full address streamed on the party's official page."/>
+            <column name="source_url" value="https://www.facebook.com/watch/?v=nlpol03"/>
+            <column name="embed_url" value="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3Dnlpol03&amp;show_text=false"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600&amp;q=70"/>
+            <column name="source_owner" value="Times Now"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='times-now')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="ADR data: criminal cases declared by sitting MPs"/>
+            <column name="title_hi" value="ADR डेटा: मौजूदा सांसदों द्वारा घोषित आपराधिक मामले"/>
+            <column name="summary_en" value="Watchdog breakdown of affidavit declarations across parties."/>
+            <column name="source_url" value="https://www.youtube.com/shorts/nl-pol-04"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-pol-04"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&amp;q=70"/>
+            <column name="source_owner" value="ADR India"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='adr-india')"/>
+            <column name="is_embeddable" valueBoolean="true"/><column name="source_verified" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-pol-01')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="POLITICS"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="parliament,budget,debate"/><column name="display_order" valueNumeric="1"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-pol-02/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="POLITICS"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="manifesto,factcheck"/><column name="display_order" valueNumeric="2"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.facebook.com/watch/?v=nlpol03')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="POLITICS"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="voters,campaign"/><column name="display_order" valueNumeric="3"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/shorts/nl-pol-04')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="POLITICS"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="adr,transparency,affidavit"/><column name="display_order" valueNumeric="4"/><column name="is_primary" valueBoolean="true"/></insert>
+    </changeSet>
+
+    <!-- ========================== ENVIRONMENT ========================== -->
+    <changeSet id="024-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-env-01'</sqlCheck></preConditions>
+
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Delhi air quality: why winters turn toxic"/>
+            <column name="title_hi" value="दिल्ली की हवा: सर्दियों में ज़हरीली क्यों हो जाती है"/>
+            <column name="summary_en" value="Explainer on stubble burning, traffic and the AQI emergency."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-env-01"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-env-01"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1611273426858-450d8e3c9fce?w=600&amp;q=70"/>
+            <column name="source_owner" value="NDTV"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='ndtv')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Reviving a dead lake: a citizen-led cleanup"/>
+            <column name="title_hi" value="मृत झील को पुनर्जीवित करना: नागरिक-नेतृत्व सफ़ाई"/>
+            <column name="summary_en" value="Volunteers restore a Bengaluru lake over 18 months."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-env-02/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-env-02/embed/"/>
+            <column name="source_owner" value="@greenfootprint.blr"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Video"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="Inside India's solar push: what the numbers say"/>
+            <column name="title_hi" value="भारत का सौर अभियान: आंकड़े क्या कहते हैं"/>
+            <column name="summary_en" value="A data-led look at renewable capacity targets."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-env-03"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-env-03"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&amp;q=70"/>
+            <column name="source_owner" value="Moneycontrol"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='moneycontrol')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="FACEBOOK"/><column name="content_type" value="Video"/><column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="Coastal erosion is swallowing this fishing village"/>
+            <column name="title_hi" value="तटीय कटाव इस मछुआरा गाँव को निगल रहा है"/>
+            <column name="summary_en" value="Ground report on rising seas along the Kerala coast."/>
+            <column name="source_url" value="https://www.facebook.com/watch/?v=nlenv04"/>
+            <column name="embed_url" value="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3Dnlenv04&amp;show_text=false"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&amp;q=70"/>
+            <column name="source_owner" value="The Wire"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='the-wire')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-env-01')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="ENVIRONMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="airquality,pollution,delhi"/><column name="display_order" valueNumeric="1"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-env-02/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="ENVIRONMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="lake,cleanup,bengaluru"/><column name="display_order" valueNumeric="2"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-env-03')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="ENVIRONMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="solar,renewable,energy"/><column name="display_order" valueNumeric="3"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.facebook.com/watch/?v=nlenv04')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="ENVIRONMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="climate,coast,kerala"/><column name="display_order" valueNumeric="4"/><column name="is_primary" valueBoolean="true"/></insert>
+    </changeSet>
+
+    <!-- ========================== GOVERNMENT ========================== -->
+    <changeSet id="024-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-gov-01'</sqlCheck></preConditions>
+
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Video"/><column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="How a bill becomes law in India"/>
+            <column name="title_hi" value="भारत में विधेयक कैसे क़ानून बनता है"/>
+            <column name="summary_en" value="Step-by-step walkthrough of the parliamentary process."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-gov-01"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-gov-01"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&amp;q=70"/>
+            <column name="source_owner" value="Sansad TV"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='sansad-tv')"/>
+            <column name="is_embeddable" valueBoolean="true"/><column name="source_verified" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="How to file an RTI in under 5 minutes"/>
+            <column name="title_hi" value="5 मिनट में RTI कैसे दाखिल करें"/>
+            <column name="summary_en" value="A practical guide to the Right to Information process."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-gov-02/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-gov-02/embed/"/>
+            <column name="source_owner" value="@rti.guru"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Digital governance: the DBT subsidy story"/>
+            <column name="title_hi" value="डिजिटल शासन: DBT सब्सिडी की कहानी"/>
+            <column name="summary_en" value="How direct benefit transfer changed welfare delivery."/>
+            <column name="source_url" value="https://www.youtube.com/shorts/nl-gov-03"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-gov-03"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1633265486064-086b219458ec?w=600&amp;q=70"/>
+            <column name="source_owner" value="Press Information Bureau"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='pib-india')"/>
+            <column name="is_embeddable" valueBoolean="true"/><column name="source_verified" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="FACEBOOK"/><column name="content_type" value="Video"/><column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="Where did the smart-city funds go?"/>
+            <column name="title_hi" value="स्मार्ट-सिटी का पैसा कहाँ गया?"/>
+            <column name="summary_en" value="An audit-based look at unspent urban development budgets."/>
+            <column name="source_url" value="https://www.facebook.com/watch/?v=nlgov04"/>
+            <column name="embed_url" value="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3Dnlgov04&amp;show_text=false"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&amp;q=70"/>
+            <column name="source_owner" value="Navbharat Times"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='navbharat-times')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-gov-01')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="GOVERNMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="parliament,lawmaking,civics"/><column name="display_order" valueNumeric="1"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-gov-02/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="GOVERNMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="rti,transparency,guide"/><column name="display_order" valueNumeric="2"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/shorts/nl-gov-03')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="GOVERNMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="dbt,welfare,digital"/><column name="display_order" valueNumeric="3"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.facebook.com/watch/?v=nlgov04')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="GOVERNMENT"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="smartcity,budget,audit"/><column name="display_order" valueNumeric="4"/><column name="is_primary" valueBoolean="true"/></insert>
+    </changeSet>
+
+    <!-- ============================ MEDIA ============================ -->
+    <changeSet id="024-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-med-01'</sqlCheck></preConditions>
+
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Video"/><column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="Who owns your news? India's media map"/>
+            <column name="title_hi" value="आपकी ख़बरों का मालिक कौन? भारत का मीडिया नक्शा"/>
+            <column name="summary_en" value="A breakdown of which conglomerates control which channels."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-med-01"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-med-01"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&amp;q=70"/>
+            <column name="source_owner" value="Newslaundry"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='the-wire')"/>
+            <column name="is_embeddable" valueBoolean="true"/><column name="source_verified" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="Spotting paid news vs reporting"/>
+            <column name="title_hi" value="पेड न्यूज़ बनाम रिपोर्टिंग को पहचानना"/>
+            <column name="summary_en" value="Quick media-literacy tips for everyday readers."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-med-02/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-med-02/embed/"/>
+            <column name="source_owner" value="@medialiteracy.in"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="CRITICAL"/>
+            <column name="title_en" value="When the anchor becomes the story"/>
+            <column name="title_hi" value="जब एंकर ही ख़बर बन जाए"/>
+            <column name="summary_en" value="A look at prime-time debate culture and its effects."/>
+            <column name="source_url" value="https://www.youtube.com/shorts/nl-med-03"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-med-03"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&amp;q=70"/>
+            <column name="source_owner" value="The Wire"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='the-wire')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Video"/><column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="Regional newsrooms keeping local power accountable"/>
+            <column name="title_hi" value="स्थानीय सत्ता को जवाबदेह रखते क्षेत्रीय न्यूज़रूम"/>
+            <column name="summary_en" value="Why small-town journalism still matters."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-med-04"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-med-04"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&amp;q=70"/>
+            <column name="source_owner" value="News18 India"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='news18-india')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-med-01')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="MEDIA"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="ownership,transparency,media"/><column name="display_order" valueNumeric="1"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-med-02/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="MEDIA"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="literacy,paidnews"/><column name="display_order" valueNumeric="2"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/shorts/nl-med-03')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="MEDIA"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="primetime,debate"/><column name="display_order" valueNumeric="3"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-med-04')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="MEDIA"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="local,journalism"/><column name="display_order" valueNumeric="4"/><column name="is_primary" valueBoolean="true"/></insert>
+    </changeSet>
+
+    <!-- ========================== JUDICIARY ========================== -->
+    <changeSet id="024-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-jud-01'</sqlCheck></preConditions>
+
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Video"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="How the Supreme Court collegium works"/>
+            <column name="title_hi" value="सुप्रीम कोर्ट कॉलेजियम कैसे काम करता है"/>
+            <column name="summary_en" value="Explainer on judicial appointments and the collegium debate."/>
+            <column name="source_url" value="https://www.youtube.com/watch?v=nl-jud-01"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-jud-01"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1589994965851-a8f479c573a9?w=600&amp;q=70"/>
+            <column name="source_owner" value="CNN-News18"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='cnn-news18')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="Your rights when you're detained"/>
+            <column name="title_hi" value="हिरासत में लिए जाने पर आपके अधिकार"/>
+            <column name="summary_en" value="A lawyer explains the constitutional safeguards in plain language."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-jud-02/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-jud-02/embed/"/>
+            <column name="source_owner" value="@lawforall.in"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="The pendency problem: 5 crore cases explained"/>
+            <column name="title_hi" value="लंबित मामलों की समस्या: 5 करोड़ केस"/>
+            <column name="summary_en" value="Why India's courts are backlogged and what's being tried."/>
+            <column name="source_url" value="https://www.youtube.com/shorts/nl-jud-03"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-jud-03"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1505664194779-8beaceb93744?w=600&amp;q=70"/>
+            <column name="source_owner" value="The Wire"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='the-wire')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="FACEBOOK"/><column name="content_type" value="Video"/><column name="sentiment_type" value="OFFICIAL"/>
+            <column name="title_en" value="Live-streamed Constitution Bench hearing, explained"/>
+            <column name="title_hi" value="संविधान पीठ की लाइव सुनवाई, समझाया गया"/>
+            <column name="summary_en" value="How open-court live streaming is changing access to justice."/>
+            <column name="source_url" value="https://www.facebook.com/watch/?v=nljud04"/>
+            <column name="embed_url" value="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3Dnljud04&amp;show_text=false"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=600&amp;q=70"/>
+            <column name="source_owner" value="Sansad TV"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='sansad-tv')"/>
+            <column name="is_embeddable" valueBoolean="true"/><column name="source_verified" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="HIGH"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/watch?v=nl-jud-01')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="JUDICIARY"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="supremecourt,collegium"/><column name="display_order" valueNumeric="1"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-jud-02/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="JUDICIARY"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="rights,detention,law"/><column name="display_order" valueNumeric="2"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/shorts/nl-jud-03')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="JUDICIARY"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="pendency,courts,reform"/><column name="display_order" valueNumeric="3"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.facebook.com/watch/?v=nljud04')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="JUDICIARY"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="livestream,openjustice"/><column name="display_order" valueNumeric="4"/><column name="is_primary" valueBoolean="true"/></insert>
+    </changeSet>
+
+    <!-- ============================ CITIZEN ============================ -->
+    <changeSet id="024-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-cit-01/'</sqlCheck></preConditions>
+
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="One pothole, one tweet, one fixed road"/>
+            <column name="title_hi" value="एक गड्ढा, एक ट्वीट, एक ठीक सड़क"/>
+            <column name="summary_en" value="How a resident used civic complaints to get a road repaired."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-cit-01/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-cit-01/embed/"/>
+            <column name="source_owner" value="@mumbai_civic_watch"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="YOUTUBE"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="POSITIVE"/>
+            <column name="title_en" value="First-time voter? Here's your 60-second checklist"/>
+            <column name="title_hi" value="पहली बार मतदाता? यह रही आपकी 60-सेकंड चेकलिस्ट"/>
+            <column name="summary_en" value="Voter ID, polling booth, and what to carry on polling day."/>
+            <column name="source_url" value="https://www.youtube.com/shorts/nl-cit-02"/>
+            <column name="embed_url" value="https://www.youtube-nocookie.com/embed/nl-cit-02"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=600&amp;q=70"/>
+            <column name="source_owner" value="@firstvote.india"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="FACEBOOK"/><column name="content_type" value="Video"/><column name="sentiment_type" value="EVIDENCE"/>
+            <column name="title_en" value="Resident welfare association takes on illegal parking"/>
+            <column name="title_hi" value="रेज़िडेंट वेलफ़ेयर एसोसिएशन ने अवैध पार्किंग पर कार्रवाई की"/>
+            <column name="summary_en" value="A neighbourhood organises to reclaim public footpaths."/>
+            <column name="source_url" value="https://www.facebook.com/watch/?v=nlcit03"/>
+            <column name="embed_url" value="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3Dnlcit03&amp;show_text=false"/>
+            <column name="thumbnail_url" value="https://images.unsplash.com/photo-1573108724029-4c46571d6490?w=600&amp;q=70"/>
+            <column name="source_owner" value="@lucknow_civic_eye"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="media_links">
+            <column name="platform" value="INSTAGRAM"/><column name="content_type" value="Reel"/><column name="sentiment_type" value="NEUTRAL"/>
+            <column name="title_en" value="What your municipal ward councillor actually does"/>
+            <column name="title_hi" value="आपका नगर पार्षद असल में क्या करता है"/>
+            <column name="summary_en" value="A primer on the most local layer of Indian government."/>
+            <column name="source_url" value="https://www.instagram.com/reel/nl-cit-04/"/>
+            <column name="embed_url" value="https://www.instagram.com/reel/nl-cit-04/embed/"/>
+            <column name="source_owner" value="@ananya.civics"/>
+            <column name="owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='citizen-creators')"/>
+            <column name="is_embeddable" valueBoolean="true"/>
+            <column name="approval_status" value="APPROVED"/><column name="source_confidence" value="MEDIUM"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-cit-01/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="CITIZEN"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="civic,complaint,roads"/><column name="display_order" valueNumeric="1"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.youtube.com/shorts/nl-cit-02')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="CITIZEN"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="voting,firsttime,checklist"/><column name="display_order" valueNumeric="2"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.facebook.com/watch/?v=nlcit03')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="CITIZEN"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="rwa,parking,community"/><column name="display_order" valueNumeric="3"/><column name="is_primary" valueBoolean="true"/></insert>
+        <insert tableName="media_mappings"><column name="media_link_id" valueComputed="(SELECT id FROM media_links WHERE source_url='https://www.instagram.com/reel/nl-cit-04/')"/><column name="mapping_type" value="SECTION"/><column name="section_key" value="CITIZEN"/><column name="display_context" value="BROWSE"/><column name="audience_scope" value="NATIONAL"/><column name="tags" value="councillor,localgov,primer"/><column name="display_order" valueNumeric="4"/><column name="is_primary" valueBoolean="true"/></insert>
+    </changeSet>
+
+</databaseChangeLog>
