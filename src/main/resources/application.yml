@@ -47,6 +47,9 @@ nationlens:
     # Set OTP_ENABLED=true when MSG91 is live. Until then, use dev-bypass-code on verify.
     enabled: ${OTP_ENABLED:false}
     dev-bypass-code: ${OTP_DEV_BYPASS_CODE:123456}
+    # Dev-only one-tap login: enter mobile number and get a JWT, no OTP step.
+    # ENABLED by default locally; the production profile forces it OFF. NEVER enable in prod.
+    dev-login: ${DEV_LOGIN_ENABLED:true}
 
 msg91:
   authkey: ${MSG91_AUTHKEY:467759AK9OsJyrK168baf5d7P1}

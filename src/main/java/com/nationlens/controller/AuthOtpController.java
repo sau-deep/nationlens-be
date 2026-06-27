@@ -13,9 +13,12 @@ import com.nationlens.security.JwtService;
 import com.nationlens.service.Msg91Service;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +36,10 @@ public class AuthOtpController {
     private final RoleRepository roleRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+
+    /** Dev-only: skip OTP entirely and log in with just the mobile number. OFF in production. */
+    @Value("${nationlens.otp.dev-login:false}")
+    private boolean devLoginEnabled;
 
     @PostMapping("/send")
     public ResponseEntity<ApiResponse<OtpSendResponse>> sendOtp(
@@ -58,12 +65,36 @@ public class AuthOtpController {
             userRepository.save(user);
         }
 
+        return ResponseEntity.ok(ApiResponse.ok(buildAuthResponse(user)));
+    }
+
+    /**
+     * Dev-only one-tap login: given just a mobile number, find/create the user and
+     * return a JWT — no OTP sent or verified. Guarded by {@code nationlens.otp.dev-login},
+     * which is true locally and false in the production profile.
+     */
+    @PostMapping("/dev-login")
+    public ResponseEntity<ApiResponse<AuthResponse>> devLogin(
+            @Valid @RequestBody OtpSendRequest request) {
+        if (!devLoginEnabled) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Dev login is disabled");
+        }
+
+        User user = userRepository.findByMobile(request.getMobile())
+            .orElseGet(() -> createUserForMobile(request.getMobile()));
+
+        if (!Boolean.TRUE.equals(user.getMobileVerified())) {
+            user.setMobileVerified(true);
+            userRepository.save(user);
+        }
+
+        return ResponseEntity.ok(ApiResponse.ok(buildAuthResponse(user)));
+    }
+
+    private AuthResponse buildAuthResponse(User user) {
         String token = jwtService.generateToken(user);
         List<String> roles = user.getRoles().stream().map(Role::getCode).toList();
-        AuthResponse authResponse = new AuthResponse(
-            token, user.getId(), user.getDisplayName(), user.getEmail(), roles
-        );
-        return ResponseEntity.ok(ApiResponse.ok(authResponse));
+        return new AuthResponse(token, user.getId(), user.getDisplayName(), user.getEmail(), roles);
     }
 
     @PostMapping("/retry")

@@ -46,7 +46,7 @@
         <!-- LiveLaw – India's top legal news portal -->
         <insert tableName="rss_feed_sources">
             <column name="name" value="LiveLaw"/>
-            <column name="feed_url" value="https://www.livelaw.in/rss"/>
+            <column name="feed_url" value="https://www.livelaw.in/google_feeds.xml"/>
             <column name="category" value="LEGAL"/>
             <column name="city_key" value="NATIONAL"/>
             <column name="source_language" value="EN"/>
@@ -55,7 +55,7 @@
         <!-- Bar and Bench – Legal news & Supreme Court -->
         <insert tableName="rss_feed_sources">
             <column name="name" value="Bar and Bench"/>
-            <column name="feed_url" value="https://www.barandbench.com/rss"/>
+            <column name="feed_url" value="https://www.barandbench.com/feed"/>
             <column name="category" value="LEGAL"/>
             <column name="city_key" value="NATIONAL"/>
             <column name="source_language" value="EN"/>

@@ -40,6 +40,9 @@ nationlens:
     # OTP disabled until go-live. Set OTP_ENABLED=true in AWS EB env when MSG91 is ready.
     enabled: ${OTP_ENABLED:false}
     dev-bypass-code: ${OTP_DEV_BYPASS_CODE:123456}
+    # No-OTP one-tap login must stay OFF in production. Defaults false; only flip via
+    # DEV_LOGIN_ENABLED if you explicitly accept that anyone can log in as any number.
+    dev-login: ${DEV_LOGIN_ENABLED:false}
 
 logging:
   level:

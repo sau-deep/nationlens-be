@@ -18,9 +18,12 @@ public class PublicConfigController {
     @Value("${nationlens.otp.dev-bypass-code:123456}")
     private String devBypassCode;
 
+    @Value("${nationlens.otp.dev-login:false}")
+    private boolean devLoginEnabled;
+
     @GetMapping("/config")
     public ResponseEntity<ApiResponse<PublicConfigDto>> getConfig() {
         String hint = otpEnabled ? null : "Use " + devBypassCode;
-        return ResponseEntity.ok(ApiResponse.ok(new PublicConfigDto(otpEnabled, hint)));
+        return ResponseEntity.ok(ApiResponse.ok(new PublicConfigDto(otpEnabled, hint, devLoginEnabled)));
     }
 }

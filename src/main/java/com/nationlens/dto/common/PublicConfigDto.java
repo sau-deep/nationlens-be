@@ -9,4 +9,5 @@ public class PublicConfigDto {
 
     private boolean otpEnabled;
     private String otpBypassHint;
+    private boolean devLoginEnabled;
 }

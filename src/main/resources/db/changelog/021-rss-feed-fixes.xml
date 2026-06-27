@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- ================================================================
+         Fix broken RSS feed sources discovered via terminal testing
+         (2026-06-27). Each was verified with curl + xmllint before the
+         change below. None of the failures were User-Agent blocking —
+         they were dead URLs (404) or HTML pages that are not RSS feeds.
+         ================================================================ -->
+
+    <!-- LiveLaw: /rss now 404. The site advertises a valid feed at
+         /google_feeds.xml (verified: 200, application/xml, 60 items). -->
+    <changeSet id="021-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <update tableName="rss_feed_sources">
+            <column name="feed_url" value="https://www.livelaw.in/google_feeds.xml"/>
+            <where>name = 'LiveLaw'</where>
+        </update>
+    </changeSet>
+
+    <!-- Bar and Bench: /rss now 404. Working feed is /feed
+         (verified: 200, application/rss+xml, valid items). -->
+    <changeSet id="021-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <update tableName="rss_feed_sources">
+            <column name="feed_url" value="https://www.barandbench.com/feed"/>
+            <where>name = 'Bar and Bench'</where>
+        </update>
+    </changeSet>
+
+    <!-- The Hindu does not publish city feeds for Chandigarh / Lucknow /
+         Pune / Ahmedabad (all 404). Lucknow, Pune and Ahmedabad already
+         have working Times of India feeds, so deactivate the dead Hindu
+         ones. Chandigarh had no other source, so it is replaced below. -->
+    <changeSet id="021-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <update tableName="rss_feed_sources">
+            <column name="active" valueBoolean="false"/>
+            <where>name IN (
+                'The Hindu - Chandigarh',
+                'The Hindu - Lucknow',
+                'The Hindu - Pune',
+                'The Hindu - Ahmedabad'
+            )</where>
+        </update>
+    </changeSet>
+
+    <!-- ADR India and PRS India are website report pages, not RSS feeds
+         (ADR -> 404, PRS -> 200 HTML, "DOCTYPE disallowed"). The Rome-based
+         ingestion service cannot parse them. Their statically seeded news
+         items (018-05) remain; only the unusable feed polling is disabled. -->
+    <changeSet id="021-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <update tableName="rss_feed_sources">
+            <column name="active" valueBoolean="false"/>
+            <where>name IN (
+                'ADR India — Reports and Press Releases',
+                'PRS India — Parliament Vital Stats'
+            )</where>
+        </update>
+    </changeSet>
+
+    <!-- Replacement Times of India city feed for Chandigarh
+         (verified: 200, text/xml, valid RSS). -->
+    <changeSet id="021-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'Times of India - Chandigarh'</sqlCheck></preConditions>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Chandigarh"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/-2128816011.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="CHANDIGARH"/>
+            <column name="state_code" value="PB"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+    </changeSet>
+
+    <!-- SURAT is a supported city key but had no feed source. Add the
+         working Times of India Surat feed (verified: 200, text/xml). -->
+    <changeSet id="021-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><sqlCheck expectedResult="0">SELECT COUNT(*) FROM rss_feed_sources WHERE name = 'Times of India - Surat'</sqlCheck></preConditions>
+
+        <insert tableName="rss_feed_sources">
+            <column name="name" value="Times of India - Surat"/>
+            <column name="feed_url" value="https://timesofindia.indiatimes.com/rssfeeds/3947067.cms"/>
+            <column name="category" value="CITY_NEWS"/>
+            <column name="city_key" value="SURAT"/>
+            <column name="state_code" value="GJ"/>
+            <column name="source_language" value="EN"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -25,5 +25,6 @@
     <include file="db/changelog/018-adr-civic-media.xml"/>
     <include file="db/changelog/019-media-mapping-scope.xml"/>
     <include file="db/changelog/020-rss-language-feeds.xml"/>
+    <include file="db/changelog/021-rss-feed-fixes.xml"/>
 
 </databaseChangeLog>
