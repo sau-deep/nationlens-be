@@ -86,6 +86,12 @@ public class AdminMediaController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/mappings/{mappingId}")
+    public ResponseEntity<Void> deleteMapping(@PathVariable Long mappingId) {
+        mediaService.deleteMapping(mappingId);
+        return ResponseEntity.noContent().build();
+    }
+
     private Long extractUserId(UserDetails userDetails) {
         if (userDetails instanceof com.nationlens.domain.entity.User u) {
             return u.getId();

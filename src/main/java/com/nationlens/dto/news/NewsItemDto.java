@@ -24,9 +24,14 @@ public class NewsItemDto {
     private final LocalDateTime fetchedAt;
 
     public NewsItemDto(RssNewsItem item) {
+        this(item, item.getTitle(), item.getDescription());
+    }
+
+    /** Localized variant: title/description already resolved into the requested locale. */
+    public NewsItemDto(RssNewsItem item, String localizedTitle, String localizedDescription) {
         this.id = item.getId();
-        this.title = item.getTitle();
-        this.description = item.getDescription();
+        this.title = localizedTitle;
+        this.description = localizedDescription;
         this.articleUrl = item.getArticleUrl();
         this.thumbnailUrl = item.getThumbnailUrl();
         this.author = item.getAuthor();

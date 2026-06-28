@@ -14,6 +14,9 @@ public class MediaMappingRequest {
     private Long constituencyId;
     private Long partyEntityId;
 
+    /** When set, reel appears on all entity profiles of this type (MP, MLA, …). */
+    private String entityTypeCode;
+
     private String audienceScope = "ENTITY";
     private String stateCode;
     private String tags;

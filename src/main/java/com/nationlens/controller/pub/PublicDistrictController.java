@@ -17,7 +17,14 @@ public class PublicDistrictController {
     private final DistrictService districtService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<District>>> list() {
+    public ResponseEntity<ApiResponse<List<District>>> list(
+        @RequestParam(required = false) Boolean featured,
+        @RequestParam(defaultValue = "6") int limit
+    ) {
+        if (Boolean.TRUE.equals(featured)) {
+            int safeLimit = Math.min(Math.max(limit, 1), 20);
+            return ResponseEntity.ok(ApiResponse.ok(districtService.listFeaturedForHome(safeLimit)));
+        }
         return ResponseEntity.ok(ApiResponse.ok(districtService.listAll()));
     }
 

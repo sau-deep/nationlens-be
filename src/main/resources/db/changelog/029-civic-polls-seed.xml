@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!--
+      Civic reform polls: election finance caps, candidate-centric democracy,
+      judiciary independence, public health access, and environmental governance.
+    -->
+    <changeSet id="029-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM polls WHERE question_en = 'Should India impose an identical nationwide spending cap on every Lok Sabha candidate, regardless of party?'</sqlCheck>
+        </preConditions>
+
+        <!-- Election finance: uniform caps -->
+        <insert tableName="polls">
+            <column name="question_en" value="Should India impose an identical nationwide spending cap on every Lok Sabha candidate, regardless of party?"/>
+            <column name="question_hi" value="क्या भारत को हर लोकसभा उम्मीदवार पर पार्टी की परवाह किए बिना समान राष्ट्रव्यापी खर्च सीमा लागू करनी चाहिए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should India impose an identical nationwide spending cap on every Lok Sabha candidate, regardless of party?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — same cap for all"/><column name="label_hi" value="हां — सभी के लिए समान सीमा"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should India impose an identical nationwide spending cap on every Lok Sabha candidate, regardless of party?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but higher cap for larger constituencies"/><column name="label_hi" value="हां, लेकिन बड़े निर्वाचन क्षेत्रों के लिए अधिक सीमा"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should India impose an identical nationwide spending cap on every Lok Sabha candidate, regardless of party?' LIMIT 1)"/>
+            <column name="label_en" value="No — parties should set their own limits"/><column name="label_hi" value="नहीं — पार्टियों को अपनी सीमा तय करनी चाहिए"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should India impose an identical nationwide spending cap on every Lok Sabha candidate, regardless of party?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should election spending limits be indexed to inflation and reviewed every two years, with identical rules for all parties?"/>
+            <column name="question_hi" value="क्या चुनावी खर्च सीमा को मुद्रास्फीति से जोड़कर हर दो साल समीक्षा की जानी चाहिए, सभी पार्टियों के लिए समान नियमों के साथ?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election spending limits be indexed to inflation and reviewed every two years, with identical rules for all parties?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — automatic inflation-linked review"/><column name="label_hi" value="हां — स्वचालित मुद्रास्फीति-आधारित समीक्षा"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election spending limits be indexed to inflation and reviewed every two years, with identical rules for all parties?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but Parliament should approve each revision"/><column name="label_hi" value="हां, लेकिन संसद को हर संशोधन मंज़ूर करना चाहिए"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election spending limits be indexed to inflation and reviewed every two years, with identical rules for all parties?' LIMIT 1)"/>
+            <column name="label_en" value="No — fixed limits are sufficient"/><column name="label_hi" value="नहीं — निश्चित सीमा पर्याप्त हैं"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election spending limits be indexed to inflation and reviewed every two years, with identical rules for all parties?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should anonymous cash donations above ₹2,000 to any candidate or party be banned, with identical penalties for all political entities?"/>
+            <column name="question_hi" value="क्या ₹2,000 से अधिक गुमनाम नकद दान किसी भी उम्मीदवार या पार्टी को प्रतिबंधित होना चाहिए, सभी राजनीतिक संस्थाओं के लिए समान दंड के साथ?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should anonymous cash donations above ₹2,000 to any candidate or party be banned, with identical penalties for all political entities?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — full ban on anonymous cash"/><column name="label_hi" value="हां — गुमनाम नकद पर पूर्ण प्रतिबंध"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should anonymous cash donations above ₹2,000 to any candidate or party be banned, with identical penalties for all political entities?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but only for parties — not individual candidates"/><column name="label_hi" value="हां, लेकिन केवल पार्टियों के लिए — व्यक्तिगत उम्मीदवारों के लिए नहीं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should anonymous cash donations above ₹2,000 to any candidate or party be banned, with identical penalties for all political entities?' LIMIT 1)"/>
+            <column name="label_en" value="No — current disclosure rules are enough"/><column name="label_hi" value="नहीं — वर्तमान प्रकटीकरण नियम पर्याप्त हैं"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should anonymous cash donations above ₹2,000 to any candidate or party be banned, with identical penalties for all political entities?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <!-- Candidate-centric democracy: no party symbols -->
+        <insert tableName="polls">
+            <column name="question_en" value="Should election ballots show only candidate names and photos, with no party symbols or names?"/>
+            <column name="question_hi" value="क्या चुनावी मतपत्र पर केवल उम्मीदवार का नाम और फोटो होना चाहिए, बिना पार्टी चिह्न या नाम के?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election ballots show only candidate names and photos, with no party symbols or names?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — individual candidate only on ballot"/><column name="label_hi" value="हां — मतपत्र पर केवल व्यक्तिगत उम्मीदवार"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election ballots show only candidate names and photos, with no party symbols or names?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but party name in small print is acceptable"/><column name="label_hi" value="हां, लेकिन छोटे अक्षरों में पार्टी का नाम स्वीकार्य है"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election ballots show only candidate names and photos, with no party symbols or names?' LIMIT 1)"/>
+            <column name="label_en" value="No — party symbols help voters decide"/><column name="label_hi" value="नहीं — पार्टी चिह्न मतदाताओं को निर्णय लेने में मदद करते हैं"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election ballots show only candidate names and photos, with no party symbols or names?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should local body elections (municipal and panchayat) be fully non-partisan, with no party affiliation allowed on the ballot?"/>
+            <column name="question_hi" value="क्या स्थानीय निकाय चुनाव (नगरपालिका और पंचायत) पूर्णतः गैर-दलीय होने चाहिए, मतपत्र पर पार्टी संबद्धता की अनुमति नहीं?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should local body elections (municipal and panchayat) be fully non-partisan, with no party affiliation allowed on the ballot?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — local issues, individual candidates only"/><column name="label_hi" value="हां — स्थानीय मुद्दे, केवल व्यक्तिगत उम्मीदवार"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should local body elections (municipal and panchayat) be fully non-partisan, with no party affiliation allowed on the ballot?' LIMIT 1)"/>
+            <column name="label_en" value="Yes for panchayat, but not for municipal corporations"/><column name="label_hi" value="पंचायत के लिए हां, लेकिन नगर निगम के लिए नहीं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should local body elections (municipal and panchayat) be fully non-partisan, with no party affiliation allowed on the ballot?' LIMIT 1)"/>
+            <column name="label_en" value="No — party backing ensures accountability"/><column name="label_hi" value="नहीं — पार्टी समर्थन जवाबदेही सुनिश्चित करता है"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should local body elections (municipal and panchayat) be fully non-partisan, with no party affiliation allowed on the ballot?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should MPs be allowed to vote independently on health and environment bills without facing anti-defection penalties?"/>
+            <column name="question_hi" value="क्या सांसदों को स्वास्थ्य और पर्यावरण विधेयकों पर स्वतंत्र रूप से मतदान करने की अनुमति होनी चाहिए, दलीय विरोध कानून के दंड के बिना?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should MPs be allowed to vote independently on health and environment bills without facing anti-defection penalties?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — conscience votes on these issues"/><column name="label_hi" value="हां — इन मुद्दों पर विवेक मत"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should MPs be allowed to vote independently on health and environment bills without facing anti-defection penalties?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but only if constituency referendum supports it"/><column name="label_hi" value="हां, लेकिन केवल यदि निर्वाचन क्षेत्र जनमत समर्थन करे"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should MPs be allowed to vote independently on health and environment bills without facing anti-defection penalties?' LIMIT 1)"/>
+            <column name="label_en" value="No — party discipline must be maintained"/><column name="label_hi" value="नहीं — पार्टी अनुशासन बनाए रखना चाहिए"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should MPs be allowed to vote independently on health and environment bills without facing anti-defection penalties?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <!-- Judiciary -->
+        <insert tableName="polls">
+            <column name="question_en" value="Should High Court and Supreme Court judges be appointed through a transparent commission with opposition and civil society members, replacing the collegium?"/>
+            <column name="question_hi" value="क्या उच्च न्यायालय और सर्वोच्च न्यायालय के न्यायाधीशों की नियुक्ति विपक्ष और नागरिक समाज सदस्यों वाले पारदर्शी आयोग से होनी चाहिए, कोलेजियम की जगह?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should High Court and Supreme Court judges be appointed through a transparent commission with opposition and civil society members, replacing the collegium?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — broader transparent commission"/><column name="label_hi" value="हां — व्यापक पारदर्शी आयोग"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should High Court and Supreme Court judges be appointed through a transparent commission with opposition and civil society members, replacing the collegium?' LIMIT 1)"/>
+            <column name="label_en" value="Reform collegium, but keep judges in control"/><column name="label_hi" value="कोलेजियम में सुधार, लेकिन न्यायाधीशों का नियंत्रण बना रहे"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should High Court and Supreme Court judges be appointed through a transparent commission with opposition and civil society members, replacing the collegium?' LIMIT 1)"/>
+            <column name="label_en" value="No — current collegium system works"/><column name="label_hi" value="नहीं — वर्तमान कोलेजियम प्रणाली काम करती है"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should High Court and Supreme Court judges be appointed through a transparent commission with opposition and civil society members, replacing the collegium?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should districts where cases are pending for over 5 years automatically trigger a judicial capacity review and fast-track funding?"/>
+            <column name="question_hi" value="क्या उन जिलों में जहां 5 साल से अधिक मामले लंबित हैं, स्वचालित रूप से न्यायिक क्षमता समीक्षा और त्वरित धन आवंटन होना चाहिए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should districts where cases are pending for over 5 years automatically trigger a judicial capacity review and fast-track funding?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — automatic review and funding"/><column name="label_hi" value="हां — स्वचालित समीक्षा और धन"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should districts where cases are pending for over 5 years automatically trigger a judicial capacity review and fast-track funding?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but only for criminal cases"/><column name="label_hi" value="हां, लेकिन केवल आपराधिक मामलों के लिए"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should districts where cases are pending for over 5 years automatically trigger a judicial capacity review and fast-track funding?' LIMIT 1)"/>
+            <column name="label_en" value="No — state governments should decide"/><column name="label_hi" value="नहीं — राज्य सरकारों को निर्णय लेना चाहिए"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should districts where cases are pending for over 5 years automatically trigger a judicial capacity review and fast-track funding?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should live-streaming of Supreme Court constitution bench hearings be mandatory for all cases affecting fundamental rights?"/>
+            <column name="question_hi" value="क्या मौलिक अधिकारों को प्रभावित करने वाले सभी मामलों में संविधान पीठ की सर्वोच्च न्यायालय सुनवाई की लाइव स्ट्रीमिंग अनिवार्य होनी चाहिए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should live-streaming of Supreme Court constitution bench hearings be mandatory for all cases affecting fundamental rights?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — full public access via live stream"/><column name="label_hi" value="हां — लाइव स्ट्रीम के माध्यम से पूर्ण जनता की पहुंच"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should live-streaming of Supreme Court constitution bench hearings be mandatory for all cases affecting fundamental rights?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but with a delay for sensitive cases"/><column name="label_hi" value="हां, लेकिन संवेदनशील मामलों के लिए विलंब के साथ"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should live-streaming of Supreme Court constitution bench hearings be mandatory for all cases affecting fundamental rights?' LIMIT 1)"/>
+            <column name="label_en" value="No — written judgments are sufficient"/><column name="label_hi" value="नहीं — लिखित निर्णय पर्याप्त हैं"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should live-streaming of Supreme Court constitution bench hearings be mandatory for all cases affecting fundamental rights?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should election result disputes be resolved within 6 months through dedicated fast-track courts, with equal rules for all candidates?"/>
+            <column name="question_hi" value="क्या चुनाव परिणाम विवादों को समर्पित त्वरित न्यायालयों में 6 महीने के भीतर हल किया जाना चाहिए, सभी उम्मीदवारों के लिए समान नियमों के साथ?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election result disputes be resolved within 6 months through dedicated fast-track courts, with equal rules for all candidates?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — mandatory 6-month deadline"/><column name="label_hi" value="हां — अनिवार्य 6 महीने की समय सीमा"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election result disputes be resolved within 6 months through dedicated fast-track courts, with equal rules for all candidates?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but 12 months is more realistic"/><column name="label_hi" value="हां, लेकिन 12 महीने अधिक व्यावहारिक हैं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election result disputes be resolved within 6 months through dedicated fast-track courts, with equal rules for all candidates?' LIMIT 1)"/>
+            <column name="label_en" value="No — current tribunal system is adequate"/><column name="label_hi" value="नहीं — वर्तमान अधिकरण प्रणाली पर्याप्त है"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should election result disputes be resolved within 6 months through dedicated fast-track courts, with equal rules for all candidates?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <!-- Health -->
+        <insert tableName="polls">
+            <column name="question_en" value="Should access to a primary health centre within 5 km be a legally enforceable citizen right, with state penalties for failure?"/>
+            <column name="question_hi" value="क्या 5 किमी के भीतर प्राथमिक स्वास्थ्य केंद्र तक पहुंच एक कानूनी रूप से लागू नागरिक अधिकार होना चाहिए, विफलता पर राज्य दंड के साथ?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should access to a primary health centre within 5 km be a legally enforceable citizen right, with state penalties for failure?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — legal right with penalties"/><column name="label_hi" value="हां — दंड के साथ कानूनी अधिकार"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should access to a primary health centre within 5 km be a legally enforceable citizen right, with state penalties for failure?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but as a policy goal — not a legal right"/><column name="label_hi" value="हां, लेकिन नीति लक्ष्य के रूप में — कानूनी अधिकार नहीं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should access to a primary health centre within 5 km be a legally enforceable citizen right, with state penalties for failure?' LIMIT 1)"/>
+            <column name="label_en" value="No — states should decide infrastructure priorities"/><column name="label_hi" value="नहीं — राज्यों को बुनियादी ढांचे की प्राथमिकताएं तय करनी चाहिए"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should access to a primary health centre within 5 km be a legally enforceable citizen right, with state penalties for failure?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should all government hospitals be required to publish real-time bed availability and emergency wait times online?"/>
+            <column name="question_hi" value="क्या सभी सरकारी अस्पतालों को वास्तविक समय में बिस्तर उपलब्धता और आपातकालीन प्रतीक्षा समय ऑनलाइन प्रकाशित करना अनिवार्य होना चाहिए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should all government hospitals be required to publish real-time bed availability and emergency wait times online?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — mandatory real-time transparency"/><column name="label_hi" value="हां — अनिवार्य वास्तविक समय पारदर्शिता"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should all government hospitals be required to publish real-time bed availability and emergency wait times online?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but daily updates are enough"/><column name="label_hi" value="हां, लेकिन दैनिक अपडेट पर्याप्त हैं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should all government hospitals be required to publish real-time bed availability and emergency wait times online?' LIMIT 1)"/>
+            <column name="label_en" value="No — hospitals cannot maintain such systems"/><column name="label_hi" value="नहीं — अस्पताल ऐसी प्रणालियां बनाए नहीं रख सकते"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should all government hospitals be required to publish real-time bed availability and emergency wait times online?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should Ayushman Bharat be expanded to cover outpatient care and diagnostic tests, not just hospitalization?"/>
+            <column name="question_hi" value="क्या आयुष्मान भारत को बाह्य रोगी देखभाल और नैदानिक परीक्षणों को कवर करने के लिए विस्तारित किया जाना चाहिए, केवल अस्पताल में भर्ती नहीं?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should Ayushman Bharat be expanded to cover outpatient care and diagnostic tests, not just hospitalization?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — full primary-to-hospital coverage"/><column name="label_hi" value="हां — प्राथमिक से अस्पताल तक पूर्ण कवरेज"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should Ayushman Bharat be expanded to cover outpatient care and diagnostic tests, not just hospitalization?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but only diagnostics — not routine OPD"/><column name="label_hi" value="हां, लेकिन केवल नैदानिक — नियमित OPD नहीं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should Ayushman Bharat be expanded to cover outpatient care and diagnostic tests, not just hospitalization?' LIMIT 1)"/>
+            <column name="label_en" value="No — current hospitalization focus is correct"/><column name="label_hi" value="नहीं — वर्तमान अस्पतालीकरण फोकस सही है"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should Ayushman Bharat be expanded to cover outpatient care and diagnostic tests, not just hospitalization?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <!-- Environment -->
+        <insert tableName="polls">
+            <column name="question_en" value="Should new industrial projects post an environmental compliance bond, refundable only after 10 years of verified standards?"/>
+            <column name="question_hi" value="क्या नई औद्योगिक परियोजनाओं को पर्यावरण अनुपालन बॉन्ड जमा करना चाहिए, जो केवल 10 साल सत्यापित मानकों के बाद वापस मिले?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should new industrial projects post an environmental compliance bond, refundable only after 10 years of verified standards?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — bond ensures long-term compliance"/><column name="label_hi" value="हां — बॉन्ड दीर्घकालिक अनुपालन सुनिश्चित करता है"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should new industrial projects post an environmental compliance bond, refundable only after 10 years of verified standards?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but 5 years is enough"/><column name="label_hi" value="हां, लेकिन 5 साल पर्याप्त हैं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should new industrial projects post an environmental compliance bond, refundable only after 10 years of verified standards?' LIMIT 1)"/>
+            <column name="label_en" value="No — it will discourage investment"/><column name="label_hi" value="नहीं — यह निवेश को हतोत्साहित करेगा"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should new industrial projects post an environmental compliance bond, refundable only after 10 years of verified standards?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should crop residue burning penalties apply only in districts where the state provides subsidized stubble-management machines within 50 km?"/>
+            <column name="question_hi" value="क्या फसल अवशेष जलाने के दंड केवल उन जिलों में लागू होने चाहिए जहां राज्य 50 किमी के भीतर सब्सिडी वाली पराली प्रबंधन मशीनें उपलब्ध कराता है?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should crop residue burning penalties apply only in districts where the state provides subsidized stubble-management machines within 50 km?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — penalty only where alternatives exist"/><column name="label_hi" value="हां — दंड केवल जहां विकल्प उपलब्ध हों"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should crop residue burning penalties apply only in districts where the state provides subsidized stubble-management machines within 50 km?' LIMIT 1)"/>
+            <column name="label_en" value="No — ban burning everywhere immediately"/><column name="label_hi" value="नहीं — हर जगह तुरंत जलाने पर प्रतिबंध"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should crop residue burning penalties apply only in districts where the state provides subsidized stubble-management machines within 50 km?' LIMIT 1)"/>
+            <column name="label_en" value="Gradual rollout — penalties after 3-year subsidy phase"/><column name="label_hi" value="क्रमिक लागू — 3 साल की सब्सिडी अवधि के बाद दंड"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should crop residue burning penalties apply only in districts where the state provides subsidized stubble-management machines within 50 km?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should an Air Quality Index above 400 automatically suspend non-essential diesel vehicles and construction in that city until AQI drops below 200?"/>
+            <column name="question_hi" value="क्या 400 से अधिक वायु गुणवत्ता सूचकांक पर स्वचालित रूप से गैर-आवश्यक डीजल वाहनों और निर्माण को उस शहर में निलंबित किया जाना चाहिए, जब तक AQI 200 से नीचे न आ जाए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should an Air Quality Index above 400 automatically suspend non-essential diesel vehicles and construction in that city until AQI drops below 200?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — automatic trigger-based restrictions"/><column name="label_hi" value="हां — स्वचालित ट्रिगर-आधारित प्रतिबंध"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should an Air Quality Index above 400 automatically suspend non-essential diesel vehicles and construction in that city until AQI drops below 200?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but state government should confirm first"/><column name="label_hi" value="हां, लेकिन राज्य सरकार को पहले पुष्टि करनी चाहिए"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should an Air Quality Index above 400 automatically suspend non-essential diesel vehicles and construction in that city until AQI drops below 200?' LIMIT 1)"/>
+            <column name="label_en" value="No — too disruptive to daily life and economy"/><column name="label_hi" value="नहीं — दैनिक जीवन और अर्थव्यवस्था के लिए बहुत व्यवधानकारी"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should an Air Quality Index above 400 automatically suspend non-essential diesel vehicles and construction in that city until AQI drops below 200?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should inter-state river water disputes be resolved by an independent environmental tribunal rather than tribunals appointed by the Centre?"/>
+            <column name="question_hi" value="क्या अंतर-राज्यीय नदी जल विवादों का समाधान केंद्र द्वारा नियुक्त अधिकरणों के बजाय स्वतंत्र पर्यावरण अधिकरण द्वारा होना चाहिए?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should inter-state river water disputes be resolved by an independent environmental tribunal rather than tribunals appointed by the Centre?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — independent environmental tribunal"/><column name="label_hi" value="हां — स्वतंत्र पर्यावरण अधिकरण"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should inter-state river water disputes be resolved by an independent environmental tribunal rather than tribunals appointed by the Centre?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, with all riparian states represented equally"/><column name="label_hi" value="हां, सभी तटवर्ती राज्यों की समान प्रतिनिधित्व के साथ"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should inter-state river water disputes be resolved by an independent environmental tribunal rather than tribunals appointed by the Centre?' LIMIT 1)"/>
+            <column name="label_en" value="No — Centre must arbitrate inter-state disputes"/><column name="label_hi" value="नहीं — केंद्र को अंतर-राज्यीय विवादों का मध्यस्थता करना चाहिए"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should inter-state river water disputes be resolved by an independent environmental tribunal rather than tribunals appointed by the Centre?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+        <insert tableName="polls">
+            <column name="question_en" value="Should state-level carbon emission targets be legally binding, with central fund cuts for states that miss targets for three consecutive years?"/>
+            <column name="question_hi" value="क्या राज्य-स्तरीय कार्बन उत्सर्जन लक्ष्य कानूनी रूप से बाध्यकारी होने चाहिए, लगातार तीन साल लक्ष्य चूकने वाले राज्यों के लिए केंद्रीय धन में कटौती के साथ?"/>
+            <column name="is_active" valueBoolean="true"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should state-level carbon emission targets be legally binding, with central fund cuts for states that miss targets for three consecutive years?' LIMIT 1)"/>
+            <column name="label_en" value="Yes — binding targets with fiscal consequences"/><column name="label_hi" value="हां — वित्तीय परिणामों के साथ बाध्यकारी लक्ष्य"/><column name="display_order" valueNumeric="1"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should state-level carbon emission targets be legally binding, with central fund cuts for states that miss targets for three consecutive years?' LIMIT 1)"/>
+            <column name="label_en" value="Yes, but incentives — not fund cuts"/><column name="label_hi" value="हां, लेकिन प्रोत्साहन — धन कटौती नहीं"/><column name="display_order" valueNumeric="2"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should state-level carbon emission targets be legally binding, with central fund cuts for states that miss targets for three consecutive years?' LIMIT 1)"/>
+            <column name="label_en" value="No — states need flexibility on development"/><column name="label_hi" value="नहीं — राज्यों को विकास पर लचीलापन चाहिए"/><column name="display_order" valueNumeric="3"/>
+        </insert>
+        <insert tableName="poll_options">
+            <column name="poll_id" valueComputed="(SELECT id FROM polls WHERE question_en='Should state-level carbon emission targets be legally binding, with central fund cuts for states that miss targets for three consecutive years?' LIMIT 1)"/>
+            <column name="label_en" value="Unsure"/><column name="label_hi" value="अनिश्चित"/><column name="display_order" valueNumeric="4"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -33,6 +33,11 @@ public class RssFeedIngestionService {
 
     private final RssFeedSourceRepository feedSourceRepository;
     private final RssNewsItemRepository newsItemRepository;
+    private final NewsCurationService curationService;
+
+    /** Max items to store per feed per ingest cycle (newest first, after curation). */
+    @org.springframework.beans.factory.annotation.Value("${nationlens.curation.per-feed-cap:8}")
+    private int perFeedCap;
 
     /** Runs 30 seconds after startup, then every 2 hours. */
     @Scheduled(fixedDelayString = "${nationlens.rss.fetch-interval-ms:7200000}", initialDelay = 30000)
@@ -75,6 +80,9 @@ public class RssFeedIngestionService {
 
         int saved = 0;
         for (SyndEntry entry : feed.getEntries()) {
+            // Feeds emit newest-first; once this cycle's per-feed quota is full, stop.
+            if (saved >= perFeedCap) break;
+
             String guid = entry.getUri() != null && !entry.getUri().isBlank()
                     ? entry.getUri() : entry.getLink();
             if (guid == null || guid.isBlank()) continue;
@@ -116,6 +124,13 @@ public class RssFeedIngestionService {
                 if (thumb != null) item.setThumbnailUrl(thumb);
                 item.setDescription(truncate(cleanHtml(raw), 2000));
             }
+
+            // Awareness curation: store only items with civic value (middle/lower-class lens).
+            var verdict = curationService.evaluate(item.getTitle(), item.getDescription(), item.getCategory());
+            if (!verdict.keep()) continue;
+            item.setAwarenessTopic(verdict.topic());
+            item.setRelevanceScore(verdict.score());
+            item.setClassRelevant(verdict.classRelevant());
 
             // Also check media:content (enclosures / media modules) for thumbnail
             if (item.getThumbnailUrl() == null) {

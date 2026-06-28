@@ -27,6 +27,19 @@ public interface MediaMappingRepository extends JpaRepository<MediaMapping, Long
            "ORDER BY mm.displayOrder ASC")
     List<MediaMapping> findApprovedByDistrictId(@Param("districtId") Long districtId);
 
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml " +
+           "WHERE ml.approvalStatus = 'APPROVED' AND mm.entityTypeCode = :entityTypeCode " +
+           "ORDER BY mm.displayOrder ASC, ml.createdAt DESC")
+    List<MediaMapping> findApprovedByEntityType(@Param("entityTypeCode") String entityTypeCode);
+
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml " +
+           "WHERE ml.approvalStatus = 'APPROVED' AND mm.entityTypeCode = :entityTypeCode " +
+           "AND mm.sectionKey = :sectionKey ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedByEntityTypeAndSectionKey(
+        @Param("entityTypeCode") String entityTypeCode,
+        @Param("sectionKey") String sectionKey
+    );
+
     List<MediaMapping> findByMediaLinkId(Long mediaLinkId);
 
     List<MediaMapping> findByEntityId(Long entityId);
@@ -54,4 +67,48 @@ public interface MediaMappingRepository extends JpaRepository<MediaMapping, Long
     // Browse section counts: [sectionKey, count] for all browse sections
     @Query("SELECT mm.sectionKey, COUNT(mm) FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.displayContext = 'BROWSE' GROUP BY mm.sectionKey")
     List<Object[]> countApprovedBrowseBySection();
+
+    // Home feed: admin-curated slots (display_context = 'HOME')
+    @Query("SELECT mm FROM MediaMapping mm JOIN mm.mediaLink ml WHERE ml.approvalStatus = 'APPROVED' AND mm.displayContext = 'HOME' ORDER BY mm.displayOrder ASC")
+    List<MediaMapping> findApprovedForHome();
+
+    @Query("SELECT DISTINCT ml FROM MediaLink ml JOIN MediaMapping mm ON mm.mediaLink.id = ml.id " +
+           "WHERE mm.stateCode = :stateCode OR mm.districtId IN :districtIds " +
+           "ORDER BY ml.createdAt DESC")
+    List<com.nationlens.domain.entity.MediaLink> findByStateScope(
+        @Param("stateCode") String stateCode,
+        @Param("districtIds") List<Long> districtIds
+    );
+
+    @Query("SELECT DISTINCT ml FROM MediaLink ml JOIN MediaMapping mm ON mm.mediaLink.id = ml.id " +
+           "WHERE ml.approvalStatus = :status AND (mm.stateCode = :stateCode OR mm.districtId IN :districtIds) " +
+           "ORDER BY ml.createdAt DESC")
+    List<com.nationlens.domain.entity.MediaLink> findByStateScopeAndStatus(
+        @Param("stateCode") String stateCode,
+        @Param("districtIds") List<Long> districtIds,
+        @Param("status") com.nationlens.domain.enums.ApprovalStatus status
+    );
+
+    @Query("SELECT DISTINCT ml FROM MediaLink ml JOIN MediaMapping mm ON mm.mediaLink.id = ml.id " +
+           "WHERE mm.districtId = :districtId ORDER BY ml.createdAt DESC")
+    List<com.nationlens.domain.entity.MediaLink> findByDistrictId(@Param("districtId") Long districtId);
+
+    @Query("SELECT DISTINCT ml FROM MediaLink ml JOIN MediaMapping mm ON mm.mediaLink.id = ml.id " +
+           "WHERE ml.approvalStatus = :status AND mm.districtId = :districtId ORDER BY ml.createdAt DESC")
+    List<com.nationlens.domain.entity.MediaLink> findByDistrictIdAndStatus(
+        @Param("districtId") Long districtId,
+        @Param("status") com.nationlens.domain.enums.ApprovalStatus status
+    );
+
+    @Query("SELECT COUNT(DISTINCT ml) FROM MediaLink ml JOIN MediaMapping mm ON mm.mediaLink.id = ml.id " +
+           "WHERE mm.stateCode = :stateCode OR mm.districtId IN :districtIds")
+    long countByStateScope(@Param("stateCode") String stateCode, @Param("districtIds") List<Long> districtIds);
+
+    @Query("SELECT COUNT(DISTINCT ml) FROM MediaLink ml JOIN MediaMapping mm ON mm.mediaLink.id = ml.id " +
+           "WHERE ml.approvalStatus = :status AND (mm.stateCode = :stateCode OR mm.districtId IN :districtIds)")
+    long countByStateScopeAndStatus(
+        @Param("stateCode") String stateCode,
+        @Param("districtIds") List<Long> districtIds,
+        @Param("status") com.nationlens.domain.enums.ApprovalStatus status
+    );
 }

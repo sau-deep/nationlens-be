@@ -5,6 +5,7 @@ import com.nationlens.domain.enums.ApprovalStatus;
 import com.nationlens.domain.enums.MediaPlatform;
 import com.nationlens.domain.enums.MediaSentiment;
 import com.nationlens.domain.enums.SourceConfidence;
+import com.nationlens.dto.media.MediaMappingRequest;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +31,5 @@ public class UpdateMediaLinkRequest {
     private SourceConfidence sourceConfidence;
     private String visibility;
     private Integer displayOrder;
+    private java.util.List<MediaMappingRequest> mappings;
 }

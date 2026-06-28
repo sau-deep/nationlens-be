@@ -17,11 +17,12 @@ import java.util.Optional;
 public class NewsFeedService {
 
     private final RssNewsItemRepository newsItemRepository;
+    private final TranslationService translationService;
 
     /**
      * Localized feed rules:
-     * - NATIONAL city items are always included (everyone sees national news).
-     * - City items match user's metro + prefer source language; EN used as fallback.
+     * - Only items whose {@code sourceLanguage} matches the selected UI locale are returned.
+     * - Metro feeds include that city plus NATIONAL, both filtered to the same language.
      */
     public Page<NewsItemDto> getFeed(String city, String category, String language, int page, int size) {
         size = Math.min(size, 50);
@@ -43,13 +44,31 @@ public class NewsFeedService {
         } else {
             result = newsItemRepository.findLocalizedFeedAll(lang, pageable);
         }
-        return result.map(NewsItemDto::new);
+        final String target = lang.toLowerCase(Locale.ROOT);
+        return result.map(item -> toLocalizedDto(item, target));
     }
 
-    public Optional<NewsItemDto> getById(Long id) {
+    public Optional<NewsItemDto> getById(Long id, String language) {
+        final String lang = normalizeLanguage(language);
+        final String target = lang.toLowerCase(Locale.ROOT);
         return newsItemRepository.findById(id)
                 .filter(i -> Boolean.TRUE.equals(i.getActive()))
-                .map(NewsItemDto::new);
+                .filter(i -> lang.equals(normalizeLanguage(i.getSourceLanguage())))
+                .map(item -> toLocalizedDto(item, target));
+    }
+
+    /**
+     * Resolve title + description into {@code targetLocale} (on-read + cache). When the
+     * Claude key is unset the {@link TranslationService} returns the source text, so this
+     * is a no-op until translation is switched on.
+     */
+    private NewsItemDto toLocalizedDto(RssNewsItem item, String targetLocale) {
+        String source = item.getSourceLanguage() == null ? "en" : item.getSourceLanguage().toLowerCase(Locale.ROOT);
+        String title = translationService.localize(
+                TranslationService.NEWS_TITLE, item.getId(), item.getTitle(), source, targetLocale);
+        String description = translationService.localize(
+                TranslationService.NEWS_DESC, item.getId(), item.getDescription(), source, targetLocale);
+        return new NewsItemDto(item, title, description);
     }
 
     private static String normalizeLanguage(String language) {

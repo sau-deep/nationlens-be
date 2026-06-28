@@ -4,6 +4,7 @@ import com.nationlens.domain.entity.EntityType;
 import com.nationlens.domain.entity.NlEntity;
 import com.nationlens.domain.entity.PoliticalProfile;
 import com.nationlens.dto.admin.CreateCrawlerEntityRequest;
+import com.nationlens.dto.admin.HomeFeaturedRequest;
 import com.nationlens.dto.common.ApiResponse;
 import com.nationlens.dto.entity.EntitySummaryDto;
 import com.nationlens.repository.EntityTypeRepository;
@@ -103,6 +104,14 @@ public class AdminEntityController {
     public ResponseEntity<ApiResponse<Page<EntitySummaryDto>>> listEntities(
             @PageableDefault(size = 20) Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.ok(entityService.listEntities(pageable)));
+    }
+
+    @PatchMapping("/{id}/featured")
+    public ResponseEntity<ApiResponse<EntitySummaryDto>> updateFeatured(
+            @PathVariable Long id,
+            @RequestBody HomeFeaturedRequest body) {
+        return ResponseEntity.ok(ApiResponse.ok("Featured status updated",
+                entityService.updateHomeFeatured(id, body.getIsFeatured(), body.getHomeDisplayOrder())));
     }
 
     @PatchMapping("/{id}/verify")

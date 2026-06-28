@@ -23,8 +23,16 @@ public class PublicEntityController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<EntitySummaryDto>>> list(
         @PageableDefault(size = 20) Pageable pageable,
-        @RequestParam(required = false) String type
+        @RequestParam(required = false) String type,
+        @RequestParam(required = false) Boolean featured,
+        @RequestParam(defaultValue = "6") int limit
     ) {
+        if (Boolean.TRUE.equals(featured)) {
+            int safeLimit = Math.min(Math.max(limit, 1), 20);
+            List<EntitySummaryDto> items = entityService.listFeaturedForHome(safeLimit);
+            Page<EntitySummaryDto> page = new org.springframework.data.domain.PageImpl<>(items, pageable, items.size());
+            return ResponseEntity.ok(ApiResponse.ok(page));
+        }
         if (type != null && !type.isBlank()) {
             List<EntitySummaryDto> items = entityService.listByType(type.trim().toUpperCase());
             Page<EntitySummaryDto> page = new org.springframework.data.domain.PageImpl<>(items, pageable, items.size());

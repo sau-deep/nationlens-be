@@ -58,6 +58,8 @@ public class SecurityConfig {
                 .requestMatchers("/state-admin/**").hasAnyRole("SUPER_ADMIN", "NATIONAL_ADMIN", "STATE_ADMIN")
                 // Moderator endpoints
                 .requestMatchers("/moderator/**").hasAnyRole("SUPER_ADMIN", "NATIONAL_ADMIN", "CONTENT_MODERATOR", "DISTRICT_MODERATOR", "FACT_CHECKER")
+                // Analyst read-only endpoints
+                .requestMatchers("/analyst/**").hasAnyRole("SUPER_ADMIN", "NATIONAL_ADMIN", "ANALYST")
                 // Everything else requires authentication
                 .anyRequest().authenticated()
             )

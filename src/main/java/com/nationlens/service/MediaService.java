@@ -9,6 +9,7 @@ import com.nationlens.dto.media.*;
 import com.nationlens.repository.MediaLinkRepository;
 import com.nationlens.repository.MediaMappingRepository;
 import com.nationlens.repository.MediaOwnerRepository;
+import com.nationlens.repository.NlEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class MediaService {
     private final MediaLinkRepository mediaLinkRepository;
     private final MediaMappingRepository mediaMappingRepository;
     private final MediaOwnerRepository mediaOwnerRepository;
+    private final NlEntityRepository entityRepository;
 
     /** Top-level browse sections in display order. */
     public static final List<BrowseSectionDto> BROWSE_SECTIONS = List.of(
@@ -46,10 +48,29 @@ public class MediaService {
     );
 
     public List<MediaLinkDto> getMediaForEntity(Long entityId, String sectionKey) {
-        List<MediaMapping> mappings = sectionKey != null
+        java.util.LinkedHashMap<Long, MediaMapping> unique = new java.util.LinkedHashMap<>();
+
+        List<MediaMapping> direct = sectionKey != null
             ? mediaMappingRepository.findApprovedByEntityIdAndSectionKey(entityId, sectionKey)
             : mediaMappingRepository.findApprovedByEntityId(entityId);
-        return mappings.stream().map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+        for (MediaMapping mm : direct) {
+            unique.putIfAbsent(mm.getMediaLink().getId(), mm);
+        }
+
+        entityRepository.findById(entityId).ifPresent(entity -> {
+            if (entity.getEntityType() == null) return;
+            String typeCode = entity.getEntityType().getCode();
+            List<MediaMapping> byType = sectionKey != null
+                ? mediaMappingRepository.findApprovedByEntityTypeAndSectionKey(typeCode, sectionKey)
+                : mediaMappingRepository.findApprovedByEntityType(typeCode);
+            for (MediaMapping mm : byType) {
+                unique.putIfAbsent(mm.getMediaLink().getId(), mm);
+            }
+        });
+
+        return unique.values().stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm))))
+            .toList();
     }
 
     public List<MediaLinkDto> getMediaForDistrict(Long districtId) {
@@ -104,6 +125,7 @@ public class MediaService {
                 mm.setMediaLink(mediaLinkRepository.getReferenceById(linkId));
                 mm.setMappingType(mr.getMappingType());
                 mm.setEntityId(mr.getEntityId());
+                mm.setEntityTypeCode(mr.getEntityTypeCode());
                 mm.setDistrictId(mr.getDistrictId());
                 mm.setConstituencyId(mr.getConstituencyId());
                 mm.setPartyEntityId(mr.getPartyEntityId());
@@ -172,8 +194,50 @@ public class MediaService {
         if (req.getDisplayOrder() != null) link.setDisplayOrder(req.getDisplayOrder());
         link.setUpdatedAt(java.time.LocalDateTime.now());
         mediaLinkRepository.save(link);
+        if (req.getMappings() != null) {
+            replaceMappings(id, req.getMappings());
+        }
         List<MediaMapping> mappings = mediaMappingRepository.findByMediaLinkId(id);
         return toDto(link, mappings.stream().map(this::toMappingDto).toList());
+    }
+
+    @Transactional
+    public void replaceMappings(Long mediaLinkId, List<MediaMappingRequest> requests) {
+        List<MediaMapping> existing = mediaMappingRepository.findByMediaLinkId(mediaLinkId);
+        if (!existing.isEmpty()) {
+            mediaMappingRepository.deleteAll(existing);
+        }
+        if (requests == null || requests.isEmpty()) {
+            return;
+        }
+        MediaLink linkRef = mediaLinkRepository.getReferenceById(mediaLinkId);
+        for (MediaMappingRequest mr : requests) {
+            MediaMapping mm = new MediaMapping();
+            mm.setMediaLink(linkRef);
+            mm.setMappingType(mr.getMappingType());
+            mm.setEntityId(mr.getEntityId());
+            mm.setEntityTypeCode(mr.getEntityTypeCode());
+            mm.setDistrictId(mr.getDistrictId());
+            mm.setConstituencyId(mr.getConstituencyId());
+            mm.setPartyEntityId(mr.getPartyEntityId());
+            mm.setSectionKey(mr.getSectionKey());
+            mm.setSubMenuKey(mr.getSubMenuKey());
+            mm.setDisplayContext(mr.getDisplayContext());
+            mm.setDisplayOrder(mr.getDisplayOrder() != null ? mr.getDisplayOrder() : 0);
+            mm.setIsPrimary(mr.getIsPrimary() != null ? mr.getIsPrimary() : false);
+            mm.setAudienceScope(mr.getAudienceScope() != null ? mr.getAudienceScope() : "ENTITY");
+            mm.setStateCode(mr.getStateCode());
+            mm.setTags(mr.getTags());
+            mm.setCreatedAt(LocalDateTime.now());
+            mediaMappingRepository.save(mm);
+        }
+    }
+
+    @Transactional
+    public void deleteMapping(Long mappingId) {
+        MediaMapping mm = mediaMappingRepository.findById(mappingId)
+            .orElseThrow(() -> new IllegalArgumentException("Media mapping not found: " + mappingId));
+        mediaMappingRepository.delete(mm);
     }
 
     public Optional<MediaLinkDto> findById(Long id) {
@@ -214,6 +278,7 @@ public class MediaService {
             .id(mm.getId())
             .mappingType(mm.getMappingType())
             .entityId(mm.getEntityId())
+            .entityTypeCode(mm.getEntityTypeCode())
             .districtId(mm.getDistrictId())
             .sectionKey(mm.getSectionKey())
             .subMenuKey(mm.getSubMenuKey())
@@ -226,8 +291,29 @@ public class MediaService {
             .build();
     }
 
+    public List<MediaLinkDto> getMediaByEntityType(String entityType, String sectionKey) {
+        List<MediaMapping> mappings = sectionKey != null && !sectionKey.isBlank()
+            ? mediaMappingRepository.findApprovedByEntityTypeAndSectionKey(entityType.toUpperCase(), sectionKey.toUpperCase())
+            : mediaMappingRepository.findApprovedByEntityType(entityType.toUpperCase());
+        return mappings.stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm))))
+            .toList();
+    }
+
     public List<MediaLinkDto> getMediaByScope(String audienceScope) {
         return mediaMappingRepository.findApprovedByScope(audienceScope).stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+    }
+
+    /** Admin-curated home reel slots (display_context = HOME). */
+    public List<MediaLinkDto> getMediaForHome() {
+        return mediaMappingRepository.findApprovedForHome().stream()
+            .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+    }
+
+    /** Trending: NATIONAL-scoped approved media (browse + home mappings). */
+    public List<MediaLinkDto> getTrendingMedia() {
+        return mediaMappingRepository.findApprovedByScope("NATIONAL").stream()
             .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
     }
 
@@ -265,6 +351,51 @@ public class MediaService {
     public List<MediaLinkDto> getBrowseSectionMedia(String sectionKey) {
         return mediaMappingRepository.findApprovedBrowseBySection(sectionKey.toUpperCase()).stream()
             .map(mm -> toDto(mm.getMediaLink(), List.of(toMappingDto(mm)))).toList();
+    }
+
+    /**
+     * Unified public feed resolver. Entity/district IDs take priority, then context/type/tag/section/scope.
+     */
+    public List<MediaLinkDto> queryPublicFeed(
+        String context,
+        String scope,
+        String state,
+        String hashtag,
+        String section,
+        String entityType,
+        Long entityId,
+        Long districtId,
+        String displayContext
+    ) {
+        if (entityId != null) {
+            return getMediaForEntity(entityId, section);
+        }
+        if (districtId != null) {
+            return getMediaForDistrict(districtId);
+        }
+        if (context != null && "HOME".equalsIgnoreCase(context.trim())) {
+            return getMediaForHome();
+        }
+        if (entityType != null && !entityType.isBlank()) {
+            return getMediaByEntityType(entityType, section);
+        }
+        if (displayContext != null && "BROWSE".equalsIgnoreCase(displayContext.trim())
+                && section != null && !section.isBlank()) {
+            return getBrowseSectionMedia(section);
+        }
+        if (state != null && !state.isBlank()) {
+            return getMediaForStateFeed(state.toUpperCase());
+        }
+        if (hashtag != null && !hashtag.isBlank()) {
+            return getMediaByTag(hashtag.toLowerCase());
+        }
+        if (section != null && !section.isBlank()) {
+            return getMediaBySection(section.toUpperCase());
+        }
+        if (scope != null && !scope.isBlank()) {
+            return getMediaByScope(scope.toUpperCase());
+        }
+        return getMediaByScope("NATIONAL");
     }
 
     // ── Ownership ───────────────────────────────────────────────────────────

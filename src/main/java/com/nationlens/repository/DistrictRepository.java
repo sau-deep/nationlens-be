@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface DistrictRepository extends JpaRepository<District, Long> {
     Optional<District> findBySlug(String slug);
     List<District> findByStateIdOrderByNameEnAsc(Long stateId);
+
+    List<District> findByIsFeaturedTrueOrderByHomeDisplayOrderAscNameEnAsc();
 }

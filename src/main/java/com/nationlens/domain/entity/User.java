@@ -35,6 +35,9 @@ public class User implements UserDetails {
     @Column(name = "district_id")
     private Long districtId;
 
+    @Column(name = "state_id")
+    private Long stateId;
+
     @Column(name = "contribution_score")
     private Integer contributionScore = 0;
 

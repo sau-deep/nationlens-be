@@ -17,4 +17,6 @@ public class EntitySummaryDto {
     private Boolean verified;
     private String districtNameEn;
     private Integer accountabilityScore;
+    private Boolean isFeatured;
+    private Integer homeDisplayOrder;
 }

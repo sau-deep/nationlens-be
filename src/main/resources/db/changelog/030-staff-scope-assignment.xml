@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- Geographic scope for staff roles -->
+    <changeSet id="030-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><columnExists tableName="users" columnName="state_id"/></not></preConditions>
+        <addColumn tableName="users">
+            <column name="state_id" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- STATE_ADMIN → Rajasthan -->
+    <changeSet id="030-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <update tableName="users">
+            <column name="state_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/>
+            <where>email = 'stateadmin@nationlens.in'</where>
+        </update>
+        <update tableName="user_roles">
+            <column name="scope_type" value="STATE"/>
+            <column name="scope_id" valueComputed="(SELECT id FROM states WHERE code='RJ')"/>
+            <where>user_id = (SELECT id FROM users WHERE email='stateadmin@nationlens.in')</where>
+        </update>
+    </changeSet>
+
+    <!-- DISTRICT_MODERATOR → Jaipur district -->
+    <changeSet id="030-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <update tableName="users">
+            <column name="district_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
+            <where>email = 'distmod@nationlens.in'</where>
+        </update>
+        <update tableName="user_roles">
+            <column name="scope_type" value="DISTRICT"/>
+            <column name="scope_id" valueComputed="(SELECT id FROM districts WHERE slug='jaipur')"/>
+            <where>user_id = (SELECT id FROM users WHERE email='distmod@nationlens.in')</where>
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

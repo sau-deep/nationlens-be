@@ -39,4 +39,10 @@ public class District {
 
     @Column(name = "headquarters", length = 120)
     private String headquarters;
+
+    @Column(name = "is_featured", nullable = false)
+    private Boolean isFeatured = false;
+
+    @Column(name = "home_display_order", nullable = false)
+    private Integer homeDisplayOrder = 0;
 }

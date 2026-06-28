@@ -24,7 +24,7 @@ public class PublicNewsController {
      *
      * @param city     metro key e.g. DELHI — returns that city PLUS NATIONAL (always).
      * @param category ADR, LEGAL, ELECTIONS, CIVIC, NATIONAL_NEWS, CITY_NEWS
-     * @param language UI locale code e.g. hi, en, ta — maps to RSS source_language
+     * @param language UI locale code e.g. hi, en, ta — only RSS items with matching source_language
      */
     @GetMapping("/news")
     public ResponseEntity<ApiResponse<Map<String, Object>>> listNews(
@@ -44,8 +44,10 @@ public class PublicNewsController {
     }
 
     @GetMapping("/news/{id}")
-    public ResponseEntity<ApiResponse<NewsItemDto>> getNewsItem(@PathVariable Long id) {
-        return newsFeedService.getById(id)
+    public ResponseEntity<ApiResponse<NewsItemDto>> getNewsItem(
+            @PathVariable Long id,
+            @RequestParam(required = false, defaultValue = "en") String language) {
+        return newsFeedService.getById(id, language)
                 .map(dto -> ResponseEntity.ok(ApiResponse.ok(dto)))
                 .orElse(ResponseEntity.notFound().build());
     }

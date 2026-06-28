@@ -13,6 +13,8 @@ public class PollDto {
     private Long id;
     private String questionEn;
     private String questionHi;
+    private Long entityId;
+    private Long districtId;
     private Boolean isActive;
     private LocalDateTime expiresAt;
     private LocalDateTime createdAt;

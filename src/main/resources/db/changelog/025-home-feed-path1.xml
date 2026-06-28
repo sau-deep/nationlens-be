@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!-- Path 1: featured home curation flags on core entities -->
+    <changeSet id="025-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><columnExists tableName="entities" columnName="is_featured"/></not></preConditions>
+        <addColumn tableName="entities">
+            <column name="is_featured" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="home_display_order" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="025-02" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><columnExists tableName="districts" columnName="is_featured"/></not></preConditions>
+        <addColumn tableName="districts">
+            <column name="is_featured" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="home_display_order" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="025-03" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN"><not><columnExists tableName="ai_insights" columnName="home_display_order"/></not></preConditions>
+        <addColumn tableName="ai_insights">
+            <column name="home_display_order" type="INT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- Curated featured leaders (admin-controllable via DB) -->
+    <changeSet id="025-04" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            UPDATE entities SET is_featured = true, home_display_order = 1 WHERE slug = 'rahul-sharma-mp';
+            UPDATE entities SET is_featured = true, home_display_order = 2 WHERE slug = 'priya-verma-mla';
+            UPDATE entities SET is_featured = true, home_display_order = 3 WHERE slug = 'amit-singh-mp';
+        </sql>
+    </changeSet>
+
+    <!-- Curated featured districts -->
+    <changeSet id="025-05" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            UPDATE districts SET is_featured = true, home_display_order = 1 WHERE slug = 'jaipur';
+            UPDATE districts SET is_featured = true, home_display_order = 2 WHERE slug = 'lucknow';
+            UPDATE districts SET is_featured = true, home_display_order = 3 WHERE slug = 'varanasi';
+        </sql>
+    </changeSet>
+
+    <!-- Order existing AI insights for home -->
+    <changeSet id="025-06" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            UPDATE ai_insights SET home_display_order = 1
+            WHERE title_en = 'Jaipur District Development Index Analysis';
+            UPDATE ai_insights SET home_display_order = 2
+            WHERE title_en = 'Parliamentary Performance: Rahul Sharma 2024';
+        </sql>
+    </changeSet>
+
+    <!-- Third national AI insight (non-Jaipur to reduce repetition) -->
+    <changeSet id="025-07" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM ai_insights WHERE title_en = 'Parliamentary Attendance Trends 2024'</sqlCheck>
+        </preConditions>
+        <insert tableName="ai_insights">
+            <column name="insight_type" value="NATIONAL"/>
+            <column name="title_en" value="Parliamentary Attendance Trends 2024"/>
+            <column name="title_hi" value="संसदीय उपस्थिति रुझान 2024"/>
+            <column name="body_en" value="AI insight placeholder: Average MP attendance in the 2024 parliament session stood at 73%. MPs from northern states showed higher question-raising activity. Data sourced from Lok Sabha records."/>
+            <column name="body_hi" value="AI इनसाइट प्लेसहोल्डर: 2024 संसद सत्र में औसत सांसद उपस्थिति 73% रही। उत्तरी राज्यों के सांसदों ने प्रश्न पूछने में अधिक सक्रियता दिखाई।"/>
+            <column name="is_placeholder" valueBoolean="true"/>
+            <column name="is_published" valueBoolean="true"/>
+            <column name="home_display_order" valueNumeric="3"/>
+        </insert>
+    </changeSet>
+
+    <!-- HOME display_context mappings — curated home reel slots (reuse existing approved media_links) -->
+    <changeSet id="025-08" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM media_mappings WHERE display_context = 'HOME'</sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO media_mappings (media_link_id, mapping_type, section_key, display_context, audience_scope, display_order, is_primary, created_at)
+            SELECT ml.id, 'SECTION', 'HOME', 'HOME', 'NATIONAL', 1, true, NOW()
+            FROM media_links ml WHERE ml.source_url = 'https://www.youtube.com/watch?v=nl-pol-01' LIMIT 1;
+
+            INSERT INTO media_mappings (media_link_id, mapping_type, section_key, display_context, audience_scope, display_order, is_primary, created_at)
+            SELECT ml.id, 'SECTION', 'HOME', 'HOME', 'NATIONAL', 2, true, NOW()
+            FROM media_links ml WHERE ml.source_url = 'https://www.instagram.com/reel/nl-pol-02/' LIMIT 1;
+
+            INSERT INTO media_mappings (media_link_id, mapping_type, section_key, display_context, audience_scope, display_order, is_primary, created_at)
+            SELECT ml.id, 'SECTION', 'HOME', 'HOME', 'NATIONAL', 3, true, NOW()
+            FROM media_links ml WHERE ml.source_url = 'https://www.youtube.com/watch?v=nl-env-01' LIMIT 1;
+
+            INSERT INTO media_mappings (media_link_id, mapping_type, section_key, display_context, audience_scope, display_order, is_primary, created_at)
+            SELECT ml.id, 'SECTION', 'HOME', 'HOME', 'NATIONAL', 4, true, NOW()
+            FROM media_links ml WHERE ml.source_url = 'https://www.instagram.com/reel/nl-gov-02/' LIMIT 1;
+        </sql>
+    </changeSet>
+
+    <!-- Trending: promote top browse reels to NATIONAL scope (entity reels stay on profiles) -->
+    <changeSet id="025-09" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            UPDATE media_mappings mm
+            JOIN media_links ml ON ml.id = mm.media_link_id
+            SET mm.audience_scope = 'NATIONAL'
+            WHERE mm.display_context = 'BROWSE'
+              AND ml.approval_status = 'APPROVED'
+              AND mm.audience_scope = 'NATIONAL';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

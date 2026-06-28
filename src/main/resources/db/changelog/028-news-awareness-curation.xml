@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!--
+      Awareness curation fields. Ingestion now scores each item for civic-awareness value
+      (with a middle/lower-class lens) and only stores items that clear a threshold. These
+      columns let the feed rank by relevance and surface what citizens should actually know.
+    -->
+    <changeSet id="028-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="rss_news_items" columnName="awareness_topic"/></not>
+        </preConditions>
+        <addColumn tableName="rss_news_items">
+            <column name="awareness_topic" type="VARCHAR(40)"/>
+            <column name="relevance_score" type="INT" defaultValueNumeric="0"/>
+            <column name="class_relevant" type="BOOLEAN" defaultValueBoolean="false"/>
+        </addColumn>
+
+        <createIndex tableName="rss_news_items" indexName="idx_news_relevance">
+            <column name="relevance_score"/>
+        </createIndex>
+        <createIndex tableName="rss_news_items" indexName="idx_news_awareness_topic">
+            <column name="awareness_topic"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -58,4 +58,16 @@ public class RssNewsItem {
 
     @Column
     private Boolean active = true;
+
+    /** Awareness topic assigned by curation: ELECTIONS | GOVERNANCE | LEGAL | CIVIC. */
+    @Column(name = "awareness_topic", length = 40)
+    private String awarenessTopic;
+
+    /** Curation relevance score; higher = more civic-awareness value. Used to rank the feed. */
+    @Column(name = "relevance_score")
+    private Integer relevanceScore = 0;
+
+    /** True when the item touches everyday middle/lower-class concerns (prices, jobs, schemes…). */
+    @Column(name = "class_relevant")
+    private Boolean classRelevant = false;
 }

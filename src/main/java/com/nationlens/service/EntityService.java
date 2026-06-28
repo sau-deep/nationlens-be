@@ -37,6 +37,13 @@ public class EntityService {
             .stream().map(this::toSummary).toList();
     }
 
+    public List<EntitySummaryDto> listFeaturedForHome(int limit) {
+        return entityRepository.findFeaturedForHome().stream()
+            .limit(limit)
+            .map(this::toSummary)
+            .toList();
+    }
+
     public Optional<EntityDetailDto> findBySlug(String slug) {
         return entityRepository.findBySlug(slug).map(entity -> {
             Optional<PoliticalProfile> profile = profileRepository.findByEntityId(entity.getId());
@@ -64,7 +71,21 @@ public class EntityService {
         profileRepository.findByEntityId(e.getId())
             .ifPresent(p -> b.accountabilityScore(p.getAccountabilityScore()));
 
+        b.isFeatured(e.getIsFeatured())
+         .homeDisplayOrder(e.getHomeDisplayOrder());
+
         return b.build();
+    }
+
+    @Transactional
+    public EntitySummaryDto updateHomeFeatured(Long id, Boolean isFeatured, Integer homeDisplayOrder) {
+        NlEntity entity = entityRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Entity not found: " + id));
+        if (isFeatured != null) entity.setIsFeatured(isFeatured);
+        if (homeDisplayOrder != null) entity.setHomeDisplayOrder(homeDisplayOrder);
+        entity.setUpdatedAt(java.time.LocalDateTime.now());
+        entityRepository.save(entity);
+        return toSummary(entity);
     }
 
     private EntityDetailDto toDetail(NlEntity e, PoliticalProfile p) {

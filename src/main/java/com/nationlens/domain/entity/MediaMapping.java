@@ -23,6 +23,9 @@ public class MediaMapping {
     @Column(name = "entity_id")
     private Long entityId;
 
+    @Column(name = "entity_type_code", length = 40)
+    private String entityTypeCode;
+
     @Column(name = "district_id")
     private Long districtId;
 

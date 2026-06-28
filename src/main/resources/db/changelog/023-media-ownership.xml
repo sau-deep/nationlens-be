@@ -90,7 +90,7 @@
             <column name="name_en" value="Network18 Media &amp; Investments"/>
             <column name="name_hi" value="नेटवर्क18 मीडिया"/>
             <column name="owner_type" value="MEDIA_HOUSE"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='reliance-industries')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='reliance-industries') AS _nl_owner)"/>
             <column name="controlled_by" value="Reliance Industries Ltd"/>
             <column name="ownership_note_en" value="Operates the CNN-News18, CNBC-TV18 and News18 networks plus Moneycontrol and Firstpost. Majority owned by Reliance."/>
             <column name="website" value="https://www.network18online.com"/>
@@ -103,7 +103,7 @@
             <column name="name_en" value="AMG Media Networks"/>
             <column name="name_hi" value="AMG मीडिया नेटवर्क्स"/>
             <column name="owner_type" value="MEDIA_HOUSE"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='adani-group')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='adani-group') AS _nl_owner)"/>
             <column name="controlled_by" value="Adani Group"/>
             <column name="ownership_note_en" value="Adani Group's media arm; holding company for its controlling stake in NDTV."/>
             <column name="hq_location" value="Ahmedabad, Gujarat"/>
@@ -132,7 +132,7 @@
             <column name="slug" value="cnn-news18"/>
             <column name="name_en" value="CNN-News18"/>
             <column name="owner_type" value="CHANNEL"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='network18')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='network18') AS _nl_owner)"/>
             <column name="controlled_by" value="Network18 (Reliance)"/>
             <column name="ownership_note_en" value="English news channel operated by Network18."/>
         </insert>
@@ -140,14 +140,14 @@
             <column name="slug" value="news18-india"/>
             <column name="name_en" value="News18 India"/>
             <column name="owner_type" value="CHANNEL"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='network18')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='network18') AS _nl_owner)"/>
             <column name="controlled_by" value="Network18 (Reliance)"/>
         </insert>
         <insert tableName="media_owners">
             <column name="slug" value="moneycontrol"/>
             <column name="name_en" value="Moneycontrol"/>
             <column name="owner_type" value="DIGITAL"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='network18')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='network18') AS _nl_owner)"/>
             <column name="controlled_by" value="Network18 (Reliance)"/>
         </insert>
         <insert tableName="media_owners">
@@ -155,7 +155,7 @@
             <column name="name_en" value="NDTV"/>
             <column name="name_hi" value="एनडीटीवी"/>
             <column name="owner_type" value="CHANNEL"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='amg-media-networks')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='amg-media-networks') AS _nl_owner)"/>
             <column name="controlled_by" value="Adani Group"/>
             <column name="ownership_note_en" value="New Delhi Television; control passed to the Adani Group in 2022-23."/>
         </insert>
@@ -163,7 +163,7 @@
             <column name="slug" value="times-now"/>
             <column name="name_en" value="Times Now"/>
             <column name="owner_type" value="CHANNEL"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='bennett-coleman')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='bennett-coleman') AS _nl_owner)"/>
             <column name="controlled_by" value="The Times Group"/>
         </insert>
         <insert tableName="media_owners">
@@ -171,7 +171,7 @@
             <column name="name_en" value="Navbharat Times"/>
             <column name="name_hi" value="नवभारत टाइम्स"/>
             <column name="owner_type" value="DIGITAL"/>
-            <column name="parent_owner_id" valueComputed="(SELECT id FROM media_owners WHERE slug='bennett-coleman')"/>
+            <column name="parent_owner_id" valueComputed="(SELECT id FROM (SELECT id FROM media_owners WHERE slug='bennett-coleman') AS _nl_owner)"/>
             <column name="controlled_by" value="The Times Group"/>
         </insert>
     </changeSet>

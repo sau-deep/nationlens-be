@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <!--
+      Generic translation cache for dynamic content (entity/district names & descriptions,
+      news titles & summaries, etc). One row per (content_type, content_id, field, locale).
+      Stored translations are produced either by the Claude batch translator (status=MACHINE)
+      or curated by a human (status=REVIEWED). source_hash lets us invalidate a cached
+      translation when the underlying source text changes.
+    -->
+    <changeSet id="027-01" author="nationlens">
+        <validCheckSum>ANY</validCheckSum>
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="content_translations"/></not>
+        </preConditions>
+        <createTable tableName="content_translations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <!-- ENTITY_NAME | ENTITY_DESC | DISTRICT_NAME | STATE_NAME | NEWS_TITLE | NEWS_DESC | ... -->
+            <column name="content_type" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- PK of the source row (nl_entities.id, districts.id, rss_news_items.id, ...) -->
+            <column name="content_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <!-- Target locale: en, hi, bn, te, mr, ta, gu, kn, ml, pa, or, as, ur -->
+            <column name="locale" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="translated_text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <!-- SHA-256 of the source text this translation was derived from -->
+            <column name="source_hash" type="VARCHAR(64)"/>
+            <!-- MACHINE (Claude) | REVIEWED (human-approved) -->
+            <column name="status" type="VARCHAR(20)" defaultValue="MACHINE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <addUniqueConstraint tableName="content_translations"
+                             columnNames="content_type, content_id, locale"
+                             constraintName="uq_content_translation"/>
+
+        <createIndex tableName="content_translations" indexName="idx_content_translation_lookup">
+            <column name="content_type"/>
+            <column name="content_id"/>
+            <column name="locale"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

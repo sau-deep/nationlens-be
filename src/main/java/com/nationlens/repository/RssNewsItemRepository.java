@@ -29,14 +29,12 @@ public interface RssNewsItemRepository extends JpaRepository<RssNewsItem, Long> 
     Page<RssNewsItem> findByCityKeyInAndCategoryAndActiveTrueOrderByPublishedAtDesc(
             List<String> cityKeys, String category, Pageable pageable);
 
-    /** NATIONAL always visible; city items match language or EN fallback. */
+    /** City + national items must match the selected UI language exactly. */
     @Query("""
             SELECT n FROM RssNewsItem n
             WHERE n.active = true
-              AND (
-                n.cityKey = 'NATIONAL'
-                OR (n.cityKey IN :cityKeys AND (UPPER(n.sourceLanguage) = :lang OR UPPER(n.sourceLanguage) = 'EN'))
-              )
+              AND n.cityKey IN :cityKeys
+              AND UPPER(n.sourceLanguage) = :lang
             ORDER BY n.publishedAt DESC, n.fetchedAt DESC
             """)
     Page<RssNewsItem> findLocalizedFeed(
@@ -48,10 +46,8 @@ public interface RssNewsItemRepository extends JpaRepository<RssNewsItem, Long> 
             SELECT n FROM RssNewsItem n
             WHERE n.active = true
               AND n.category = :category
-              AND (
-                n.cityKey = 'NATIONAL'
-                OR (n.cityKey IN :cityKeys AND (UPPER(n.sourceLanguage) = :lang OR UPPER(n.sourceLanguage) = 'EN'))
-              )
+              AND n.cityKey IN :cityKeys
+              AND UPPER(n.sourceLanguage) = :lang
             ORDER BY n.publishedAt DESC, n.fetchedAt DESC
             """)
     Page<RssNewsItem> findLocalizedFeed(
@@ -64,7 +60,7 @@ public interface RssNewsItemRepository extends JpaRepository<RssNewsItem, Long> 
             SELECT n FROM RssNewsItem n
             WHERE n.active = true
               AND n.category = :category
-              AND (n.cityKey = 'NATIONAL' OR UPPER(n.sourceLanguage) = :lang OR UPPER(n.sourceLanguage) = 'EN')
+              AND UPPER(n.sourceLanguage) = :lang
             ORDER BY n.publishedAt DESC, n.fetchedAt DESC
             """)
     Page<RssNewsItem> findLocalizedFeedByCategory(
@@ -75,7 +71,7 @@ public interface RssNewsItemRepository extends JpaRepository<RssNewsItem, Long> 
     @Query("""
             SELECT n FROM RssNewsItem n
             WHERE n.active = true
-              AND (n.cityKey = 'NATIONAL' OR UPPER(n.sourceLanguage) = :lang OR UPPER(n.sourceLanguage) = 'EN')
+              AND UPPER(n.sourceLanguage) = :lang
             ORDER BY n.publishedAt DESC, n.fetchedAt DESC
             """)
     Page<RssNewsItem> findLocalizedFeedAll(@Param("lang") String lang, Pageable pageable);

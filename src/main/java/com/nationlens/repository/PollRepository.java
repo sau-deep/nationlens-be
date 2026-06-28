@@ -8,4 +8,5 @@ import java.util.List;
 public interface PollRepository extends JpaRepository<Poll, Long> {
     List<Poll> findByIsActiveTrueOrderByCreatedAtDesc();
     List<Poll> findByEntityIdAndIsActiveTrueOrderByCreatedAtDesc(Long entityId);
+    List<Poll> findAllByOrderByCreatedAtDesc();
 }

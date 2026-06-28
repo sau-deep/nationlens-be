@@ -12,17 +12,16 @@ import java.util.List;
 /**
  * Public media feed endpoint.
  *
- * Query params (all optional, combined with AND logic):
- *   scope   = NATIONAL | STATE | DISTRICT | ENTITY | GENERAL
- *   state   = 2-letter state code, e.g. MH, DL, KA (used when scope=STATE or for state feed)
- *   hashtag = single tag to filter by, e.g. parliament
- *   section = section key, e.g. SPEECHES_INTERVIEWS
- *
- * Common use-cases:
- *   /public/media/feed?scope=NATIONAL                         → pan-India content (home feed)
- *   /public/media/feed?state=MH                              → Maharashtra feed (NATIONAL + STATE:MH)
- *   /public/media/feed?hashtag=parliament                    → parliament-tagged content
- *   /public/media/feed?section=CRITICAL_REPORTS              → critical reports section
+ * Query params (optional):
+ *   context     = HOME (admin-curated home slots)
+ *   scope       = NATIONAL | STATE | DISTRICT | ENTITY | GENERAL | ENTITY_TYPE
+ *   state       = 2-letter state code (MH, DL, …)
+ *   hashtag     = topic tag, e.g. parliament
+ *   section     = profile or browse section key
+ *   entityType  = MP | MLA | … (type-wide reel placement)
+ *   entityId    = specific entity profile
+ *   districtId  = specific district page
+ *   displayContext = HOME | BROWSE | ENTITY_PROFILE | DISTRICT_FEED | STATE_FEED
  */
 @RestController
 @RequestMapping("/public/media/feed")
@@ -36,25 +35,16 @@ public class MediaFeedController {
         @RequestParam(required = false) String scope,
         @RequestParam(required = false) String state,
         @RequestParam(required = false) String hashtag,
-        @RequestParam(required = false) String section
+        @RequestParam(required = false) String section,
+        @RequestParam(required = false) String context,
+        @RequestParam(required = false) String entityType,
+        @RequestParam(required = false) Long entityId,
+        @RequestParam(required = false) Long districtId,
+        @RequestParam(required = false) String displayContext
     ) {
-        List<MediaLinkDto> result;
-
-        // Priority: state feed > hashtag > section > scope
-        if (state != null && !state.isBlank()) {
-            // Returns NATIONAL + STATE:<code> combined feed
-            result = mediaService.getMediaForStateFeed(state.toUpperCase());
-        } else if (hashtag != null && !hashtag.isBlank()) {
-            result = mediaService.getMediaByTag(hashtag.toLowerCase());
-        } else if (section != null && !section.isBlank()) {
-            result = mediaService.getMediaBySection(section.toUpperCase());
-        } else if (scope != null && !scope.isBlank()) {
-            result = mediaService.getMediaByScope(scope.toUpperCase());
-        } else {
-            // Default: return NATIONAL-scoped content (home feed)
-            result = mediaService.getMediaByScope("NATIONAL");
-        }
-
+        List<MediaLinkDto> result = mediaService.queryPublicFeed(
+            context, scope, state, hashtag, section, entityType, entityId, districtId, displayContext
+        );
         return ResponseEntity.ok(ApiResponse.ok(result));
     }
 }

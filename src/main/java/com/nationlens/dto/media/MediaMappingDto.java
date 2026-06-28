@@ -11,6 +11,7 @@ public class MediaMappingDto {
     private String mappingType;
     private Long entityId;
     private Long districtId;
+    private String entityTypeCode;
     private String sectionKey;
     private String subMenuKey;
     private String displayContext;
